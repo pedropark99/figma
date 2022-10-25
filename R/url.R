@@ -44,34 +44,16 @@ check_endpoint <- function(endpoint){
   )
   msg_format <- paste(msg_components, collapse = "")
 
-  if (is.null(endpoint) || is.na(endpoint)) {
-    msg <- sprintf(msg_format, "a NULL or NA value")
-    stop(msg)
-  }
+  not_a_single_string <- !is_single_string(endpoint)
+  not_implemented <- !endpoint %in% implemented_endpoints
 
-  if (length(endpoint) > 1) {
-    msg <- sprintf(msg_format, "a vector")
-    stop(msg)
-  }
-
-  if (!endpoint %in% implemented_endpoints) {
-    msg <- sprintf(msg_format, endpoint)
-    stop(msg)
+  if (not_implemented || not_a_single_string) {
+    stop(sprintf(msg_format, endpoint))
   }
 }
 
-
-is_single_string <- function(x, argument_name){
-  msg <- sprintf(
-    "Argument `%s` should be a single string!",
-    argument_name
-  )
-  is_empty <- is.null(x) || is.na(x) || length(x) == 0
-  is_not_string <- !is.character(x)
-  is_vector <- length(x) > 1
-  if (is_empty || is_not_string || is_vector) {
-    stop(msg)
-  }
+is_single_string <- function(x){
+  is.character(x) && length(x) == 1
 }
 
 
@@ -90,12 +72,23 @@ is_not_null <- function(x){
 }
 
 add_paths_to_url <- function(url, path){
-  is_single_string(url, argument_name = "url")
+  check_single_string(url, argument_name = "url")
   check_path(path)
   path <- paste0(path, collapse = "/")
   path <- sprintf("/%s/", path)
   url <- paste0(url, path, collapse = "")
   return(url)
+}
+
+
+check_single_string <- function(x, argument_name){
+  msg <- sprintf(
+    "Argument `%s` should be a single string!",
+    argument_name
+  )
+  if ( !is_single_string(x) ) {
+    stop(msg)
+  }
 }
 
 check_path <- function(path){
