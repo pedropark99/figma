@@ -2,27 +2,28 @@
 % Please edit documentation in R/url.R
 \name{get_endpoint_url}
 \alias{get_endpoint_url}
-\title{Get the URL to each of the implemented endpoints of Figma API}
+\title{Get the URL to a endpoint of Figma API}
 \usage{
 get_endpoint_url(endpoint)
 }
 \arguments{
-\item{endpoint}{a single string with the name of the desired endpoint;}
+\item{endpoint}{A single string with the name of the desired endpoint
+(needs to be one of the values present in \code{figma::implemented_endpoints});}
 }
 \value{
-a string with the URL to the given endpoint.
+A string with the URL to the given endpoint.
 }
 \description{
-Get the URL to each of the implemented endpoints of Figma API
+Get the URL to a endpoint of Figma API
 }
 \details{
 This function accepts only single string values,
 and, this string needs to be one of the values present
 in \code{figma::implemented_endpoints}.
 
-If the user provided a NULL or NA value,
-or, a vector of strings, the function will
-automatically prompt the user with an error.
+If the user provided any type of value that does
+not fit in this description, the function
+will prompt the user with an error message.
 }
 \examples{
 # Returns the URL to the `files` endpoint of Figma API

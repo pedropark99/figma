@@ -15,19 +15,20 @@ api_endpoints <- list(
 implemented_endpoints <- names(api_endpoints)
 
 
-#' Get the URL to each of the implemented endpoints of Figma API
+#' Get the URL to a endpoint of Figma API
 #'
-#' @param endpoint a single string with the name of the desired endpoint;
-#' @returns a string with the URL to the given endpoint.
+#' @param endpoint A single string with the name of the desired endpoint
+#' (needs to be one of the values present in \code{figma::implemented_endpoints});
+#' @returns A string with the URL to the given endpoint.
 #' @details
 #'
 #' This function accepts only single string values,
 #' and, this string needs to be one of the values present
 #' in \code{figma::implemented_endpoints}.
 #'
-#' If the user provided a NULL or NA value,
-#' or, a vector of strings, the function will
-#' automatically prompt the user with an error.
+#' If the user provided any type of value that does
+#' not fit in this description, the function
+#' will prompt the user with an error message.
 #'
 #' @examples
 #' # Returns the URL to the `files` endpoint of Figma API
@@ -41,31 +42,6 @@ get_endpoint_url <- function(endpoint){
 }
 
 
-#' Check the \code{endpoint} argument
-#'
-#' Check if the provided value to the \code{endpoint}
-#' argument.
-#'
-#' This function checks if the \code{endpoint} argument
-#' is:
-#'
-#' \itemize{
-#'   \item{A single string value;}
-#'   \item{One of the values in \code{figma::implemented_endpoints};}
-#' }
-#'
-#' @param endpoint a single string value;
-#' @examples
-#' # Will work:
-#' check_endpoint("files")
-#' \dontrun{
-#' # Will not work, because is a number
-#' check_endpoint(1)
-#' # Will not work, because is a vector
-#' check_endpoint(c("a", "b", "c"))
-#' # Will not work, because there is no "rectangle" endpoint implemented
-#' check_endpoint("rectangle")
-#' }
 check_endpoint <- function(endpoint){
   msg_components <- c(
     "The given endpoint was %s. ",

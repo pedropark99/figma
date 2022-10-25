@@ -11,7 +11,7 @@ build_request_url(base_url, path = NULL, ...)
 
 \item{path}{A vector of strings (or a single string) with "path" components;}
 
-\item{...}{key value pairs that will compose the query string section of the URL;}
+\item{...}{Key-value pairs that will compose the query string section of the URL;}
 }
 \value{
 A single string with the complete URL.
@@ -44,4 +44,10 @@ Third, a query string, which is usually composed by a set of
 key-value pairs. \code{build_request_url()} collects all these
 key-value pairs through the \code{...} argument, and then, combines
 all these pairs together to form a query string.
+}
+\examples{
+build_request_url(
+  "http://test.com", path = c("folder", "a-interesting-resource"),
+  skip = 100, page = 2, title = "Document"
+)
 }
