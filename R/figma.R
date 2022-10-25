@@ -1,7 +1,7 @@
 
 
 
-figma_file <- function(file_key, token){
+get_file <- function(file_key, token){
   url <- get_files_url()
   url <- paste0(
     url,
@@ -11,5 +11,9 @@ figma_file <- function(file_key, token){
   header <- httr::add_headers(
     "X-Figma-Token" = token
   )
-  httr::GET(url = url, header)
+  r <- httr::GET(url = url, header)
+  return(r)
 }
+
+
+
