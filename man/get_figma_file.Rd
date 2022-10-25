@@ -15,18 +15,8 @@ get_figma_file(file_key, token)
 A Figma Document object (i.e. a object of class `figma_document`);
 }
 \description{
-This function will use the \code{/v1/files/} endpoint to get a Figma File
-from the Figma API.
+Use the \code{/v1/files/} endpoint of Figma API to get a Figma File as an R object.
 }
 \details{
 You can easily get the key of your Figma File from the URL of this file.
-In other words, when you visit this file in your web browser, the URL
-will probably look something like this:
-
-\code{https://www.figma.com/file/hch8YlkIrYbU3raDzjPvCz/Untitled}
-
-In the above example, the string \code{hch8YlkIrYbU3raDzjPvCz} is the
-key to the file. So, every URL to a Figma File comes in the following format:
-
-\code{https://www.figma.com/file/file_key/file_title}
 }
