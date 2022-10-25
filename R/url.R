@@ -5,9 +5,7 @@
 #' basic informations of the Figma API, like the base URL
 #' of the API, and the implemented endpoints in this
 #' package.
-#'
-#'
-#'
+
 api_base_url <- "https://api.figma.com"
 api_endpoints <- list(
   files = "/v1/files",
@@ -87,12 +85,6 @@ check_endpoint <- function(endpoint){
 }
 
 
-
-is_single_string <- function(x){
-  is.character(x) && length(x) == 1
-}
-
-
 #' Build the request URL
 #'
 #' Add multiple "components" to a base URL, to build
@@ -100,9 +92,38 @@ is_single_string <- function(x){
 #'
 #' @param base_url A single string with the base URL that you want add components to;
 #' @param path A vector of strings (or a single string) with "path" components;
-#' @param ... key value pairs that will compose the query string section of the URL;
+#' @param ... Key-value pairs that will compose the query string section of the URL;
+#' @returns A single string with the complete URL.
+#' @details
+#' This function receives as input, a set of pieces (or components) of
+#' the URL that will be used in the HTTP request. Then, it tries to combine
+#' (or "collapse") all these pieces together to form a single string with
+#' the complete URL.
 #'
+#' There are three main types of pieces (or components) accepted by this function.
+#' First, the base URL, which is the initial portion of the URL. Usually, this is
+#' the base URL for the Figma API.
 #'
+#' Second, we have the "path" components,
+#' which are all the small bits that compose the path and resource sections
+#' of the URL. Each element of the vector given to \code{path} is separated
+#' by a slash character (\code{"/"}) in the final result.
+#'
+#' For example, if I give the vector \code{c("path1", "path2", "path3")}
+#' to \code{path}, the end result will be structured like this:
+#'
+#' \code{base_url/path1/path2/path3}
+#'
+#' Third, a query string, which is usually composed by a set of
+#' key-value pairs. \code{build_request_url()} collects all these
+#' key-value pairs through the \code{...} argument, and then, combines
+#' all these pairs together to form a query string.
+#'
+#' @examples
+#' build_request_url(
+#'   "http://test.com", path = c("folder", "a-interesting-resource"),
+#'   skip = 100, page = 2, title = "Document"
+#' )
 build_request_url <- function(base_url, path = NULL, ...){
   url <- base_url
   if (is_not_null(path) && is.character(path)) {
@@ -112,14 +133,25 @@ build_request_url <- function(base_url, path = NULL, ...){
   return(url)
 }
 
+
+
+
+is_single_string <- function(x){
+  is.character(x) && length(x) == 1
+}
+
 is_not_null <- function(x){
   !is.null(x) && !all(is.na(x))
 }
 
+
+
+
+
 add_paths_to_url <- function(url, path){
   check_single_string(url, argument_name = "url")
   path <- paste0(path, collapse = "/")
-  path <- sprintf("/%s/", path)
+  path <- sprintf("/%s", path)
   url <- paste0(url, path, collapse = "")
   return(url)
 }
@@ -165,12 +197,34 @@ check_parameters <- function(parameters){
 
 
 
+#' Build a query string from a set of named parameters
+#'
+#' Utility function used to build query strings.
+#'
+#' @param parameters A list with a set of key-value pairs to compose the query string
+#' @returns A single string with the query string produced.
+#' @details
+#' This function takes a set of key-value pairs (or in other words,
+#' a set of named arguments), to build a query string. It basically
+#' combine (or "collapse") all key-value pairs together, to form
+#' the resulting query string.
+#'
+#' Logical values (TRUE or FALSE) are automatically converted to
+#' a lower-case version ("true" or "false"), since these versions are
+#' more tipically used in standard query strings.
+#'
+#' @examples
+#' build_query_string(list(skip = 100, page = 2, title = "Document"))
+#' # Returns a empty string:
+#' build_query_string(list())
+#' build_query_string(list(a = 1, b = 2, c = TRUE))
 build_query_string <- function(parameters){
   keys <- names(parameters)
   key_value_pairs <- vector("character", length(parameters))
   for (i in seq_along(parameters)) {
     key <- keys[i]
     value <- parameters[[i]]
+    if (is.logical(value)) value <- tolower(as.character(value))
     key_value_pairs[i] <- sprintf("%s=%s", key, value)
   }
   query_string <- paste0(key_value_pairs, collapse = "&")
