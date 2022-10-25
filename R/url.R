@@ -95,7 +95,7 @@ is_single_string <- function(x){
 
 #' Build the request URL
 #'
-#' This function adds "components" to a base URL, to compose
+#' Add multiple "components" to a base URL, to build
 #' the complete URL that will be used in the HTTP request.
 #'
 #' @param base_url A single string with the base URL that you want add components to;
@@ -113,12 +113,11 @@ build_request_url <- function(base_url, path = NULL, ...){
 }
 
 is_not_null <- function(x){
-  !is.null(x) && !is.na(x)
+  !is.null(x) && !all(is.na(x))
 }
 
 add_paths_to_url <- function(url, path){
   check_single_string(url, argument_name = "url")
-  check_path(path)
   path <- paste0(path, collapse = "/")
   path <- sprintf("/%s/", path)
   url <- paste0(url, path, collapse = "")
@@ -136,23 +135,7 @@ check_single_string <- function(x, argument_name){
   }
 }
 
-check_path <- function(path){
-  msg_components <- c(
-    "The given path was %s. ",
-    "However `path` should be a single string, or, a vector of strings."
-  )
-  msg_format <- paste(msg_components, collapse = "")
 
-  if (is.null(path) || is.na(path)) {
-    msg <- sprintf(msg_format, "a NULL or NA value!")
-    stop(msg)
-  }
-
-  if (!is.character(path)) {
-    msg <- sprintf(msg_format, path)
-    stop(msg)
-  }
-}
 
 add_query_string_to_url <- function(url, ...){
   parameters <- list(...)
