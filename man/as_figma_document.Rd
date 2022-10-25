@@ -7,7 +7,7 @@
 as_figma_document(response)
 }
 \arguments{
-\item{response:}{a `response` object produced by a `httr` HTTP method (e.g. `httr::GET()`, `httr::POST()`, etc.);}
+\item{response}{a `response` object produced by a `httr` HTTP method (e.g. `httr::GET()`, `httr::POST()`, etc.);}
 }
 \description{
 This function is not intended for client/user-use.

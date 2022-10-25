@@ -7,7 +7,7 @@
 extract_canvas(document)
 }
 \arguments{
-\item{document:}{a Figma Document (i.e. a object of class `figma_document`);}
+\item{document}{a Figma Document (i.e. a object of class `figma_document`);}
 }
 \description{
 Collect all canvas objects present in a Figma Document object.

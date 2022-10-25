@@ -11,8 +11,7 @@ response_content <- function(response){
 #'
 #' This function is not intended for client/user-use.
 #'
-#' @param response: a `response` object produced by a `httr` HTTP method (e.g. `httr::GET()`, `httr::POST()`, etc.);
-#'
+#' @param response a `response` object produced by a `httr` HTTP method (e.g. `httr::GET()`, `httr::POST()`, etc.);
 as_figma_document <- function(response){
   if (!inherits(response, "response")) {
     stop("Object is not of type `response`!")
@@ -34,7 +33,7 @@ as_figma_document <- function(response){
 print.figma_document <- function(x, ...){
   cat("<Figma Document>", "\n\n", sep = "")
   cat(" * Number of canvas:", x$n_canvas, "\n")
-  cat(" * Number of nodes:", str(x$n_nodes), "\n")
+  cat(" * Number of nodes:", x$n_nodes, "\n")
   invisible(x)
 }
 
@@ -43,8 +42,7 @@ print.figma_document <- function(x, ...){
 #'
 #' Collect all canvas objects present in a Figma Document object.
 #'
-#' @param document: a Figma Document (i.e. a object of class `figma_document`);
-#'
+#' @param document a Figma Document (i.e. a object of class `figma_document`);
 extract_canvas <- function(document){
   list_of_canvas <- document$content$children
 }
