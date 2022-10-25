@@ -142,20 +142,25 @@ add_query_string_to_url <- function(url, ...){
   if (length(parameters) == 0) {
     return(url)
   }
-  if (is.null(names(parameters)) || any(names(parameters) == "")) {
-    msg <- c(
-      "Looks like you provided unnamed arguments to `...`. ",
-      "You need to make sure that all arguments passed to `...` ",
-      "are named arguments (i.e. have a key value pair)."
-    )
-    stop(paste0(msg, collapse = ""))
-  }
+  check_parameters(parameters)
   query_string <- build_query_string(parameters)
   url <- paste0(
     url, "?", query_string,
     collapse = ""
   )
   return(url)
+}
+
+
+check_parameters <- function(parameters){
+  if (is.null(names(parameters)) || any(names(parameters) == "")) {
+    msg <- c(
+      "Looks like you provided a unnamed argument to `...`. ",
+      "You need to make sure that all arguments passed to `...` ",
+      "are named arguments."
+    )
+    stop(paste0(msg, collapse = ""))
+  }
 }
 
 

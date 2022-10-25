@@ -7,7 +7,7 @@
 get_endpoint_url(endpoint)
 }
 \arguments{
-\item{endpoint}{a string with the name of the desired endpoint;}
+\item{endpoint}{a single string with the name of the desired endpoint;}
 }
 \value{
 a string with the URL to the given endpoint.
@@ -20,9 +20,9 @@ This function accepts only single string values,
 and, this string needs to be one of the values present
 in \code{figma::implemented_endpoints}.
 
-The function checks if the user provided a NULL or NA value,
-or, a vector of strings. If any of these cases occur,
-the function will automatically prompt the user with an error.
+If the user provided a NULL or NA value,
+or, a vector of strings, the function will
+automatically prompt the user with an error.
 }
 \examples{
 # Returns the URL to the `files` endpoint of Figma API
