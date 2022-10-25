@@ -24,6 +24,10 @@ report_http_error <- function(response){
   content <- response_content(response)
   cat("HTTP Error:\n\n", file = stderr())
   cat(
+    "* URL used in the request: ", response$url, "\n",
+    sep = "", file = stderr()
+  )
+  cat(
     "* Status code returned by the API: ", response$status_code, "\n",
     sep = "", file = stderr()
   )
