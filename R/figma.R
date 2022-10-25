@@ -12,7 +12,7 @@ get_file <- function(file_key, token){
     "X-Figma-Token" = token
   )
   r <- httr::GET(url = url, header)
-  return(r)
+  return(as_figma_document(r))
 }
 
 
