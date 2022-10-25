@@ -1,7 +1,8 @@
 
 api_base_url <- "https://api.figma.com"
 api_endpoints <- list(
-  files = "/v1/files/"
+  files = "/v1/files",
+  file_nodes = "/v1/files"
 )
 
 implemented_endpoints <- names(api_endpoints)
@@ -28,7 +29,7 @@ implemented_endpoints <- names(api_endpoints)
 get_endpoint_url <- function(endpoint){
   check_endpoint(endpoint)
   endpoint_url <- api_endpoints[[endpoint]]
-  url <- paste0(api_base_url, endpoint_url)
+  url <- paste0(api_base_url, endpoint_url, collapse = "")
   return(url)
 }
 
@@ -93,8 +94,9 @@ is_not_null <- function(x){
 add_paths_to_url <- function(url, path){
   is_single_string(url, argument_name = "url")
   check_path(path)
+  path <- paste0(path, collapse = "/")
   path <- sprintf("/%s/", path)
-  url <- paste(url, path, collapse = "")
+  url <- paste0(url, path, collapse = "")
   return(url)
 }
 
@@ -110,12 +112,12 @@ check_path <- function(path){
     stop(msg)
   }
 
-  if (!is.character) {
+  if (!is.character(path)) {
     msg <- sprintf(msg_format, path)
     stop(msg)
   }
 }
 
-add_query_string_to_url <- function(url, query_string) {
+add_query_string_to_url <- function(url, query_string){
   return(url)
 }
