@@ -76,14 +76,12 @@ is_single_string <- function(x, argument_name){
 
 
 
-build_request_url <- function(base_url, path = NULL, query_string = NULL){
+build_request_url <- function(base_url, path = NULL, ...){
   url <- base_url
   if (is_not_null(path) && is.character(path)) {
     url <- add_paths_to_url(url, path)
   }
-  if (is_not_null(query_string) && is.character(query_string)) {
-    url <- add_query_string_to_url(url, query_string)
-  }
+  url <- add_query_string_to_url(url, ...)
   return(url)
 }
 
@@ -118,6 +116,32 @@ check_path <- function(path){
   }
 }
 
-add_query_string_to_url <- function(url, query_string){
+add_query_string_to_url <- function(url, ...){
+  parameters <- list(...)
+  if (length(parameters) == 0) {
+    return(url)
+  }
+  query_string <- build_query_string(parameters)
+  url <- paste0(
+    url, "?", query_string,
+    collapse = ""
+  )
   return(url)
 }
+
+
+
+build_query_string <- function(parameters){
+  keys <- names(parameters)
+  key_value_pairs <- vector("character", length(parameters))
+  for (i in seq_along(parameters)) {
+    key <- keys[i]
+    value <- parameters[[i]]
+    key_value_pairs[i] <- sprintf("%s=%s", key, value)
+  }
+  query_string <- paste0(key_value_pairs, collapse = "&")
+  return(query_string)
+}
+
+
+

@@ -22,7 +22,10 @@ get_figma_file <- function(file_key, token){
 
 get_figma_file_nodes <- function(file_key, node_id, token){
   url <- get_endpoint_url(endpoint = "file_nodes")
-  url <- build_request_url(url, path = c(file_key, node_id))
+  url <- build_request_url(
+    url,
+    path = c(file_key, "nodes"), ids = node_id
+  )
   header <- httr::add_headers(
     "X-Figma-Token" = token
   )
