@@ -1,4 +1,13 @@
-
+#' Figma API infos and handlers to URLs
+#'
+#' This file contains all functions for basic
+#' URL manipulation, and, global variables that stores
+#' basic informations of the Figma API, like the base URL
+#' of the API, and the implemented endpoints in this
+#' package.
+#'
+#'
+#'
 api_base_url <- "https://api.figma.com"
 api_endpoints <- list(
   files = "/v1/files",
@@ -10,7 +19,7 @@ implemented_endpoints <- names(api_endpoints)
 
 #' Get the URL to each of the implemented endpoints of Figma API
 #'
-#' @param endpoint a string with the name of the desired endpoint;
+#' @param endpoint a single string with the name of the desired endpoint;
 #' @returns a string with the URL to the given endpoint.
 #' @details
 #'
@@ -18,9 +27,9 @@ implemented_endpoints <- names(api_endpoints)
 #' and, this string needs to be one of the values present
 #' in \code{figma::implemented_endpoints}.
 #'
-#' The function checks if the user provided a NULL or NA value,
-#' or, a vector of strings. If any of these cases occur,
-#' the function will automatically prompt the user with an error.
+#' If the user provided a NULL or NA value,
+#' or, a vector of strings, the function will
+#' automatically prompt the user with an error.
 #'
 #' @examples
 #' # Returns the URL to the `files` endpoint of Figma API
@@ -34,6 +43,31 @@ get_endpoint_url <- function(endpoint){
 }
 
 
+#' Check the \code{endpoint} argument
+#'
+#' Check if the provided value to the \code{endpoint}
+#' argument.
+#'
+#' This function checks if the \code{endpoint} argument
+#' is:
+#'
+#' \itemize{
+#'   \item{A single string value;}
+#'   \item{One of the values in \code{figma::implemented_endpoints};}
+#' }
+#'
+#' @param endpoint a single string value;
+#' @examples
+#' # Will work:
+#' check_endpoint("files")
+#' \dontrun{
+#' # Will not work, because is a number
+#' check_endpoint(1)
+#' # Will not work, because is a vector
+#' check_endpoint(c("a", "b", "c"))
+#' # Will not work, because there is no "rectangle" endpoint implemented
+#' check_endpoint("rectangle")
+#' }
 check_endpoint <- function(endpoint){
   msg_components <- c(
     "The given endpoint was %s. ",
@@ -52,12 +86,23 @@ check_endpoint <- function(endpoint){
   }
 }
 
+
+
 is_single_string <- function(x){
   is.character(x) && length(x) == 1
 }
 
 
-
+#' Build the request URL
+#'
+#' This function adds "components" to a base URL, to compose
+#' the complete URL that will be used in the HTTP request.
+#'
+#' @param base_url A single string with the base URL that you want add components to;
+#' @param path A vector of strings (or a single string) with "path" components;
+#' @param ... key value pairs that will compose the query string section of the URL;
+#'
+#'
 build_request_url <- function(base_url, path = NULL, ...){
   url <- base_url
   if (is_not_null(path) && is.character(path)) {
@@ -113,6 +158,14 @@ add_query_string_to_url <- function(url, ...){
   parameters <- list(...)
   if (length(parameters) == 0) {
     return(url)
+  }
+  if (is.null(names(parameters)) || any(names(parameters) == "")) {
+    msg <- c(
+      "Looks like you provided unnamed arguments to `...`. ",
+      "You need to make sure that all arguments passed to `...` ",
+      "are named arguments (i.e. have a key value pair)."
+    )
+    stop(paste0(msg, collapse = ""))
   }
   query_string <- build_query_string(parameters)
   url <- paste0(
