@@ -16,7 +16,8 @@ get_figma_file <- function(file_key, token){
     "X-Figma-Token" = token
   )
   r <- httr::GET(url = url, header)
-  return(as_figma_document(r))
+  r <- parse_response_object(r)
+  return(r)
 }
 
 

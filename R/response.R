@@ -7,6 +7,35 @@ response_content <- function(response){
 }
 
 
+parse_response_object <- function(response){
+  check_for_http_erros(response)
+}
+
+check_for_http_erros <- function(response){
+  if (!httr:::is.response(response)) {
+    stop("Object given to `response` is not of type `response`!")
+  }
+  if (response$status_code != 200) {
+    report_http_error(response)
+  }
+}
+
+report_http_error <- function(response){
+  content <- response_content(response)
+  cat("HTTP Error:\n\n", file = stderr())
+  cat(
+    "* Status code returned by the API: ", response$status_code, "\n",
+    sep = "", file = stderr()
+  )
+  cat(
+    "* Error message returned by the API: ", content$err, "\n",
+    sep = "", file = stderr()
+  )
+  cat("* Headers returned by the API:\n", file = stderr())
+  cat(utils::str(response$all_headers[[1]]), file = stderr())
+  stop("The status code returned by the HTTP request is different from 200!")
+}
+
 #' Convert a `httr` response object to a Figma Document object
 #'
 #' This function is not intended for client/user-use.
