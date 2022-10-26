@@ -7,16 +7,18 @@
 #'
 #' @param file_key A string with the key of the Figma File you want to get;
 #' @param token A string with your personal Figma token to authenticate in the API;
+#' @param .output_format The output format (i.e. you want your Figma data as is?
+#' Or, you want to allocate it on a `tibble`? etc...)
 #'
 #' @returns A Figma Document object (i.e. a object of class `figma_document`);
-get_figma_file <- function(file_key, token){
+get_figma_file <- function(file_key, token, .output_format = "response"){
   url <- get_endpoint_url(endpoint = "files")
   url <- build_request_url(url, path = file_key)
   header <- httr::add_headers(
     "X-Figma-Token" = token
   )
   r <- httr::GET(url = url, header)
-  r <- parse_response_object(r)
+  r <- parse_response_object(r, .output_format)
   return(r)
 }
 

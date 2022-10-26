@@ -7,11 +7,18 @@ response_content <- function(response){
 }
 
 
-parse_response_object <- function(response){
-  check_for_http_erros(response)
+parse_response_object <- function(response, .output_format){
+  check_for_http_errors(response)
+  output_format <- check_output_format(.output_format)
+  if (output_format == 'response') {
+    return(response)
+  }
+  if (output_format == 'figma') {
+    return(as_figma_document(response))
+  }
 }
 
-check_for_http_erros <- function(response){
+check_for_http_errors <- function(response){
   if (!httr:::is.response(response)) {
     stop("Object given to `response` is not of type `response`!")
   }
@@ -40,6 +47,22 @@ report_http_error <- function(response){
   stop("The status code returned by the HTTP request is different from 200!")
 }
 
+
+check_output_format <- function(format){
+  formats_allowed <- c('response', 'figma_document', 'tibble')
+  if ( !(format %in% formats_allowed) ) {
+    msg <- sprintf("Output format '%s' not allowed!", format)
+    formats <- sprintf("'%s'", formats_allowed)
+    formats <- paste0(formats, collapse = ", ")
+    msg <- paste0(
+      msg, "\n",
+      sprintf("Choose one of the following options: %s", formats)
+    )
+    stop(msg)
+  }
+  return(format)
+}
+
 #' Convert a `httr` response object to a Figma Document object
 #'
 #' This function is not intended for client/user-use.
@@ -49,13 +72,15 @@ as_figma_document <- function(response){
   if (!inherits(response, "response")) {
     stop("Object is not of type `response`!")
   }
-  content <- response_content(response)$document
-  n_canvas <- length(content$children)
-  n_nodes <- purrr::map_int(content$children, length)
-  names(n_nodes) <- paste("Canvas", seq_along(content$children))
+  content <- httr::content(a)
+  document <- content$document[c("id", "name", "type")]
+  canvas <- content$document[["children"]]
+  n_nodes <- purrr::map_int(canvas, length)
+  names(n_nodes) <- paste("Canvas", seq_along(canvas))
   structure(
-    list(name = "Figma Document", n_canvas = n_canvas,
-         n_nodes = n_nodes, content = content),
+    list(name = "Figma Document", document = document,
+         canvas = canvas, n_canvas = length(canvas),
+         n_nodes = n_nodes),
     class = "figma_document"
   )
 }
@@ -70,6 +95,11 @@ print.figma_document <- function(x, ...){
   invisible(x)
 }
 
+
+as_tibble <- function(response){
+  data <- as_figma_document(response)
+  data$canvas
+}
 
 #' Extract all canvas from a Figma Document
 #'
