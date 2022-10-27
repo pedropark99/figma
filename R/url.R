@@ -42,9 +42,9 @@ get_endpoint_url <- function(endpoint){
 }
 
 
-check_endpoint <- function(endpoint){
+check_endpoint <- function(endpoint, call = rlang::caller_env()){
   msg_components <- c(
-    "The given endpoint was %s. ",
+    "The given endpoint was '%s'. ",
     "However, the `endpoint` argument should be a single string ",
     "with the name of the endpoint you want to use. ",
     "Check `print(figma::implemented_endpoints)` to see the available values ",
@@ -56,7 +56,7 @@ check_endpoint <- function(endpoint){
   not_implemented <- !endpoint %in% implemented_endpoints
 
   if (not_implemented || not_a_single_string) {
-    stop(sprintf(msg_format, endpoint))
+    rlang::abort(sprintf(msg_format, endpoint), call = call)
   }
 }
 
@@ -133,13 +133,15 @@ add_paths_to_url <- function(url, path){
 }
 
 
-check_single_string <- function(x, argument_name){
+check_single_string <- function(x,
+                                argument_name,
+                                call = rlang::caller_env()){
   msg <- sprintf(
     "Argument `%s` should be a single string!",
     argument_name
   )
   if ( !is_single_string(x) ) {
-    stop(msg)
+    rlang::abort(msg, call = call)
   }
 }
 
@@ -160,14 +162,15 @@ add_query_string_to_url <- function(url, ...){
 }
 
 
-check_parameters <- function(parameters){
+check_parameters <- function(parameters, call = rlang::caller_env()){
+
   if (is.null(names(parameters)) || any(names(parameters) == "")) {
     msg <- c(
       "Looks like you provided a unnamed argument to `...`. ",
       "You need to make sure that all arguments passed to `...` ",
       "are named arguments."
     )
-    stop(paste0(msg, collapse = ""))
+    rlang::abort(paste0(msg, collapse = ""), call = call)
   }
 }
 

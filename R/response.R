@@ -18,33 +18,47 @@ parse_response_object <- function(response, .output_format){
   }
 }
 
-check_for_http_errors <- function(response){
+check_for_http_errors <- function(response,
+                                  call = rlang::caller_env()){
+
   if (!httr:::is.response(response)) {
-    stop("Object given to `response` is not of type `response`!")
+    rlang::abort(
+      "Object given to `response` is not of type `response`!",
+      call = call
+    )
   }
   if (response$status_code != 200) {
     report_http_error(response)
   }
 }
 
-report_http_error <- function(response){
+report_http_error <- function(response,
+                              call = rlang::caller_env(n = 3)){
+
   content <- response_content(response)
-  cat("HTTP Error:\n\n", file = stderr())
-  cat(
-    "* URL used in the request: ", response$url, "\n",
-    sep = "", file = stderr()
+  header <- "HTTP Error:\n\n"
+  url <- sprintf(
+    "* URL used in the request: %s\n", response$url
   )
-  cat(
-    "* Status code returned by the API: ", response$status_code, "\n",
-    sep = "", file = stderr()
+  status <- sprintf(
+    "* Status code returned by the API: %s\n", response$status_code
   )
-  cat(
-    "* Error message returned by the API: ", content$err, "\n",
-    sep = "", file = stderr()
+  error_message <- sprintf(
+    "* Error message returned by the API: %s\n", content$err
   )
-  cat("* Headers returned by the API:\n", file = stderr())
-  cat(utils::str(response$all_headers[[1]]), file = stderr())
-  stop("The status code returned by the HTTP request is different from 200!")
+  headers <- sprintf(
+    "* Headers returned by the API:\n%s\n",
+    response$all_headers[[1]] |>
+      utils::str() |>
+      utils::capture.output() |>
+      paste0(collapse = "\n")
+  )
+
+  rlang::abort(
+    c(header, url, status, error_message, headers) |>
+      paste0(collapse = ""),
+    call = call
+  )
 }
 
 
