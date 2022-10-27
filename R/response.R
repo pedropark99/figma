@@ -21,7 +21,7 @@ parse_response_object <- function(response, .output_format){
 check_for_http_errors <- function(response,
                                   call = rlang::caller_env()){
 
-  if (!httr:::is.response(response)) {
+  if (!inherits(response, "response")) {
     rlang::abort(
       "Object given to `response` is not of type `response`!",
       call = call
@@ -86,7 +86,7 @@ as_figma_document <- function(response){
   if (!inherits(response, "response")) {
     stop("Object is not of type `response`!")
   }
-  content <- httr::content(a)
+  content <- httr::content(response)
   document <- content$document[c("id", "name", "type")]
   canvas <- content$document[["children"]]
   n_nodes <- purrr::map_int(canvas, length)
@@ -155,14 +155,19 @@ build_objects_tibble <- function(objects){
 get_standard_attributes <- function(objects){
   attrs <- purrr::map(objects, ~.[standard_attrs])
   attrs <- purrr::transpose(attrs)
-  attrs <- map(attrs, unlist)
+  attrs <- purrr::map(attrs, unlist)
   return(tibble::as_tibble(attrs))
 }
 
 
 get_nonstandard_attributes <- function(objects){
-  nonstandard_attrs <- map(objects, find_nonstandard_attr)
-  attrs <- map2(objects, nonstandard_attrs, `[`)
+  nonstandard_attrs <- purrr::map(
+    objects, find_nonstandard_attr
+  )
+  attrs <- purrr::map2(
+    objects, nonstandard_attrs,
+    `[`
+  )
   return(attrs)
 }
 

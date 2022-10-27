@@ -1,19 +1,21 @@
 Package: figma
 Type: Package
-Title: What the Package Does (Title Case)
+Title: R client to the Figma API
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Pedro Duarte Faria
+Maintainer: Pedro Duarte Faria <pedropark99@gmail.com>
+Description: The package provides useful functions to access data
+    from Figma documents and projects using the Figma public API,
+    and collect it into useful R data structures.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
-    httr,
-    purrr,
-    dplyr,
-    rlang
+    httr (>= 1.4.1),
+    purrr (>= 0.3.3),
+    dplyr (>= 1.0.0),
+    rlang (>= 1.0.0),
+    tibble (>= 3.0.5)
 RoxygenNote: 7.2.1
 Suggests:
     usethis

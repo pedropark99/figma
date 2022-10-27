@@ -4,12 +4,15 @@
 \alias{get_figma_file}
 \title{Get a Figma File from the API}
 \usage{
-get_figma_file(file_key, token)
+get_figma_file(file_key, token, .output_format = "response")
 }
 \arguments{
 \item{file_key}{A string with the key of the Figma File you want to get;}
 
 \item{token}{A string with your personal Figma token to authenticate in the API;}
+
+\item{.output_format}{The output format (i.e. you want your Figma data as is?
+Or, you want to allocate it on a `tibble`? etc...)}
 }
 \value{
 A Figma Document object (i.e. a object of class `figma_document`);

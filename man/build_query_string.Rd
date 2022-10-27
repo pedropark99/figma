@@ -30,4 +30,5 @@ build_query_string(list(skip = 100, page = 2, title = "Document"))
 # Returns a empty string:
 build_query_string(list())
 build_query_string(list(a = 1, b = 2, c = TRUE))
+
 }

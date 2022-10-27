@@ -197,6 +197,7 @@ check_parameters <- function(parameters, call = rlang::caller_env()){
 #' # Returns a empty string:
 #' build_query_string(list())
 #' build_query_string(list(a = 1, b = 2, c = TRUE))
+#'
 build_query_string <- function(parameters){
   keys <- names(parameters)
   key_value_pairs <- vector("character", length(parameters))
