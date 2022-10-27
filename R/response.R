@@ -97,8 +97,73 @@ print.figma_document <- function(x, ...){
 
 
 as_tibble <- function(response){
-  data <- as_figma_document(response)
-  data$canvas
+  document <- as_figma_document(response)
+  canvas <- document$canvas
+  list_of_tibbles <- vector("list", length = length(canvas))
+  for (i in seq_along(canvas)) {
+    canvas_metadata <- get_canvas_metadata(canvas[[i]])
+    objects_data <- parse_objects(canvas[[i]])
+    objects_data$canvas_id <- canvas_metadata$id
+    objects_data$canvas_name <- canvas_metadata$name
+    list_of_tibbles[[i]] <- objects_data |>
+      dplyr::rename(
+        object_id = "id",
+        object_name = "name"
+      ) |>
+      dplyr::select(
+        dplyr::starts_with("canvas"),
+        dplyr::starts_with("object")
+      )
+  }
+  dplyr::bind_rows(list_of_tibbles)
+}
+
+standard_attrs <- c("id", "name", "type")
+
+get_canvas_metadata <- function(canva){
+  attrs <- canva[standard_attrs]
+  return(attrs)
+}
+
+
+parse_objects <- function(canva){
+  objects <- get_canva_objects(canva)
+  build_objects_tibble(objects)
+}
+
+
+build_objects_tibble <- function(objects){
+  table <- get_standard_attributes(objects)
+  table$object_attributes <- get_nonstandard_attributes(objects)
+  return(table)
+}
+
+get_standard_attributes <- function(objects){
+  attrs <- purrr::map(objects, ~.[standard_attrs])
+  attrs <- purrr::transpose(attrs)
+  attrs <- map(attrs, unlist)
+  return(tibble::as_tibble(attrs))
+}
+
+
+get_nonstandard_attributes <- function(objects){
+  nonstandard_attrs <- map(objects, find_nonstandard_attr)
+  attrs <- map2(objects, nonstandard_attrs, `[`)
+  return(attrs)
+}
+
+
+get_canva_objects <- function(canva){
+  canva$children
+}
+
+
+find_nonstandard_attr <- function(node){
+  attr_names <- names(node)
+  non_standard_attrs <- attr_names[
+    !(attr_names %in% standard_attrs)
+  ]
+  return(non_standard_attrs)
 }
 
 #' Extract all canvas from a Figma Document
