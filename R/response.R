@@ -1,6 +1,13 @@
 #' Parse the response object returned by Figma API
 #'
 #'
+standard_attrs <- c("id", "name", "type")
+document_attrs <- c(
+  "name", "components", "componentSets",
+  "styles", "schemaVersion", "lastModified",
+  "thumbnailUrl", "version", "role",
+  "editorType", "linkAccess"
+)
 
 response_content <- function(response){
   httr::content(response, encoding = "UTF-8")
@@ -15,6 +22,9 @@ parse_response_object <- function(response, .output_format){
   }
   if (output_format == 'figma') {
     return(as_figma_document(response))
+  }
+  if (output_format == 'tibble') {
+    return(as_tibble(response))
   }
 }
 
@@ -87,20 +97,19 @@ as_figma_document <- function(response){
     stop("Object is not of type `response`!")
   }
   content <- httr::content(response)
-  document <- content$document[c("id", "name", "type")]
+  document <- content[document_attrs]
+  document <- c(content$document[c("id", "type")], document)
   canvas <- content$document[["children"]]
   n_nodes <- purrr::map_int(canvas, length)
   names(n_nodes) <- paste("Canvas", seq_along(canvas))
   structure(
-    list(name = "Figma Document", document = document,
-         canvas = canvas, n_canvas = length(canvas),
-         n_nodes = n_nodes),
+    list(document = document, canvas = canvas,
+         n_canvas = length(canvas), n_nodes = n_nodes),
     class = "figma_document"
   )
 }
 
 
-#' Print method for Figma Document objects
 #' @exportS3Method
 print.figma_document <- function(x, ...){
   cat("<Figma Document>", "\n\n", sep = "")
@@ -110,53 +119,124 @@ print.figma_document <- function(x, ...){
 }
 
 
-as_tibble <- function(response){
-  document <- as_figma_document(response)
+as_tibble <- function(x){
+  if (inherits(x, "response")) {
+    document <- as_figma_document(x)
+  } else
+  if (inherits(x, "figma_document")) {
+    document <- x
+  } else {
+    msg <- paste0(c(
+      "`as_tibble()` accepts objects of type `response` or `figma_document`. ",
+      "However, a object of type %s was given."
+    ), collapse = "")
+    rlang::abort(sprintf(msg, class(x)))
+  }
+
   canvas <- document$canvas
   list_of_tibbles <- vector("list", length = length(canvas))
   for (i in seq_along(canvas)) {
-    canvas_metadata <- get_canvas_metadata(canvas[[i]])
+    canvas_metadata <- parse_canvas_metadata(canvas[[i]])
     objects_data <- parse_objects(canvas[[i]])
-    objects_data$canvas_id <- canvas_metadata$id
-    objects_data$canvas_name <- canvas_metadata$name
-    list_of_tibbles[[i]] <- objects_data |>
-      dplyr::rename(
-        object_id = "id",
-        object_name = "name"
-      ) |>
-      dplyr::select(
-        dplyr::starts_with("canvas"),
-        dplyr::starts_with("object")
-      )
+    data <- bind_tables(canvas_metadata, objects_data)
+    list_of_tibbles[[i]] <- data
   }
-  dplyr::bind_rows(list_of_tibbles)
-}
-
-standard_attrs <- c("id", "name", "type")
-
-get_canvas_metadata <- function(canva){
-  attrs <- canva[standard_attrs]
-  return(attrs)
+  df <- dplyr::bind_rows(list_of_tibbles)
+  df <- add_document_metadata(df, document)
+  return(df)
 }
 
 
-parse_objects <- function(canva){
-  objects <- get_canva_objects(canva)
+add_document_metadata <- function(df, document){
+  n <- nrow(df)
+  attrs <- names(document$document)
+  for (attr in attrs) {
+    value <- document$document[[attr]]
+    if (is.list(value)) {
+      value <- lapply(seq_len(n), function(x) value)
+    } else {
+      value <- rep(value, times = n)
+    }
+    attr_name <- gsub("([A-Z])", "_\\1", attr, perl = TRUE)
+    attr_name <- paste("document", tolower(attr_name), sep = "_")
+    df[[attr_name]] <- value
+  }
+  df <- df |>
+    dplyr::select(
+      dplyr::starts_with("document"),
+      dplyr::everything()
+    )
+  return(df)
+}
+
+
+parse_canvas_metadata <- function(canvas){
+  attrs <- canvas[standard_attrs]
+  n_objects <- length(canvas$children)
+  df <- tibble::tibble(tempcol = seq_len(n_objects))
+  for (attr in standard_attrs) {
+    df[[attr]] <- rep(attrs[[attr]], times = n_objects)
+  }
+  df <- df |>
+    dplyr::select(-tempcol) |>
+    dplyr::rename(
+      canvas_id = "id",
+      canvas_name = "name",
+      canvas_type = "type"
+    )
+
+  return(df)
+}
+
+bind_tables <- function(canvas_data, objects_data){
+  n_objects <- nrow(objects_data)
+  n_canvas <- nrow(canvas_data)
+  if (n_objects == 0) {
+    return(tibble::tibble())
+  }
+  if (n_objects != n_canvas) {
+    msg <- paste0(c(
+      "Objects dataframe have %d rows. However, Canvas dataframe have %d rows.",
+      "Because of this inconsistency, we cannot bind these two dataframes together!"
+    ), collapse = "\n")
+    msg <- sprintf(msg, n_objects, n_canvas)
+    rlang::abort(msg)
+  }
+  dplyr::bind_cols(canvas_data, objects_data)
+}
+
+
+
+parse_objects <- function(canvas){
+  objects <- get_canva_objects(canvas)
+  if (length(objects) == 0) {
+    return(tibble::tibble())
+  }
   build_objects_tibble(objects)
 }
 
 
 build_objects_tibble <- function(objects){
   table <- get_standard_attributes(objects)
-  table$object_attributes <- get_nonstandard_attributes(objects)
+  table <- table |>
+    dplyr::mutate(
+      object_attributes = get_nonstandard_attributes(objects)
+    )
+
   return(table)
 }
 
 get_standard_attributes <- function(objects){
   attrs <- purrr::map(objects, ~.[standard_attrs])
   attrs <- purrr::transpose(attrs)
-  attrs <- purrr::map(attrs, unlist)
-  return(tibble::as_tibble(attrs))
+  attrs <- purrr::map(attrs, unlist) |>
+    tibble::as_tibble() |>
+    dplyr::rename(
+      object_id = "id",
+      object_name = "name",
+      object_type = "type"
+    )
+  return(attrs)
 }
 
 
