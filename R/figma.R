@@ -8,27 +8,38 @@
 #' With this function you can bring all of the data of your
 #' Figma file into R. By default, \code{get_figma_file()} returns
 #' a `response` object with all of the data returned by the API.
-#' That is, not only the data of your file, but, all of the data
+#' That is, not only the data of your Figma file, but also, the data
 #' from the HTTP request.
 #'
-#' Although this format might be useful (specially because it
-#' brings all of the available data), you might want a more "formatted"
-#' (or friendly) output. In this case, you can use the \code{.output_format}
-#' argument to get a different output format.
+#' All of the data from your Figma file is in the \code{content} element of
+#' the `response` object. However, by default, the Figma API returns this data in
+#' \code{raw} format (that is, as raw bytes). To convert these bytes into
+#' a useful object (like a JSON object, or a character vector, or a list),
+#' is highly recomended to apply the \code{httr::content()} function
+#' over this \code{content} element.
+#'
+#' Although this being a useful output format (i.e. `response` object)
+#' (specially because it brings all of the available data), you might want
+#' a more "formatted" (or friendly) output. In this case, you can use
+#' the \code{.output_format} argument to get a different output format.
 #'
 #' With \code{.output_format = "figma_document"}, \code{get_figma_file()}
-#' returns a Figma Document object
-#' (i.e. a object of class \code{figma_document}).
+#' use \code{figma::as_figma_document()} to convert the `response` object
+#' into a Figma Document object
+#' (i.e. a object of class \code{figma_document}), and returns it as the
+#' output. This \code{figma_document} object, is a normal R list, with
+#' only the data of your Figma file (See documentation of
+#' \code{figma::as_figma_document()} for more details).
 #'
 #' With \code{.output_format = "tibble"}, \code{get_figma_file()}
 #' will use \code{figma::as_tibble()} to parse the output from
 #' the API to fit into a \code{tibble::tibble()} object. If you
 #' use this output format, you can also use the \code{simplified}
 #' argument to control if document metadata should be present
-#' in the resulting \code{tibble} (See examples section)
+#' in the resulting \code{tibble} (See examples section).
 #'
-#' By default, \code{simplified} is set to \code{TRUE}. With this
-#' configuration \code{get_figma_file()} outputs a tibble with
+#' By default, \code{simplified} is set to \code{TRUE}, so
+#' \code{get_figma_file()} outputs a tibble with
 #' all the objects data from your Figma file, and their corresponding
 #' canvas metadata. However, it does not include any metadata from
 #' the document per se.
@@ -36,9 +47,13 @@
 #' In other words, with \code{simplified = TRUE} you get all the data
 #' of the objects from each canvas in your Figma file, but you do
 #' not get any metadata from the document. That is okay, because you
-#' usually do not need these informations. But if you want them in
-#' the resulting tibble, pass \code{simplified = FALSE};
+#' usually do not need these informations.
 #'
+#' But if you want them in the resulting tibble, pass \code{simplified = FALSE}
+#' to \code{get_figma_file()}. If you want just the document metadata (and not
+#' the canvas or objects data), you might want to use the
+#' \code{get_document_info()} function instead of \code{get_figma_file()} (See
+#' \code{get_document_info()} documentation for more details).
 #'
 #' @param file_key A string with the key of the Figma File you want to get;
 #' @param token A string with your personal Figma token to authenticate in the API;
@@ -49,16 +64,15 @@
 #' @returns By default, \code{get_figma_file()} do not parse the output from
 #' the API, and returns the raw \code{response} object
 #' produced by the \code{httr} HTTP methods (e.g. \code{httr::GET()}). But you
-#' can change this behaviour with \code{.output_format} argument (See Details
-#' section for more information).
-#'
-#' With \code{.output_format = "tibble"}, a \code{tibble::tibble()} object
+#' can change this behaviour with \code{.output_format} argument. With
+#' \code{.output_format = "tibble"}, a \code{tibble::tibble()} object
 #' is returned. With \code{.output_format = "figma_document"}, a object of
-#' class \code{figma_document} is returned.
+#' class \code{figma_document} is returned (See Details
+#' section for more information).
 #'
 #' @examples
 #' \dontrun{
-#' file_key <- "hch8YlkIrYbU3raDzjPvCz"
+#' file_key <- "hch8YlkgaUIZ9raDzjPvCz"
 #' token <- "my figma token secret ... "
 #' # Returns a `response` object:
 #' result <- get_figma_file(file_key, token)
@@ -90,6 +104,52 @@ get_figma_file <- function(file_key,
   return(r)
 }
 
+
+
+
+
+#' Get the document metadata of a Figma File from the API
+#'
+#' This function uses the \code{/v1/files/} endpoint of Figma API
+#' to get all of the document metadata of a particular Figma File,
+#' and fit it into a R object.
+#'
+#' @inheritParams get_figma_file
+#' @param .output_format The output format. Options are \code{"list"} and
+#' \code{"tibble"}. Defaults to \code{"list"};
+#'
+#' @returns
+#' By default, \code{get_document_info()} returns a raw R list with all
+#' of the document metadata of your Figma file. But you can change this
+#' behaviour with \code{.output_format = "tibble"}, which gives you
+#' a \code{tibble::tibble} object.
+#'
+#' @details
+#' You may not be interested in the contents of a Figma file, but in the
+#' metadata of this file instead. That is, you want to know the "name"
+#' of a particular Figma file, the last time it was modified, which version
+#' it uses, etc.
+#'
+#' That is why \code{get_document_info()} exists. It collects just the
+#' metadata of your Figma file, and ignores all canvas and objects data.
+#'
+#' By default, \code{get_document_info()} fits the metada into a raw R list.
+#' But you can change this behaviour with the \code{.output_format} argument.
+#' With \code{.output_format = "tibble"}, \code{get_document_info()} will
+#' fit the metadata into a \code{tibble::tibble} object.
+#'
+#' @examples
+#' \dontrun{
+#' file_key <- "hch8YlkgaUIZ9raDzjPvCz"
+#' token <- "my figma token secret ... "
+#' # Returns a list with the metadata:
+#' result <- get_document_info(file_key, token)
+#' # Returns a `tibble` object:
+#' result <- get_document_info(
+#'   file_key, token,
+#'   .output_format = "tibble"
+#' )
+#' }
 
 get_document_info <- function(file_key, token, .output_format = "list"){
   r <- get_figma_file(

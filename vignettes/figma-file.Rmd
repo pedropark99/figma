@@ -1,0 +1,25 @@
+---
+title: "Representation of a Figma file"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Representation of a Figma file}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, eval = FALSE}
+library(figma)
+```
+
+# Introduction
+
+A Figma file is represented as a tree of nodes. is composed of a set of canvas (or pages), and each canvas contains a set of multiple objects. So, the canvas is the visual space where you draw, and, each object represents a layer, or, a visual element that you add to this space.
+
+Each object that you add can be of a different type (like TEXT, RECTANGLE, ARROW, etc.). But each canvas is always
