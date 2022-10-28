@@ -14,17 +14,17 @@ response_content <- function(response){
 }
 
 
-parse_response_object <- function(response, .output_format){
+parse_response_object <- function(response, .output_format, ...){
   check_for_http_errors(response)
   output_format <- check_output_format(.output_format)
   if (output_format == 'response') {
     return(response)
   }
-  if (output_format == 'figma') {
-    return(as_figma_document(response))
+  if (output_format == 'figma_document') {
+    return(as_figma_document(response, ...))
   }
   if (output_format == 'tibble') {
-    return(as_tibble(response))
+    return(as_tibble(response, ...))
   }
 }
 
@@ -92,7 +92,7 @@ check_output_format <- function(format){
 #' This function is not intended for client/user-use.
 #'
 #' @param response a `response` object produced by a `httr` HTTP method (e.g. `httr::GET()`, `httr::POST()`, etc.);
-as_figma_document <- function(response){
+as_figma_document <- function(response, ...){
   if (!inherits(response, "response")) {
     stop("Object is not of type `response`!")
   }
@@ -119,7 +119,7 @@ print.figma_document <- function(x, ...){
 }
 
 
-as_tibble <- function(x){
+as_tibble <- function(x, simplified = TRUE){
   if (inherits(x, "response")) {
     document <- as_figma_document(x)
   } else
@@ -142,8 +142,12 @@ as_tibble <- function(x){
     list_of_tibbles[[i]] <- data
   }
   df <- dplyr::bind_rows(list_of_tibbles)
-  df <- add_document_metadata(df, document)
-  return(df)
+  if (simplified) {
+    return(df)
+  } else {
+    df <- add_document_metadata(df, document)
+    return(df)
+  }
 }
 
 
@@ -167,6 +171,26 @@ add_document_metadata <- function(df, document){
       dplyr::everything()
     )
   return(df)
+}
+
+
+parse_document_metadata <- function(figma_document, .output_format){
+  document <- figma_document$document
+  if (.output_format == "tibble") {
+    df <- tibble::tibble(tempcol = 1L)
+    attrs <- names(document)
+    for (attr in attrs) {
+      value <- document[[attr]]
+      if (is.list(value)) {
+        value <- list(value)
+      }
+      df[[attr]] <- value
+    }
+    df <- df |> dplyr::select(-tempcol)
+    return(df)
+  }
+
+  return(document)
 }
 
 

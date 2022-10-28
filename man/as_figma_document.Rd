@@ -4,7 +4,7 @@
 \alias{as_figma_document}
 \title{Convert a `httr` response object to a Figma Document object}
 \usage{
-as_figma_document(response)
+as_figma_document(response, ...)
 }
 \arguments{
 \item{response}{a `response` object produced by a `httr` HTTP method (e.g. `httr::GET()`, `httr::POST()`, etc.);}
