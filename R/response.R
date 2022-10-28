@@ -81,11 +81,12 @@ parse_response_object <- function(response, .output_format, ...){
 #' This function receives a \code{httr::response()} object, and outputs a
 #' \code{figma_document} object.
 #'
+#' @export
 #' @details
 #' A Figma Document is a just a R list with a more organized structure than the
 #' raw content of the HTTP request in \code{httr::response()}. You can access
 #' each part of this list with \code{`$`} and \code{`[[`} operators. To
-#' understand what is in each element of this list, see the Value section.
+#' understand what is in each element of this list (see Value section).
 #'
 #' @param response a `response` object produced by a `httr` HTTP method
 #' (e.g. `httr::GET()`, `httr::POST()`, etc.);
@@ -142,6 +143,7 @@ print.figma_document <- function(x, ...){
 #' This function receives a \code{httr::response()} object, and outputs a
 #' \code{tibble::tibble()} object.
 #'
+#' @export
 #' @details
 #' The function parses the data from the \code{response} object and tries to fit
 #' it into a tibble object. Each row in the resulting tibble will be describing
@@ -157,6 +159,10 @@ print.figma_document <- function(x, ...){
 #' your Figma file is a empty, or, in other words, if all of the canvas/pages of the
 #' file have no objects draw in them, the final result of \code{as_tibble()} will
 #' be an empty \code{tibble} object.
+#'
+#' By default, \code{figma::as_tibble()} does not include any document metadata in
+#' the resulting tibble object. But you can pass \code{simplified = FALSE} to the
+#' function to change this behaviour.
 #'
 #' @param x A Figma document object (i.e. a \code{figma::figma_document} object),
 #' or, a \code{httr::response} object to parse;
@@ -174,6 +180,9 @@ print.figma_document <- function(x, ...){
 #' # Returns a `response` object:
 #' r <- figma::get_figma_file(file_key, token)
 #' result <- figma::as_tibble(r)
+#'
+#' # To include all of the document metadata, use `simplified = FALSE`
+#' result <- figma::as_tibble(r, simplified = FALSE)
 #' }
 
 as_tibble <- function(x, ...){

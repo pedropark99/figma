@@ -36,6 +36,10 @@ will return an empty \code{tibble} object for this specific canvas. This means t
 your Figma file is a empty, or, in other words, if all of the canvas/pages of the
 file have no objects draw in them, the final result of \code{as_tibble()} will
 be an empty \code{tibble} object.
+
+By default, \code{figma::as_tibble()} does not include any document metadata in
+the resulting tibble object. But you can pass \code{simplified = FALSE} to the
+function to change this behaviour.
 }
 \examples{
 \dontrun{
@@ -44,5 +48,8 @@ token <- "my figma token secret ... "
 # Returns a `response` object:
 r <- figma::get_figma_file(file_key, token)
 result <- figma::as_tibble(r)
+
+# To include all of the document metadata, use `simplified = FALSE`
+result <- figma::as_tibble(r, simplified = FALSE)
 }
 }

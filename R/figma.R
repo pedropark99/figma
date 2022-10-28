@@ -3,6 +3,7 @@
 #' This function uses the \code{/v1/files/} endpoint of Figma API to get all of
 #' the data of a particular Figma File, and fit it into a R object.
 #'
+#' @export
 #' @details
 #' With this function you can bring all of the data of yourFigma file into R.
 #' By default, \code{get_figma_file()} returns a `response` object with all of
@@ -65,6 +66,9 @@
 #' class \code{figma_document} is returned (See Details
 #' section for more information).
 #'
+#' @seealso [figma::as_tibble()]
+#'   [figma::as_figma_document()]
+#'
 #' @examples
 #' \dontrun{
 #' file_key <- "hch8YlkgaUIZ9raDzjPvCz"
@@ -109,6 +113,7 @@ get_figma_file <- function(file_key,
 #' to get all of the document metadata of a particular Figma File,
 #' and fit it into a R object.
 #'
+#' @export
 #' @inheritParams get_figma_file
 #' @param .output_format The output format. Options are \code{"list"} and
 #' \code{"tibble"}. Defaults to \code{"list"};

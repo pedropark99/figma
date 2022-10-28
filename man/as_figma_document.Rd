@@ -31,7 +31,7 @@ This function receives a \code{httr::response()} object, and outputs a
 A Figma Document is a just a R list with a more organized structure than the
 raw content of the HTTP request in \code{httr::response()}. You can access
 each part of this list with \code{`$`} and \code{`[[`} operators. To
-understand what is in each element of this list, see the Value section.
+understand what is in each element of this list (see Value section).
 }
 \examples{
 \dontrun{

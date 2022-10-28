@@ -97,3 +97,7 @@ result <- figma::get_figma_file(
 )
 }
 }
+\seealso{
+[figma::as_tibble()]
+  [figma::as_figma_document()]
+}
