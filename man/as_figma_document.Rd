@@ -2,13 +2,43 @@
 % Please edit documentation in R/response.R
 \name{as_figma_document}
 \alias{as_figma_document}
-\title{Convert a `httr` response object to a Figma Document object}
+\title{Convert a \code{httr} response object to a Figma Document object}
 \usage{
 as_figma_document(response, ...)
 }
 \arguments{
-\item{response}{a `response` object produced by a `httr` HTTP method (e.g. `httr::GET()`, `httr::POST()`, etc.);}
+\item{response}{a `response` object produced by a `httr` HTTP method
+(e.g. `httr::GET()`, `httr::POST()`, etc.);}
+
+\item{...}{Further arguments passed by the caller. Currently ignored by the
+function;}
+}
+\value{
+Returns an object of class \code{figma_document}, which is a R list with these elements:
+
+\itemize{
+\item \strong{document}: a R list with all of the document metadata of the Figma file;
+\item \strong{canvas}: a R list with all of the canvas and objects data of the Figma file;
+\item \strong{n_canvas}: a integer with the number of canvas/pages of the Figma file;
+\item \strong{n_objects}: a vector of integers with the number of objects in each canvas/page of the Figma file;
+}
 }
 \description{
-This function is not intended for client/user-use.
+This function receives a \code{httr::response()} object, and outputs a
+\code{figma_document} object.
+}
+\details{
+A Figma Document is a just a R list with a more organized structure than the
+raw content of the HTTP request in \code{httr::response()}. You can access
+each part of this list with \code{`$`} and \code{`[[`} operators. To
+understand what is in each element of this list, see the Value section.
+}
+\examples{
+\dontrun{
+file_key <- "hch8YlkgaUIZ9raDzjPvCz"
+token <- "my figma token secret ... "
+# Returns a `response` object:
+r <- figma::get_figma_file(file_key, token)
+result <- figma::as_figma_document(r)
+}
 }

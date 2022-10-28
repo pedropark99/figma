@@ -44,9 +44,9 @@ fit the metadata into a \code{tibble::tibble} object.
 file_key <- "hch8YlkgaUIZ9raDzjPvCz"
 token <- "my figma token secret ... "
 # Returns a list with the metadata:
-result <- get_document_info(file_key, token)
+result <- figma::get_document_info(file_key, token)
 # Returns a `tibble` object:
-result <- get_document_info(
+result <- figma::get_document_info(
   file_key, token,
   .output_format = "tibble"
 )
