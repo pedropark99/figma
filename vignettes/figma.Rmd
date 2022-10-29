@@ -29,13 +29,15 @@ it parses this data into a R native object, so you can easily use it in your R p
 library(figma)
 ```
 
-But in order to use the Figma API, you need to collect two key informations about your file and your credentials. 
+But in order to use the Figma API, you need to collect two key variables about your file and your credentials. 
 They are:
 
 - `file_key`: The ID (or the "key") that identifies your Figma file;
 - `token`: Your personal access token from the Figma platform;
 
-Lets talk about these informations;
+However, if you want to use `get_figma_file_nodes()`, you will need to collect a third information,
+which is the `node_id`, or the ID that identifies an object drawn on one of the canvas
+in your Figma file. We will talk about this ID on section 1.2.
 
 ## 1.1 Is always nice to read the official Figma API documentation
 
@@ -72,6 +74,13 @@ collect this `:file_key` portion of the URL, to get the key to your
 file.
 
 `https://www.figma.com/file/:file_key/:file_title?:node_id`
+
+This also means that, if you want to use `get_figma_file_nodes()`, you will need
+to collect the `:node_id` portion of the URL as well. This portion is usually a
+key-value pair, where the ID of your node is after the equal sign (`=`).
+
+For example, by looking at the URL example that we gave above, we know that the
+object that I clicked on my web browser, is the object of `node_id = "0%3A1"`.
 
 
 ## 1.3 Get your personal access token
