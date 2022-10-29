@@ -69,6 +69,12 @@ file.
 
 `https://www.figma.com/file/:file_key/:file_title?:node_id`
 
+
+## Get your personal access token
+
+If you do not have a personal access token
+
+
 # The structure of a Figma file
 
 A Figma file is represented as a tree of nodes. is composed of a set of canvas (or pages), and each canvas contains a set of multiple objects. So, the canvas is the visual space where you draw, and, each object represents a layer, or, a visual element that you add to this space.
