@@ -314,16 +314,16 @@ parse_objects <- function(canvas){
 
 
 build_objects_tibble <- function(objects){
-  table <- get_standard_attributes(objects)
+  table <- get_default_attributes(objects)
   table <- table |>
     dplyr::mutate(
-      object_attributes = get_nonstandard_attributes(objects)
+      object_attributes = get_nondefault_attributes(objects)
     )
 
   return(table)
 }
 
-get_standard_attributes <- function(objects){
+get_default_attributes <- function(objects){
   attrs <- purrr::map(objects, ~.[default_attrs])
   attrs <- purrr::transpose(attrs)
   attrs <- purrr::map(attrs, unlist) |>
@@ -337,7 +337,7 @@ get_standard_attributes <- function(objects){
 }
 
 
-get_nonstandard_attributes <- function(objects){
+get_nondefault_attributes <- function(objects){
   nondefault_attrs <- purrr::map(
     objects, find_nonstandard_attr
   )
