@@ -155,20 +155,78 @@ str(figma::untitled_file)
 
 All of your Figma file data is in the `content` element, so, you would use the 
 command `figma::untitled_file$content` to access it. But, by default, the Figma API sends
-the data of your Figma file as raw bytes. So you need to convert these bytes in a more useful 
-format like a JSON object, or a character vector, or as pure text.
+the data of your Figma file as raw bytes:
 
 ```{r}
 head(figma::untitled_file$content)
 ```
 
-To do this conversion, I recommend you to use the `httr::content()` function
+So you need to convert these bytes in a more useful format like a JSON object, or a character
+vector, or as pure text. To do this conversion, I recommend you to use the `httr::content()`
+function. By default, this function converts the raw bytes into a R list.
 
 ```{r}
-figma::untitled_file |>
-  httr::content(as = "text") |>
-  substr(1, 50) # Truncate/limit very long string to first 50 characters
+list_of_nodes <- figma::untitled_file |>
+  httr::content()
+
+names(list_of_nodes)
 ```
+
+The canvas/pages nodes are in the `list_of_nodes$document$children` element, and the
+objects nodes are in the `children` element of each canvas/page node (e.g. 
+`list_of_nodes$document$children[[1]][["children"]]`).
+
+```{r}
+first_canvas_node <- list_of_nodes$document$children[[1]]
+first_object_node <- first_canvas_node[["children"]][[1]]
+```
+
+## 1.6 Output a Figma Document object
+
+With `.output_argument = "figma_document"`, `get_figma_file()` will output a Figma Document object,
+instead of a `response` object.
+
+```{r, eval = FALSE}
+file_key <- "hch8YlkIrYbU3raDzjPvCz"
+# Insert your personal token:
+token <- "Your personal token ..."
+
+figma_document <- figma::get_figma_file(
+  file_key, token,
+  .output_format = "figma_document"
+)
+# A `response` object:
+print(figma_document)
+```
+
+```{r, echo = FALSE}
+figma_document <- figma:::as_figma_document(figma::untitled_file)
+figma_document
+```
+
+This object is just a R list with class `figma_document`. The main differences between this object and 
+the `response` object are:
+
+- the `figma_document` object have only data about your Figma file (i.e. no data about the HTTP request made to the Figma API);
+- the data of your Figma file is a little more organized in the `figma_document` object;
+
+In a `figma_document` object, all of the document metadata of your Figma file (like the name/title of 
+the file, the last time it was modified, its components, etc...) is available in the 
+`document` element:
+
+```{r}
+figma_document$document
+```
+
+Furthermore, you can get the data of each canvas/page (and their respective objects) in the `canvas`
+element:
+
+```{r}
+names(figma_document$canvas[[1]])
+```
+
+
+
 
 
 
