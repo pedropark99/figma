@@ -28,7 +28,7 @@ section for more information).
 }
 \description{
 This function uses the \code{/v1/files/} endpoint of Figma API to get all of
-the data of a particular Figma File, and fit it into a R object.
+the data of a particular Figma file, and fit it into a R object.
 }
 \details{
 With this function you can bring all of the data of yourFigma file into R.
@@ -79,6 +79,7 @@ documentation for more details).
 }
 \examples{
 \dontrun{
+library(figma)
 file_key <- "hch8YlkgaUIZ9raDzjPvCz"
 token <- "my figma token secret ... "
 # Returns a `response` object:
@@ -98,6 +99,7 @@ result <- figma::get_figma_file(
 }
 }
 \seealso{
-[figma::as_tibble()]
-  [figma::as_figma_document()]
+\code{\link{figma::as_tibble}}
+
+  \code{\link{figma::as_figma_document}}
 }

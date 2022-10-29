@@ -1,7 +1,7 @@
 #' Get data of a Figma File from the API
 #'
 #' This function uses the \code{/v1/files/} endpoint of Figma API to get all of
-#' the data of a particular Figma File, and fit it into a R object.
+#' the data of a particular Figma file, and fit it into a R object.
 #'
 #' @export
 #' @details
@@ -66,11 +66,14 @@
 #' class \code{figma_document} is returned (See Details
 #' section for more information).
 #'
-#' @seealso [figma::as_tibble()]
-#'   [figma::as_figma_document()]
+#' @seealso
+#'   \code{\link{figma::as_tibble}}
+#'
+#'   \code{\link{figma::as_figma_document}}
 #'
 #' @examples
 #' \dontrun{
+#' library(figma)
 #' file_key <- "hch8YlkgaUIZ9raDzjPvCz"
 #' token <- "my figma token secret ... "
 #' # Returns a `response` object:
@@ -110,7 +113,7 @@ get_figma_file <- function(file_key,
 #' Get the document metadata of a Figma File from the API
 #'
 #' This function uses the \code{/v1/files/} endpoint of Figma API
-#' to get all of the document metadata of a particular Figma File,
+#' to get all of the document metadata of a particular Figma file,
 #' and fit it into a R object.
 #'
 #' @export
@@ -140,6 +143,7 @@ get_figma_file <- function(file_key,
 #'
 #' @examples
 #' \dontrun{
+#' library(figma)
 #' file_key <- "hch8YlkgaUIZ9raDzjPvCz"
 #' token <- "my figma token secret ... "
 #' # Returns a list with the metadata:
@@ -162,7 +166,31 @@ get_document_info <- function(file_key, token, .output_format = "list"){
 }
 
 
-get_figma_file_nodes <- function(file_key, node_id, token){
+
+
+
+#' Get data of a set of objects in a Figma File from the API
+#'
+#' This function uses the \code{/v1/files/} endpoint of Figma API
+#' to get the data of an specific object (or a set of objects) from a Figma file,
+#' and fit it into a R object.
+#'
+#' @details
+#' Every object draw in a canvas/page of a Figma file, is represented as a node in
+#' the canvas on which it was drawn. Because of this notion, to identify the specific
+#' object (or "node") that you want to search, you need to give the ID code that identifies
+#' this specific object in the canvas.
+#'
+#' You can easily get this ID from the URL that appears in your browser when
+#' you select this specific object. See vignette.
+#'
+#' @export
+#' @inheritParams get_figma_file
+#' @param node_id A string with the node ID (or a vector of strings with node IDs);
+#'
+
+
+get_figma_objects <- function(file_key, token, node_id, .output_format = "response", ...){
   url <- get_endpoint_url(endpoint = "file_nodes")
   url <- build_request_url(
     url,
@@ -172,6 +200,7 @@ get_figma_file_nodes <- function(file_key, node_id, token){
     "X-Figma-Token" = token
   )
   r <- httr::GET(url = url, header)
+  r <- parse_response_object(r, .output_format, ...)
   return(r)
 }
 

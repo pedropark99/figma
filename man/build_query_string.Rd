@@ -26,9 +26,10 @@ a lower-case version ("true" or "false"), since these versions are
 more tipically used in standard query strings.
 }
 \examples{
-build_query_string(list(skip = 100, page = 2, title = "Document"))
+library(figma)
+figma:::build_query_string(list(skip = 100, page = 2, title = "Document"))
 # Returns a empty string:
-build_query_string(list())
-build_query_string(list(a = 1, b = 2, c = TRUE))
+figma:::build_query_string(list())
+figma:::build_query_string(list(a = 1, b = 2, c = TRUE))
 
 }

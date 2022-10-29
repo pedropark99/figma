@@ -269,7 +269,8 @@ parse_document_metadata <- function(figma_document, .output_format){
 parse_canvas_metadata <- function(canvas){
   attrs <- canvas[default_attrs]
   n_objects <- length(canvas$children)
-  df <- tibble::tibble(tempcol = seq_len(n_objects))
+  tempcol <- seq_len(n_objects)
+  df <- tibble::tibble(tempcol = tempcol)
   for (attr in default_attrs) {
     df[[attr]] <- rep(attrs[[attr]], times = n_objects)
   }

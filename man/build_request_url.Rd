@@ -46,7 +46,8 @@ key-value pairs through the \code{...} argument, and then, combines
 all these pairs together to form a query string.
 }
 \examples{
-build_request_url(
+library(figma)
+figma:::build_request_url(
   "http://test.com", path = c("folder", "a-interesting-resource"),
   skip = 100, page = 2, title = "Document"
 )

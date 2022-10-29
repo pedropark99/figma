@@ -22,7 +22,7 @@ a \code{tibble::tibble} object.
 }
 \description{
 This function uses the \code{/v1/files/} endpoint of Figma API
-to get all of the document metadata of a particular Figma File,
+to get all of the document metadata of a particular Figma file,
 and fit it into a R object.
 }
 \details{
@@ -41,6 +41,7 @@ fit the metadata into a \code{tibble::tibble} object.
 }
 \examples{
 \dontrun{
+library(figma)
 file_key <- "hch8YlkgaUIZ9raDzjPvCz"
 token <- "my figma token secret ... "
 # Returns a list with the metadata:

@@ -1,29 +1,39 @@
-#' Figma API infos and handlers to URLs
-#'
-#' This file contains all functions for basic
-#' URL manipulation, and, global variables that stores
-#' basic informations of the Figma API, like the base URL
-#' of the API, and the implemented endpoints in this
-#' package.
+# Figma API infos and handlers to URLs
+#
+# This file contains all functions for basic
+# URL manipulation, and, global variables that stores
+# basic informations of the Figma API, like the base URL
+# of the API, and the implemented endpoints in this
+# package.
+
 
 api_base_url <- "https://api.figma.com"
+
 api_endpoints <- list(
   files = "/v1/files",
   file_nodes = "/v1/files"
 )
+
 
 implemented_endpoints <- names(api_endpoints)
 
 
 #' Get the URL to a endpoint of Figma API
 #'
+#' @export
 #' @param endpoint A single string with the name of the desired endpoint
 #' (needs to be one of the values present in \code{figma::implemented_endpoints});
-#' @returns A string with the URL to the given endpoint.
+#' @returns A string with the URL to the given endpoint, or, a list with all of
+#'   the implemented endpoints;
 #' @details
 #'
-#' This function accepts only single string values,
-#' and, this string needs to be one of the values present
+#' If the function is called without any arguments, \code{get_endpoint_url()}
+#' will output a list with all of the implemented endpoints.
+#'
+#' However, the function accepts a single string value with the name of,
+#' a specific endpoint. In this case, \code{get_endpoint_url()} will
+#' output a single string with the endpoint you selected. Is worth
+#' mentioning, that this string must be one of the values present
 #' in \code{figma::implemented_endpoints}.
 #'
 #' If the user provided any type of value that does
@@ -32,9 +42,18 @@ implemented_endpoints <- names(api_endpoints)
 #'
 #' @examples
 #' # Returns the URL to the `files` endpoint of Figma API
-#' get_endpoint_url("files")
+#' library(figma)
+#' figma:::get_endpoint_url("files")
 #'
-get_endpoint_url <- function(endpoint){
+get_endpoint_url <- function(endpoint = NULL){
+  if (is.null(endpoint)) {
+    all_endpoints <- lapply(
+      api_endpoints, function(endpoint){
+        paste0(api_base_url, endpoint, collapse = "")
+      }
+    )
+    return(all_endpoints)
+  }
   check_endpoint(endpoint)
   endpoint_url <- api_endpoints[[endpoint]]
   url <- paste0(api_base_url, endpoint_url, collapse = "")
@@ -96,7 +115,8 @@ check_endpoint <- function(endpoint, call = rlang::caller_env()){
 #' all these pairs together to form a query string.
 #'
 #' @examples
-#' build_request_url(
+#' library(figma)
+#' figma:::build_request_url(
 #'   "http://test.com", path = c("folder", "a-interesting-resource"),
 #'   skip = 100, page = 2, title = "Document"
 #' )
@@ -193,10 +213,11 @@ check_parameters <- function(parameters, call = rlang::caller_env()){
 #' more tipically used in standard query strings.
 #'
 #' @examples
-#' build_query_string(list(skip = 100, page = 2, title = "Document"))
+#' library(figma)
+#' figma:::build_query_string(list(skip = 100, page = 2, title = "Document"))
 #' # Returns a empty string:
-#' build_query_string(list())
-#' build_query_string(list(a = 1, b = 2, c = TRUE))
+#' figma:::build_query_string(list())
+#' figma:::build_query_string(list(a = 1, b = 2, c = TRUE))
 #'
 build_query_string <- function(parameters){
   keys <- names(parameters)

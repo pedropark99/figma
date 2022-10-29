@@ -4,21 +4,27 @@
 \alias{get_endpoint_url}
 \title{Get the URL to a endpoint of Figma API}
 \usage{
-get_endpoint_url(endpoint)
+get_endpoint_url(endpoint = NULL)
 }
 \arguments{
 \item{endpoint}{A single string with the name of the desired endpoint
 (needs to be one of the values present in \code{figma::implemented_endpoints});}
 }
 \value{
-A string with the URL to the given endpoint.
+A string with the URL to the given endpoint, or, a list with all of
+  the implemented endpoints;
 }
 \description{
 Get the URL to a endpoint of Figma API
 }
 \details{
-This function accepts only single string values,
-and, this string needs to be one of the values present
+If the function is called without any arguments, \code{get_endpoint_url()}
+will output a list with all of the implemented endpoints.
+
+However, the function accepts a single string value with the name of,
+a specific endpoint. In this case, \code{get_endpoint_url()} will
+output a single string with the endpoint you selected. Is worth
+mentioning, that this string must be one of the values present
 in \code{figma::implemented_endpoints}.
 
 If the user provided any type of value that does
@@ -27,6 +33,7 @@ will prompt the user with an error message.
 }
 \examples{
 # Returns the URL to the `files` endpoint of Figma API
-get_endpoint_url("files")
+library(figma)
+figma:::get_endpoint_url("files")
 
 }
