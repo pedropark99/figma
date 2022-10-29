@@ -22,7 +22,8 @@ implemented_endpoints <- names(api_endpoints)
 #'
 #' @export
 #' @param endpoint A single string with the name of the desired endpoint
-#'   (needs to be one of the values present in \code{figma::implemented_endpoints});
+#'   (needs to be one of the values present in \code{figma::implemented_endpoints}).
+#'   Defaults to NULL;
 #' @returns A string with the URL to the given endpoint, or, a list with all of
 #'   the implemented endpoints;
 #' @details

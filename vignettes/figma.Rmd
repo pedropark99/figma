@@ -195,11 +195,13 @@ figma_document <- figma::get_figma_file(
   file_key, token,
   .output_format = "figma_document"
 )
-# A `response` object:
+# A `figma_document` object:
 print(figma_document)
 ```
 
-```{r, echo = FALSE}
+Or, analogously:
+
+```{r}
 figma_document <- figma:::as_figma_document(figma::untitled_file)
 figma_document
 ```
@@ -215,7 +217,7 @@ the file, the last time it was modified, its components, etc...) is available in
 `document` element:
 
 ```{r}
-figma_document$document
+str(figma_document$document)
 ```
 
 Furthermore, you can get the data of each canvas/page (and their respective objects) in the `canvas`
@@ -225,17 +227,59 @@ element:
 names(figma_document$canvas[[1]])
 ```
 
+And the data of all the objects present in each canvas is found in the `objects` element:
+
+```{r}
+first_canvas_node <- figma_document$canvas[[1]]
+first_object_node <- first_canvas_node$objects[[1]]
+str(first_object_node)
+```
 
 
+## 1.7 Output a `tibble::tibble()` object
+
+With `.output_format = "tibble`, `get_figma_file()` will output a `tibble::tibble()` object, instead of 
+a `response` object. This is probably the most useful and friendly output format that you can use:
+
+```{r, eval = FALSE}
+file_key <- "hch8YlkIrYbU3raDzjPvCz"
+# Insert your personal token:
+token <- "Your personal token ..."
+
+tibble <- figma::get_figma_file(
+  file_key, token,
+  .output_format = "tibble"
+)
+# A `tibble` object:
+print(tibble)
+```
+
+Or, analogously:
+
+```{r}
+tibble <- figma::as_tibble(figma::untitled_file)
+tibble
+```
+
+Each row in the resulting tibble, is a object present in one of the canvas of your Figma file.
+As an example, the Figma file stored in `figma::untitled_file` have 2 canvas/pages: 3 objects in 
+the first canvas, and 2 objects in the second canvas. So 3 objects + 2 objects = 5 rows in the 
+output tibble.
+
+The columns with `canvas_` prefix stores the metadata about the canvas on which the object of the
+corresponding row is. And the columns with `object_` prefix stores the data about the object of the
+corresponding row. 
+
+Each object can have a different type (it can be a RECTANGLE, a TEXT, a VECTOR, etc.),
+and different types of objects usually have different kinds of attributes. The attributes of each
+object are stored in the `object_attributes` column.
 
 
+<!-- # 2 The structure of a Figma file -->
 
+<!-- A Figma file is represented as a tree of nodes. is composed of a set of canvas (or pages), and  -->
+<!-- each canvas contains a set of multiple objects. So, the canvas is the visual space where you draw,  -->
+<!-- and, each object represents a layer, or, a visual element that you add to this space. -->
 
-# 2 The structure of a Figma file
-
-A Figma file is represented as a tree of nodes. is composed of a set of canvas (or pages), and 
-each canvas contains a set of multiple objects. So, the canvas is the visual space where you draw, 
-and, each object represents a layer, or, a visual element that you add to this space.
-
-Each object that you add can be of a different type (like TEXT, RECTANGLE, ARROW, etc.). 
-But each canvas is always.
+<!-- Each object that you add can be of a different type (like TEXT, RECTANGLE, VECTOR, etc.).  -->
+<!-- But each canvas is always. -->
