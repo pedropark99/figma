@@ -119,7 +119,10 @@ as_figma_document <- function(response, ...){
   document <- content[document_attrs]
   document <- c(content$document[c("id", "type")], document)
   canvas <- content$document[["children"]]
-  n_objects <- purrr::map_int(canvas, ~length(.[["children"]]))
+  for (i in seq_along(canvas)) {
+    names(canvas[[i]])[names(canvas[[i]]) == "children"] <- "objects"
+  }
+  n_objects <- purrr::map_int(canvas, ~length(.[["objects"]]))
   names(n_objects) <- paste("Canvas", seq_along(canvas))
   structure(
     list(document = document, canvas = canvas,
@@ -237,7 +240,7 @@ as_tibble <- function(x, ...){
 
 parse_canvas_metadata <- function(canvas){
   attrs <- canvas[default_attrs]
-  n_objects <- length(canvas$children)
+  n_objects <- length(canvas$objects)
   tempcol <- seq_len(n_objects)
   df <- tibble::tibble(tempcol = tempcol)
   for (attr in default_attrs) {
@@ -294,7 +297,7 @@ parse_document_metadata <- function(figma_document, .output_format){
 
 
 get_canva_objects <- function(canva){
-  canva$children
+  canva$objects
 }
 
 build_objects_tibble <- function(objects){
