@@ -8,7 +8,8 @@ get_endpoint_url(endpoint = NULL)
 }
 \arguments{
 \item{endpoint}{A single string with the name of the desired endpoint
-(needs to be one of the values present in \code{figma::implemented_endpoints});}
+(needs to be one of the values present in \code{figma::implemented_endpoints}).
+Defaults to NULL;}
 }
 \value{
 A string with the URL to the given endpoint, or, a list with all of

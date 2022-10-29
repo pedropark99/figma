@@ -44,7 +44,7 @@ implemented_endpoints <- names(api_endpoints)
 #' @examples
 #' # Returns the URL to the `files` endpoint of Figma API
 #' library(figma)
-#' figma:::get_endpoint_url("files")
+#' figma::get_endpoint_url("files")
 #'
 get_endpoint_url <- function(endpoint = NULL){
   if (is.null(endpoint)) {

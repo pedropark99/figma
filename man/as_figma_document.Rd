@@ -17,10 +17,10 @@ function;}
 Returns an object of class \code{figma_document}, which is a R list with these elements:
 
 \itemize{
-\item \strong{document}: a R list with all of the document metadata of the Figma file;
-\item \strong{canvas}: a R list with all of the canvas and objects data of the Figma file;
-\item \strong{n_canvas}: a integer with the number of canvas/pages of the Figma file;
-\item \strong{n_objects}: a vector of integers with the number of objects in each canvas/page of the Figma file;
+\item \strong{document}: a R list with all of the document metadata of your Figma file;
+\item \strong{canvas}: a R list with all of the canvas and objects data of your Figma file;
+\item \strong{n_canvas}: a integer with the number of canvas/pages in your Figma file;
+\item \strong{n_objects}: a vector of integers with the number of objects in each canvas/page of your Figma file;
 }
 }
 \description{

@@ -4,12 +4,21 @@
 \alias{get_figma_file}
 \title{Get data of a Figma File from the API}
 \usage{
-get_figma_file(file_key, token, .output_format = "response", ...)
+get_figma_file(
+  file_key,
+  token,
+  geometry = FALSE,
+  .output_format = "response",
+  ...
+)
 }
 \arguments{
 \item{file_key}{A string with the key of the Figma File you want to get;}
 
 \item{token}{A string with your personal Figma token to authenticate in the API;}
+
+\item{geometry}{A boolean value indicating if you want to export vector data.
+Defaults to FALSE;}
 
 \item{.output_format}{The output format. Options are \code{"response",
 "figma_document", "tibble"}. Defaults to \code{"response"};}
@@ -36,11 +45,11 @@ By default, \code{get_figma_file()} returns a `response` object with all of
 the data returned by the API. That is, not only the data of your Figma file,
 but also, the data from the HTTP request.
 
-All of the data from your Figma file is in the \code{content} element of
+All of your Figma file data is in the \code{content} element of
 the `response` object. However, by default, the Figma API returns this data in
 \code{raw} format (that is, as raw bytes). To convert these bytes into a
 useful object (like a JSON object, or a character vector, or a list), is
-highly recomended to apply the \code{httr::content()} function over this
+highly recommended to apply the \code{httr::content()} function over this
 \code{content} element.
 
 Although this being a useful output format (i.e. `response` object)
@@ -95,6 +104,10 @@ result <- figma::get_figma_file(
   file_key, token,
   .output_format = "tibble",
   simplified = FALSE
+)
+# Returns a `figma_document` object:
+result <- figma::get_figma_file(
+  file_key, token, .output_format = "figma_document"
 )
 }
 }

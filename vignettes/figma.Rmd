@@ -35,7 +35,7 @@ They are:
 - `file_key`: The ID (or the "key") that identifies your Figma file;
 - `token`: Your personal access token from the Figma platform;
 
-However, if you want to use `get_figma_file_nodes()`, you will need to collect a third information,
+However, if you want to use `get_figma_objects()`, you will need to collect a third information,
 which is the `node_id`, or the ID that identifies an object drawn on one of the canvas
 in your Figma file. We will talk about this ID on section 1.2.
 
@@ -75,7 +75,7 @@ file.
 
 `https://www.figma.com/file/:file_key/:file_title?:node_id`
 
-This also means that, if you want to use `get_figma_file_nodes()`, you will need
+This also means that, if you want to use `get_figma_objects()`, you will need
 to collect the `:node_id` portion of the URL as well. This portion is usually a
 key-value pair, where the ID of your node is after the equal sign (`=`).
 

@@ -4,7 +4,14 @@
 \alias{get_figma_objects}
 \title{Get data of a set of objects in a Figma File from the API}
 \usage{
-get_figma_objects(file_key, token, node_id, .output_format = "response", ...)
+get_figma_objects(
+  file_key,
+  token,
+  node_id,
+  geometry = FALSE,
+  .output_format = "response",
+  ...
+)
 }
 \arguments{
 \item{file_key}{A string with the key of the Figma File you want to get;}
@@ -12,6 +19,9 @@ get_figma_objects(file_key, token, node_id, .output_format = "response", ...)
 \item{token}{A string with your personal Figma token to authenticate in the API;}
 
 \item{node_id}{A string with the node ID (or a vector of strings with node IDs);}
+
+\item{geometry}{A boolean value indicating if you want to export vector data.
+Defaults to FALSE;}
 
 \item{.output_format}{The output format. Options are \code{"response",
 "figma_document", "tibble"}. Defaults to \code{"response"};}

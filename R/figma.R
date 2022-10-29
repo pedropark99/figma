@@ -53,8 +53,10 @@
 #'
 #' @param file_key A string with the key of the Figma File you want to get;
 #' @param token A string with your personal Figma token to authenticate in the API;
+#' @param geometry A boolean value indicating if you want to export vector data.
+#'   Defaults to FALSE;
 #' @param .output_format The output format. Options are \code{"response",
-#' "figma_document", "tibble"}. Defaults to \code{"response"};
+#'   "figma_document", "tibble"}. Defaults to \code{"response"};
 #' @param ... Further arguments that are passed to \code{parse_response_object()};
 #'
 #' @returns By default, \code{get_figma_file()} do not parse the output from
@@ -90,17 +92,27 @@
 #'   .output_format = "tibble",
 #'   simplified = FALSE
 #' )
+#' # Returns a `figma_document` object:
+#' result <- figma::get_figma_file(
+#'   file_key, token, .output_format = "figma_document"
+#' )
 #' }
 
 get_figma_file <- function(file_key,
                            token,
+                           geometry = FALSE,
                            .output_format = "response",
                            ...){
   url <- get_endpoint_url(endpoint = "files")
-  url <- build_request_url(url, path = file_key)
-  header <- httr::add_headers(
-    "X-Figma-Token" = token
+  query_string_args <- list(path = file_key)
+  if (isTRUE(geometry)) {
+    query_string_args$geometry <- "paths"
+  }
+  url <- do.call(
+    build_request_url,
+    args = c(list(base_url = url), query_string_args)
   )
+  header <- httr::add_headers("X-Figma-Token" = token)
   r <- httr::GET(url = url, header)
   r <- parse_response_object(r, .output_format, ...)
   return(r)
@@ -189,16 +201,22 @@ get_document_info <- function(file_key, token, .output_format = "list"){
 #' @param node_id A string with the node ID (or a vector of strings with node IDs);
 #'
 
-
-get_figma_objects <- function(file_key, token, node_id, .output_format = "response", ...){
+get_figma_objects <- function(file_key,
+                              token,
+                              node_id,
+                              geometry = FALSE,
+                              .output_format = "response",
+                              ...){
   url <- get_endpoint_url(endpoint = "file_nodes")
-  url <- build_request_url(
-    url,
-    path = c(file_key, "nodes"), ids = node_id
+  query_string_args <- list(path = c(file_key, "nodes"), ids = node_id)
+  if (isTRUE(geometry)) {
+    query_string_args$geometry <- "paths"
+  }
+  url <- do.call(
+    build_request_url,
+    args = c(list(base_url = url), query_string_args)
   )
-  header <- httr::add_headers(
-    "X-Figma-Token" = token
-  )
+  header <- httr::add_headers("X-Figma-Token" = token)
   r <- httr::GET(url = url, header)
   r <- parse_response_object(r, .output_format, ...)
   return(r)
