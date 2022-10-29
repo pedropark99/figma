@@ -62,19 +62,19 @@ get_endpoint_url <- function(endpoint = NULL){
 
 
 check_endpoint <- function(endpoint, call = rlang::caller_env()){
-  msg_components <- c(
-    "The given endpoint was '%s'. ",
-    "However, the `endpoint` argument should be a single string ",
-    "with the name of the endpoint you want to use. ",
-    "Check `print(figma::implemented_endpoints)` to see the available values ",
-    "for `endpoint` argument."
-  )
-  msg_format <- paste(msg_components, collapse = "")
 
   not_a_single_string <- !is_single_string(endpoint)
   not_implemented <- !endpoint %in% implemented_endpoints
 
   if (not_implemented || not_a_single_string) {
+    msg_components <- c(
+      "The given endpoint was '%s'. ",
+      "However, the `endpoint` argument should be a single string ",
+      "with the name of the endpoint you want to use. ",
+      "Check `print(figma::implemented_endpoints)` to see the available values ",
+      "for `endpoint` argument."
+    )
+    msg_format <- paste(msg_components, collapse = "")
     rlang::abort(sprintf(msg_format, endpoint), call = call)
   }
 }
@@ -132,23 +132,28 @@ build_request_url <- function(base_url, path = NULL, ...){
 
 
 
-is_single_string <- function(x){
-  is.character(x) && length(x) == 1
-}
-
-is_not_null <- function(x){
-  !is.null(x) && !all(is.na(x))
-}
-
-
-
-
 
 add_paths_to_url <- function(url, path){
   check_single_string(url, argument_name = "url")
   path <- paste0(path, collapse = "/")
   path <- sprintf("/%s", path)
   url <- paste0(url, path, collapse = "")
+  return(url)
+}
+
+
+
+add_query_string_to_url <- function(url, ...){
+  parameters <- list(...)
+  if (length(parameters) == 0) {
+    return(url)
+  }
+  check_parameters(parameters)
+  query_string <- build_query_string(parameters)
+  url <- paste0(
+    url, "?", query_string,
+    collapse = ""
+  )
   return(url)
 }
 
@@ -167,19 +172,15 @@ check_single_string <- function(x,
 
 
 
-add_query_string_to_url <- function(url, ...){
-  parameters <- list(...)
-  if (length(parameters) == 0) {
-    return(url)
-  }
-  check_parameters(parameters)
-  query_string <- build_query_string(parameters)
-  url <- paste0(
-    url, "?", query_string,
-    collapse = ""
-  )
-  return(url)
+is_single_string <- function(x){
+  is.character(x) && length(x) == 1
 }
+
+is_not_null <- function(x){
+  !is.null(x) && !all(is.na(x))
+}
+
+
 
 
 check_parameters <- function(parameters, call = rlang::caller_env()){

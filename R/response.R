@@ -223,26 +223,44 @@ as_tibble <- function(x, ...){
 }
 
 
-add_document_metadata <- function(df, document){
-  n <- nrow(df)
-  attrs <- names(document$document)
-  for (attr in attrs) {
-    value <- document$document[[attr]]
-    if (is.list(value)) {
-      value <- lapply(seq_len(n), function(x) value)
-    } else {
-      value <- rep(value, times = n)
-    }
-    attr_name <- gsub("([A-Z])", "_\\1", attr, perl = TRUE)
-    attr_name <- paste("document", tolower(attr_name), sep = "_")
-    df[[attr_name]] <- value
+
+
+
+
+
+
+
+
+
+
+
+
+parse_canvas_metadata <- function(canvas){
+  attrs <- canvas[default_attrs]
+  n_objects <- length(canvas$children)
+  tempcol <- seq_len(n_objects)
+  df <- tibble::tibble(tempcol = tempcol)
+  for (attr in default_attrs) {
+    df[[attr]] <- rep(attrs[[attr]], times = n_objects)
   }
   df <- df |>
-    dplyr::select(
-      dplyr::starts_with("document"),
-      dplyr::everything()
+    dplyr::select(-tempcol) |>
+    dplyr::rename(
+      canvas_id = "id",
+      canvas_name = "name",
+      canvas_type = "type"
     )
+
   return(df)
+}
+
+
+parse_objects <- function(canvas){
+  objects <- get_canva_objects(canvas)
+  if (length(objects) == 0) {
+    return(tibble::tibble())
+  }
+  build_objects_tibble(objects)
 }
 
 
@@ -267,24 +285,28 @@ parse_document_metadata <- function(figma_document, .output_format){
 }
 
 
-parse_canvas_metadata <- function(canvas){
-  attrs <- canvas[default_attrs]
-  n_objects <- length(canvas$children)
-  tempcol <- seq_len(n_objects)
-  df <- tibble::tibble(tempcol = tempcol)
-  for (attr in default_attrs) {
-    df[[attr]] <- rep(attrs[[attr]], times = n_objects)
-  }
-  df <- df |>
-    dplyr::select(-tempcol) |>
-    dplyr::rename(
-      canvas_id = "id",
-      canvas_name = "name",
-      canvas_type = "type"
+
+
+
+
+
+
+
+
+get_canva_objects <- function(canva){
+  canva$children
+}
+
+build_objects_tibble <- function(objects){
+  table <- get_default_attributes(objects)
+  table <- table |>
+    dplyr::mutate(
+      object_attributes = get_nondefault_attributes(objects)
     )
 
-  return(df)
+  return(table)
 }
+
 
 bind_tables <- function(canvas_data, objects_data){
   n_objects <- nrow(objects_data)
@@ -305,24 +327,42 @@ bind_tables <- function(canvas_data, objects_data){
 
 
 
-parse_objects <- function(canvas){
-  objects <- get_canva_objects(canvas)
-  if (length(objects) == 0) {
-    return(tibble::tibble())
+
+
+
+
+
+
+add_document_metadata <- function(df, document){
+  n <- nrow(df)
+  attrs <- names(document$document)
+  for (attr in attrs) {
+    value <- document$document[[attr]]
+    if (is.list(value)) {
+      value <- lapply(seq_len(n), function(x) value)
+    } else {
+      value <- rep(value, times = n)
+    }
+    attr_name <- gsub("([A-Z])", "_\\1", attr, perl = TRUE)
+    attr_name <- paste("document", tolower(attr_name), sep = "_")
+    df[[attr_name]] <- value
   }
-  build_objects_tibble(objects)
-}
-
-
-build_objects_tibble <- function(objects){
-  table <- get_default_attributes(objects)
-  table <- table |>
-    dplyr::mutate(
-      object_attributes = get_nondefault_attributes(objects)
+  df <- df |>
+    dplyr::select(
+      dplyr::starts_with("document"),
+      dplyr::everything()
     )
-
-  return(table)
+  return(df)
 }
+
+
+
+
+
+
+
+
+
 
 get_default_attributes <- function(objects){
   attrs <- purrr::map(objects, ~.[default_attrs])
@@ -350,11 +390,6 @@ get_nondefault_attributes <- function(objects){
 }
 
 
-get_canva_objects <- function(canva){
-  canva$children
-}
-
-
 find_nondefault_attr <- function(node){
   attr_names <- names(node)
   non_default_attrs <- attr_names[
@@ -362,6 +397,15 @@ find_nondefault_attr <- function(node){
   ]
   return(non_default_attrs)
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -387,8 +431,7 @@ check_output_format <- function(format){
 }
 
 
-check_for_http_errors <- function(response,
-                                  call = rlang::caller_env()){
+check_for_http_errors <- function(response, call = rlang::caller_env()){
 
   if (!inherits(response, "response")) {
     rlang::abort(
@@ -401,8 +444,10 @@ check_for_http_errors <- function(response,
   }
 }
 
-report_http_error <- function(response,
-                              call = rlang::caller_env(n = 3)){
+
+
+
+report_http_error <- function(response, call = rlang::caller_env(n = 3)){
 
   content <- response_content(response)
   header <- "HTTP Error:\n\n"
