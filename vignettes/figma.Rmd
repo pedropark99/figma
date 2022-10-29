@@ -16,13 +16,13 @@ knitr::opts_chunk$set(
 ```
 
 
-## Introduction
+# 1. Introduction
 
 You might have some Figma files that you want to bring into R, to analyse, or, use the visual attributes
 of the objects from this file to compose a layout that you want to use in a RMarkdown/Quarto file.
 
-The `figma` package allows you to that. It uses the Figma API to bring all of the data from your Figma file into R.
-It does this, by sending a HTTP request to the Figma API to collect all of the data of your Figma file, and them,
+The `figma` package allows you to that. It uses the Figma API to bring all of your Figma file data into R.
+It does this, by sending a HTTP request to the Figma API to collect all of your Figma data, and then,
 it parses this data into a R native object, so you can easily use it in your R process.
 
 ```{r setup, eval = FALSE}
@@ -37,14 +37,17 @@ They are:
 
 Lets talk about these informations;
 
-## Is always nice to read the official Figma API documentation
+## 1.1 Is always nice to read the official Figma API documentation
 
-Much of the information described in this vignette comes from the official Figma API documentation, and
-is always interesting to read from the source to learn more about a specific subject. I will give you
-direct links to specific parts of the documentation throughout this vignette, but if you want to read
-the complete documentation, you can access [this link](https://www.figma.com/developers/api).
+Some of the information described in this vignette comes from the official Figma API documentation, and
+in order to learn more about a specific subject, is always a good idea to read about that subject
+directly from the source `r emoji::emoji("winking_face")`.
 
-## Findind the key (or ID) of your Figma file
+I will give you direct links to specific parts of the documentation throughout this vignette,
+but if you want to read the complete documentation, you can access
+[this link](https://www.figma.com/developers/api).
+
+## 1.2 Findind the key (or ID) of your Figma file
 
 The file key (or the file key), is a random text that identifies your Figma
 file. The Figma API uses this key to identify which specific Figma file you
@@ -71,8 +74,10 @@ file.
 `https://www.figma.com/file/:file_key/:file_title?:node_id`
 
 
-## Get your personal access token
+## 1.3 Get your personal access token
 
+You can read more about the authentication process and the use of personal
+access tokens, in [the section "Authentication" of the Figma API documentation](https://www.figma.com/developers/api#authentication).
 If you do not have a personal access token, you can create one in the Figma
 platform. Just log in the platform, and click on the `Settings` section, like
 in the image below:
@@ -99,7 +104,7 @@ many other methods that are good alternatives too. A good place to start is the
 [vignette from Hadley Wickham](https://cran.r-project.org/web/packages/httr/vignettes/secrets.html).
 
 
-## Use `get_figma_file()` to get your Figma file 
+## 1.4 Use `get_figma_file()` to get your Figma file 
 Now that you have the key (or ID) that identifies your Figma file, and your personal token that
 identifies yourself, you can use `get_figma_file()` to get your Figma file:
 
@@ -125,7 +130,7 @@ Response [https://api.figma.com/v1/files/hch8YlkIrYbU3raDzjPvCz]
 ```
 
 
-## Using the `response` object
+## 1.5 Using the `response` object
 
 The functions from `figma` package have the philosophy of giving (by default) the most raw and unprocessed
 result as possible to the user. This is good for debugging situations, because it gives
@@ -136,16 +141,39 @@ which makes analysis and transformation pipelines harder and more complex. That 
 `get_figma_file()` comes with more output formats available through the `.output_format` argument,
 which we will describe later.
 
-To give you an useful example, you can access the exact `response` object returned by the code example
-shown in the last section. This `response` object is stored in a object called `untitled_file`,
+To give you an useful example, you can access the exact `response` object shown in the example
+of section 1.4. This `response` object is stored in a object called `untitled_file`,
 that you can access with `figma::untitled_file`. This object `untitled_file` contains all
-of the data from the Figma file shown in Section.
+of the data from the Figma file shown in section 1.2.
 
-All the data of your Figma file is in the `content` element of the y default, the Figma API sends the data of your Figma file as raw bytes
+As you can see in the result below, a `response` object is just a simple R list with many
+elements:
+
+```{r}
+str(figma::untitled_file)
+```
+
+All of your Figma file data is in the `content` element, so, you would use the 
+command `figma::untitled_file$content` to access it. But, by default, the Figma API sends
+the data of your Figma file as raw bytes. So you need to convert these bytes in a more useful 
+format like a JSON object, or a character vector, or as pure text.
+
+```{r}
+head(figma::untitled_file$content)
+```
+
+To do this conversion, I recommend you to use the `httr::content()` function
+
+```{r}
+figma::untitled_file |>
+  httr::content(as = "text") |>
+  substr(1, 50) # Truncate/limit very long string to first 50 characters
+```
 
 
 
-# The structure of a Figma file
+
+# 2 The structure of a Figma file
 
 A Figma file is represented as a tree of nodes. is composed of a set of canvas (or pages), and 
 each canvas contains a set of multiple objects. So, the canvas is the visual space where you draw, 

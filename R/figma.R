@@ -10,11 +10,11 @@
 #' the data returned by the API. That is, not only the data of your Figma file,
 #' but also, the data from the HTTP request.
 #'
-#' All of the data from your Figma file is in the \code{content} element of
+#' All of your Figma file data is in the \code{content} element of
 #' the `response` object. However, by default, the Figma API returns this data in
 #' \code{raw} format (that is, as raw bytes). To convert these bytes into a
 #' useful object (like a JSON object, or a character vector, or a list), is
-#' highly recomended to apply the \code{httr::content()} function over this
+#' highly recommended to apply the \code{httr::content()} function over this
 #' \code{content} element.
 #'
 #' Although this being a useful output format (i.e. `response` object)
