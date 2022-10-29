@@ -67,9 +67,9 @@
 #' section for more information).
 #'
 #' @seealso
-#'   \code{\link{figma::as_tibble}}
+#'   \code{\link{as_tibble}}
 #'
-#'   \code{\link{figma::as_figma_document}}
+#'   \code{\link{as_figma_document}}
 #'
 #' @examples
 #' \dontrun{

@@ -99,7 +99,7 @@ result <- figma::get_figma_file(
 }
 }
 \seealso{
-\code{\link{figma::as_tibble}}
+\code{\link{as_tibble}}
 
-  \code{\link{figma::as_figma_document}}
+  \code{\link{as_figma_document}}
 }

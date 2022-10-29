@@ -249,7 +249,8 @@ add_document_metadata <- function(df, document){
 parse_document_metadata <- function(figma_document, .output_format){
   document <- figma_document$document
   if (.output_format == "tibble") {
-    df <- tibble::tibble(tempcol = 1L)
+    tempcol <- 1L
+    df <- tibble::tibble(tempcol = tempcol)
     attrs <- names(document)
     for (attr in attrs) {
       value <- document[[attr]]
