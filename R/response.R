@@ -339,7 +339,7 @@ get_default_attributes <- function(objects){
 
 get_nondefault_attributes <- function(objects){
   nondefault_attrs <- purrr::map(
-    objects, find_nonstandard_attr
+    objects, find_nondefault_attr
   )
   attrs <- purrr::map2(
     objects, nondefault_attrs,
@@ -354,7 +354,7 @@ get_canva_objects <- function(canva){
 }
 
 
-find_nonstandard_attr <- function(node){
+find_nondefault_attr <- function(node){
   attr_names <- names(node)
   non_default_attrs <- attr_names[
     !(attr_names %in% default_attrs)
