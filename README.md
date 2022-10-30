@@ -4,7 +4,7 @@ The aim of `figma` package is to provide an easy-to-use client/wrapper for the [
 to your R session. This includes the data of all objects that you drawn in this file, and their
 respective canvas/page metadata. 
 
-With this kind of data, you can maybe build a custom and automated layout, or create a automated pipeline to build design content to your clients.
+With this kind of data, you can maybe build a custom and automated layout for documents, or create a automated pipeline to build design content to your clients.
 
 Key features of the package:
 
@@ -17,7 +17,9 @@ Key features of the package:
 
 ## Getting started
 
-A good place to start in the `figma` package, is to read the main vignette (which you can access with `vignette("figma")`). In order to use the Figma API, you need to collect two key variables in the Figma
+A good place to start in the `figma` package, is to read the main vignette (which you can access with `vignette("figma")`). But lets give you a brief summary of its features, shall we?
+
+In order to use the Figma API, you need to collect two key variables in the Figma
 platform, which are:
 
 - file key: the key (or the ID) that identifies the Figma file that you are interested in;
