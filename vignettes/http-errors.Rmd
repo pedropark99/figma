@@ -42,6 +42,57 @@ in the key variables they provided to the functions of \code{figma} package.
 library(figma)
 ```
 
+
+### Wrong node ID in `figma::get_figma_page()` results in status code 400
+
+When you use `figma::get_figma_page()`, and it returns an HTT error with status code 400,
+is possible that this error was caused by a mistake in the node ID that you provided to
+the function.
+
+In other words, if the Figma API returns the status code 400 with `figma::get_figma_page()`,
+there is a chance that you provided a wrong or invalid node ID to the API. As an example,
+the code below uses a clearly wrong node ID, but a valid personal access token and a valid
+file key.
+
+```{r, eval = FALSE}
+node_id <- "wrongID"
+file_key <- "hch8YlkIrYbU3raDzjPvCz"
+token <- "My valid personal access token... "
+result <- get_figma_page(
+  file_key, token, node_id
+)
+```
+
+```
+Error in `get_figma_page()`:
+! HTTP Error:
+
+• * URL used in the request: https://api.figma.com/v1/files/hch8YlkIrYbU3raDzjPvCz/nodes?ids=wrong
+• * Status code returned by the API: 400
+• * Error message returned by the API: ID wrongID is not a valid node_id
+• * Headers returned by the API:
+List of 3
+ $ status : int 400
+ $ version: chr "HTTP/2"
+ $ headers:List of 13
+  ..$ content-type                : chr "application/json; charset=utf-8"
+  ..$ content-length              : chr "54"
+  ..$ date                        : chr "Sun, 30 Oct 2022 23:10:49 GMT"
+  ..$ access-control-allow-origin : chr "*"
+  ..$ access-control-allow-headers: chr "Content-Type, X-Figma-Token, Authorization"
+  ..$ cache-control               : chr "no-cache, no-store"
+  ..$ vary                        : chr "X-Figma-Token,Authorization"
+  ..$ x-cache                     : chr "Error from cloudfront"
+  ..$ via                         : chr "1.1 a5f39a4680587f7042bdbc4ff6cd417c.cloudfront.net (CloudFront)"
+  ..$ x-amz-cf-pop                : chr "GRU3-P1"
+  ..$ alt-svc                     : chr "h3=\":443\"; ma=86400"
+  ..$ x-amz-cf-id                 : chr "74-bxpmIzbo3clyliImc4IZCaVtxgW-VCFlMN9Na8Ixva1caM8JENw=="
+  ..$ strict-transport-security   : chr "max-age=31536000; includeSubDomains; preload"
+  ..- attr(*, "class")= chr [1:2] "insensitive" "list"
+Run `rlang::last_error()` to see where the error occurred.
+```
+
+
 ### 404: File not found
 
 When the Figma API returns a status code equal to 404, it means that the servers of Figma
