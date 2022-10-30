@@ -33,7 +33,7 @@ document_attrs <- c(
 #' Parse the response data and fit it into a R object
 #'
 #' This function is usually called by \code{get_figma_file()},
-#' \code{get_document_info()} and \code{get_figma_file_nodes()}, to process
+#' \code{get_document_info()} and \code{get_figma_page()}, to process
 #' the \code{response} object returned by the \code{httr} HTTP methods, such as
 #' \code{httr::GET()}.
 #'
