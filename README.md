@@ -24,7 +24,6 @@ Key features of the package:
 To get the current development version from github:
 
 ```r
-# install.packages("devtools")
 devtools::install_github("pedropark99/figma")
 ```
 
