@@ -35,6 +35,6 @@ will prompt the user with an error message.
 \examples{
 # Returns the URL to the `files` endpoint of Figma API
 library(figma)
-figma:::get_endpoint_url("files")
+figma::get_endpoint_url("files")
 
 }

@@ -181,34 +181,51 @@ get_document_info <- function(file_key, token, .output_format = "list"){
 
 
 
-#' Get data of a set of objects in a Figma File from the API
+#' Get data of a specific canvas/page in a Figma File from the API
 #'
 #' This function uses the \code{/v1/files/} endpoint of Figma API
-#' to get the data of an specific object (or a set of objects) from a Figma file,
+#' to get the data of an specific canvas/page (or a set of canvas/pages) from a Figma file,
 #' and fit it into a R object.
 #'
 #' @details
-#' Every object draw in a canvas/page of a Figma file, is represented as a node in
-#' the canvas on which it was drawn. Because of this notion, to identify the specific
-#' object (or "node") that you want to search, you need to give the ID code that identifies
-#' this specific object in the canvas.
 #'
-#' You can easily get this ID from the URL that appears in your browser when
-#' you select this specific object. See vignette.
+#' With `get_figma_file()` you get data of all objects in all canvas/pages of your Figma file.
+#' But with `get_figma_page()` you get data of all objects drawn in a specific set of canvas/pages
+#' of your Figma file.
+#'
+#' Every canvas/page in a Figma file, is identified by a node ID. You can easily get this ID
+#' from the URL that appears in your browser when you access this canvas/page on the
+#' Figma platform (See \code{vignette("figma")} for more details).
+#'
+#' After you collected this node ID, give it to \code{node_id} argument as a string. If
+#' you want to collect data from more than one canvas/page of your Figma file, give a vector
+#' of node IDs to \code{node_id} argument.
 #'
 #' @export
 #' @inheritParams get_figma_file
-#' @param node_id A string with the node ID (or a vector of strings with node IDs);
+#' @param node_ids A string with the node ID (or a vector of strings with node IDs);
 #'
+#' @examples
+#' \dontrun{
+#' library(figma)
+#' file_key <- "hch8YlkgaUIZ9raDzjPvCz"
+#' token <- "my figma token secret ... "
+#' node_id <- "0%3A1"
+#' result <- figma::get_figma_page(
+#'   file_key, token, node_id
+#' )
+#' }
 
-get_figma_objects <- function(file_key,
+
+get_figma_page <- function(file_key,
                               token,
-                              node_id,
+                              node_ids,
                               geometry = FALSE,
                               .output_format = "response",
                               ...){
   url <- get_endpoint_url(endpoint = "file_nodes")
-  query_string_args <- list(path = c(file_key, "nodes"), ids = node_id)
+  node_ids <- paste0(node_ids, collapse = ",")
+  query_string_args <- list(path = c(file_key, "nodes"), ids = node_ids)
   if (isTRUE(geometry)) {
     query_string_args$geometry <- "paths"
   }
