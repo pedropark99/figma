@@ -286,10 +286,7 @@ as_tibble <- function(x, ...){
 
 
 
-#' Parse the content of a Figma file into a R object
-#'
-#' @details
-#' If \code{as_figma_document()}
+
 
 parse_figma_file <- function(content){
   document <- select_any_of(content, document_attrs)
