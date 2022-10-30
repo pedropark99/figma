@@ -1,0 +1,153 @@
+---
+title: "Commom HTTP errors in the Figma API"
+author: Pedro Duarte Faria
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Commom HTTP errors in the Figma API}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+To get the data of your Figma file, the functions from \code{figma} package make a HTTP request to the Figma API. But this request can fail for a number of reasons, and if this does happen, \code{report_http_error()} is called to raise an error and report to the user, what kind of error message the Figma API returned.
+
+A HTTP error means that the server could not fulfill the HTTP request you made. In the context of 
+the `figma` package, we usually request for the data of a specific Figma file to the servers of the
+Figma platform, and if a HTTP error occurs, this means that servers of Figma could not deliver the
+data of this Figma file to you.
+
+Every successful HTTP request occurs when the server respond with a HTTP status code equal to 200.
+So, every HTTP request that we make to the Figma servers that have a HTTP status code different than
+200 is a HTTP error.
+
+## Most common HTTP errors
+
+The most common HTTP errors returned by the Figma API are status codes 400, 404 and 403. The status
+code 400 is usually a signal of a internal bug in the `figma` package, and you should 
+(if possible) report it to the authors by [registering an issue in the official repository of the package](https://github.com/pedropark99/figma/issues). 
+
+
+In the other hand, status codes 404 and 403 are usually result of an user mistake
+in the key variables they provided to the functions of \code{figma} package.
+
+```{r setup}
+library(figma)
+```
+
+### 404: File not found
+
+When the Figma API returns a status code equal to 404, it means that the servers of Figma
+could not find the file you referred through the file key (or file ID) that you provided. In other words,
+you probably provided an incorrect file key (or file ID) to \code{figma}'s function.
+
+In the example below, I give a valid personal access token, but a very incorrect file key (or file ID).
+As a result, the Figma servers respond to the HTTP request with a HTTP status code equal to 404, 
+indicating that they could not find a Figma file identified by the key \code{"This key does not exist"}:
+
+```{r, eval = FALSE}
+file_key <- "This key does not exist"
+token <- "A valid personal token ..."
+
+result <- figma::get_figma_file(
+  file_key, token
+)
+```
+
+```
+Error in `figma::get_figma_file()`:
+! HTTP Error:
+
+* URL used in the request: https://api.figma.com/v1/files/This key does not exist
+* Status code returned by the API: 404
+* Error message returned by the API: Not found
+* Headers returned by the API:
+List of 3
+ $ status : int 404
+ $ version: chr "HTTP/2"
+ $ headers:List of 13
+  ..$ content-type                : chr "application/json; charset=utf-8"
+  ..$ content-length              : chr "32"
+  ..$ date                        : chr "Sun, 30 Oct 2022 01:36:12 GMT"
+  ..$ access-control-allow-origin : chr "*"
+  ..$ access-control-allow-headers: chr "Content-Type, X-Figma-Token, Authorization"
+  ..$ cache-control               : chr "no-cache, no-store"
+  ..$ vary                        : chr "X-Figma-Token,Authorization"
+  ..$ x-cache                     : chr "Error from cloudfront"
+  ..$ via                         : chr "1.1 1854e234bfccfb7a387b67a7feff26d2.cloudfront.net (CloudFront)"
+  ..$ x-amz-cf-pop                : chr "GRU3-P1"
+  ..$ alt-svc                     : chr "h3=\":443\"; ma=86400"
+  ..$ x-amz-cf-id                 : chr "HE9e153j-uftva_tydKpb6kibQM5Kcw62URWoxsC4zoYSSmNnX-VOA=="
+  ..$ strict-transport-security   : chr "max-age=31536000; includeSubDomains; preload"
+  ..- attr(*, "class")= chr [1:2] "insensitive" "list"
+Run `rlang::last_error()` to see where the error occurred.
+```
+
+
+
+### 403: Invalid token
+
+When the Figma API returns a status code equal to 403, it means that you provided an invalid 
+personal token. This means that you probably forgot to correctly set your personal token,
+or maybe, you unintentionally forgot one character in the token.
+
+In the example below, I use a valid file key, but, a very incorrect personal access token.
+When I deliver these key variables to `figma::get_figma_file()`, it makes the HTTP request to
+the Figma API with this incorrect token, and the Figma servers respond to this request with a
+HTTP error equal to 403.
+
+```{r, eval = FALSE}
+file_key <- "hch8YlkIrYbU3raDzjPvCz"
+token <- "This is an incorrect token"
+
+result <- figma::get_figma_file(
+  file_key, token
+)
+```
+
+```
+Error in `figma::get_figma_file()`:
+! HTTP Error:
+
+* URL used in the request: https://api.figma.com/v1/files/hch8YlkIrYbU3raDzjPvCz
+* Status code returned by the API: 403
+* Error message returned by the API: Invalid token
+* Headers returned by the API:
+List of 3
+ $ status : int 403
+ $ version: chr "HTTP/2"
+ $ headers:List of 13
+  ..$ content-type                : chr "application/json; charset=utf-8"
+  ..$ content-length              : chr "36"
+  ..$ date                        : chr "Sun, 30 Oct 2022 01:32:20 GMT"
+  ..$ access-control-allow-origin : chr "*"
+  ..$ access-control-allow-headers: chr "Content-Type, X-Figma-Token, Authorization"
+  ..$ cache-control               : chr "no-cache, no-store"
+  ..$ vary                        : chr "X-Figma-Token,Authorization"
+  ..$ x-cache                     : chr "Error from cloudfront"
+  ..$ via                         : chr "1.1 f88bd4c15622473fc18eef7d15f4b8d4.cloudfront.net (CloudFront)"
+  ..$ x-amz-cf-pop                : chr "GRU3-P1"
+  ..$ alt-svc                     : chr "h3=\":443\"; ma=86400"
+  ..$ x-amz-cf-id                 : chr "CClnH5QCZF1wC31us3POW1TWxoODMcriBq0n29_P-y6Q2KYWa6Zw8A=="
+  ..$ strict-transport-security   : chr "max-age=31536000; includeSubDomains; preload"
+  ..- attr(*, "class")= chr [1:2] "insensitive" "list"
+Run `rlang::last_error()` to see where the error occurred.
+```
+
+
+## Other possible HTTP errors
+
+You can read the section of "Errors" in the [official Figma API documentation](https://www.figma.com/developers/api#errors) if you want to know more about other kinds of HTTP errors that can be returned by the API. 
+
+On the date of writing of this document, the official documentation describes two more possible HTTP errors, which are
+HTTP status codes 429 and 500. The status code 429 means "rate limit" in the server, and if
+this error occurs, you do not have much choice than trying the request again in a few minutes. But if you get the status code 500 instead, this usually occurs for very large image render requests, which may time out the Figma server.
+
+
