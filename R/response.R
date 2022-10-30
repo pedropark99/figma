@@ -30,6 +30,15 @@ document_attrs <- c(
 )
 
 
+select_any_of <- function(x, elements){
+  available_elements <- names(x)
+  selected_elements <- elements[
+    elements %in% available_elements
+  ]
+  return(x[selected_elements])
+}
+
+
 #' Parse the response data and fit it into a R object
 #'
 #' This function is usually called by \code{get_figma_file()},
@@ -116,19 +125,14 @@ as_figma_document <- function(response, ...){
     stop("Object is not of type `response`!")
   }
   content <- httr::content(response)
-  document <- content[document_attrs]
-  document <- c(content$document[c("id", "type")], document)
-  canvas <- content$document[["children"]]
-  for (i in seq_along(canvas)) {
-    names(canvas[[i]])[names(canvas[[i]]) == "children"] <- "objects"
+  if ("document" %in% names(content)) {
+    r <- parse_figma_file(content)
+    return(r)
   }
-  n_objects <- purrr::map_int(canvas, ~length(.[["objects"]]))
-  names(n_objects) <- paste("Canvas", seq_along(canvas))
-  structure(
-    list(document = document, canvas = canvas,
-         n_canvas = length(canvas), n_objects = n_objects),
-    class = "figma_document"
-  )
+  if ("nodes" %in% names(content)) {
+    r <- parse_figma_pages(content)
+    return(r)
+  }
 }
 
 
@@ -139,6 +143,7 @@ print.figma_document <- function(x, ...){
   cat(" * Number of objects in each canvas:", x$n_objects, "\n")
   invisible(x)
 }
+
 
 
 #' Convert a \code{httr} response object to a \code{tibble} object
@@ -217,7 +222,7 @@ as_tibble <- function(x, ...){
     list_of_tibbles[[i]] <- data
   }
   df <- dplyr::bind_rows(list_of_tibbles)
-  if (simplified) {
+  if (isTRUE(simplified)) {
     return(df)
   } else {
     df <- add_document_metadata(df, document)
@@ -230,6 +235,40 @@ as_tibble <- function(x, ...){
 
 
 
+
+parse_figma_file <- function(content){
+  document <- select_any_of(content, document_attrs)
+  document <- c(content$document[c("id", "type")], document)
+  canvas <- content$document[["children"]]
+  for (i in seq_along(canvas)) {
+    names(canvas[[i]])[names(canvas[[i]]) == "children"] <- "objects"
+  }
+  n_objects <- purrr::map_int(canvas, ~length(.[["objects"]]))
+  names(n_objects) <- paste("Canvas", seq_along(canvas))
+  structure(
+    list(document = document, canvas = canvas,
+         n_canvas = length(canvas), n_objects = n_objects),
+    class = "figma_document"
+  )
+}
+
+
+
+parse_figma_pages <- function(content){
+  document <- select_any_of(content, document_attrs)
+  canvas <- content$nodes
+  canvas <- purrr::map(canvas, ~.[["document"]])
+  for (i in seq_along(canvas)) {
+    names(canvas[[i]])[names(canvas[[i]]) == "children"] <- "objects"
+  }
+  n_objects <- purrr::map_int(canvas, ~length(.[["objects"]]))
+  names(n_objects) <- paste("Canvas", seq_along(canvas))
+  structure(
+    list(document = document, canvas = canvas,
+         n_canvas = length(canvas), n_objects = n_objects),
+    class = "figma_document"
+  )
+}
 
 
 

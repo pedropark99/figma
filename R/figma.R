@@ -117,13 +117,13 @@ get_figma_file <- function(file_key,
                            .output_format = "response",
                            ...){
   url <- get_endpoint_url(endpoint = "files")
-  query_string_args <- list(path = file_key)
+  url_args <- list(path = file_key)
   if (isTRUE(geometry)) {
-    query_string_args$geometry <- "paths"
+    url_args$geometry <- "paths"
   }
   url <- do.call(
     build_request_url,
-    args = c(list(base_url = url), query_string_args)
+    args = c(list(base_url = url), url_args)
   )
   header <- httr::add_headers("X-Figma-Token" = token)
   r <- httr::GET(url = url, header)
@@ -252,13 +252,13 @@ get_figma_page <- function(file_key,
                               ...){
   url <- get_endpoint_url(endpoint = "file_nodes")
   node_ids <- paste0(node_ids, collapse = ",")
-  query_string_args <- list(path = c(file_key, "nodes"), ids = node_ids)
+  url_args <- list(path = c(file_key, "nodes"), ids = node_ids)
   if (isTRUE(geometry)) {
-    query_string_args$geometry <- "paths"
+    url_args$geometry <- "paths"
   }
   url <- do.call(
     build_request_url,
-    args = c(list(base_url = url), query_string_args)
+    args = c(list(base_url = url), url_args)
   )
   header <- httr::add_headers("X-Figma-Token" = token)
   r <- httr::GET(url = url, header)
