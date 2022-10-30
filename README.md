@@ -21,12 +21,6 @@ Key features of the package:
 
 ## Installation
 
-To get the current released version from CRAN:
-
-```r
-install.packages("figma")
-```
-
 To get the current development version from github:
 
 ```r
