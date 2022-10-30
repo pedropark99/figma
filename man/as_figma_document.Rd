@@ -7,8 +7,8 @@
 as_figma_document(response, ...)
 }
 \arguments{
-\item{response}{a `response` object produced by a `httr` HTTP method
-(e.g. `httr::GET()`, `httr::POST()`, etc.);}
+\item{response}{a \code{response} object produced by a \code{httr} HTTP method
+(e.g. \code{httr::GET()}, \code{httr::POST()}, etc.);}
 
 \item{...}{Further arguments passed by the caller. Currently ignored by the
 function;}
@@ -30,8 +30,27 @@ This function receives a \code{httr::response()} object, and outputs a
 \details{
 A Figma Document is a just a R list with a more organized structure than the
 raw content of the HTTP request in \code{httr::response()}. You can access
-each part of this list with \code{`$`} and \code{`[[`} operators. To
-understand what is in each element of this list (see Value section).
+each part of this list with \code{`$`} and \code{`[[`} operators. See Value section to
+understand what is in each element of this list.
+
+\code{as_figma_document()} will call different parsers depending on what kind
+of elements are present in the content of the \code{response} object it receives
+as input. These elements define what kind of data is present in the \code{response}
+object, and how it is strucutured.
+
+If this input object have a \code{document} element in the top-level of
+the content, is likely that this input object was produced by \code{figma::get_figma_file()}.
+In this case, \code{as_figma_document()} will call \code{figma:::parse_figma_file()} to parse
+the contents of the HTTP request.
+
+In the other hand, if this input object have a \code{nodes} element in the top-level of
+the content, is likely that this input object was produced by \code{figma::get_figma_page()}.
+In this case, \code{as_figma_document()} will call \code{figma:::parse_figma_page()} to parse
+the contents of the HTTP request.
+
+If none of these key elements ("document" or "nodes") are found in the top-level of the
+content of the \code{response} object, \code{as_figma_document()} will issue an error
+to the user, telling it could not recognize the source of the \code{response} object.
 }
 \examples{
 \dontrun{

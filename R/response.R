@@ -56,7 +56,7 @@ document_attrs <- c(
 #' @examples
 #' library(figma)
 #' figma:::select_any_of(
-#'   list(a = 1, b = 2, d = 3, e = 9)
+#'   list(a = 1, b = 2, d = 3, e = 9),
 #'   c("a", "c", "e")
 #' )
 
@@ -146,10 +146,10 @@ parse_response_object <- function(response, .output_format, ...){
 #' content of the \code{response} object, \code{as_figma_document()} will issue an error
 #' to the user, telling it could not recognize the source of the \code{response} object.
 #'
-#' @param response a `response` object produced by a `httr` HTTP method
-#' (e.g. `httr::GET()`, `httr::POST()`, etc.);
+#' @param response a \code{response} object produced by a \code{httr} HTTP method
+#'   (e.g. \code{httr::GET()}, \code{httr::POST()}, etc.);
 #' @param ... Further arguments passed by the caller. Currently ignored by the
-#' function;
+#'   function;
 #'
 #' @returns
 #' Returns an object of class \code{figma_document}, which is a R list with these elements:
@@ -215,7 +215,7 @@ print.figma_document <- function(x, ...){
 #'
 #' If the Figma file have no objects draw in a specific canvas, \code{as_tibble()}
 #' will return an empty \code{tibble} object for this specific canvas. This means that, if
-#' your Figma file is a empty, or, in other words, if all of the canvas/pages of the
+#' your Figma file is empty, or, in other words, if all of the canvas/pages of the
 #' file have no objects draw in them, the final result of \code{as_tibble()} will
 #' be an empty \code{tibble} object.
 #'

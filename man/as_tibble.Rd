@@ -33,7 +33,7 @@ and jump this step.
 
 If the Figma file have no objects draw in a specific canvas, \code{as_tibble()}
 will return an empty \code{tibble} object for this specific canvas. This means that, if
-your Figma file is a empty, or, in other words, if all of the canvas/pages of the
+your Figma file is empty, or, in other words, if all of the canvas/pages of the
 file have no objects draw in them, the final result of \code{as_tibble()} will
 be an empty \code{tibble} object.
 

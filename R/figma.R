@@ -5,7 +5,7 @@
 #'
 #' @export
 #' @details
-#' With this function you can bring all of the data of yourFigma file into R.
+#' With this function you can bring all of the data of your Figma file into R.
 #' By default, \code{get_figma_file()} returns a `response` object with all of
 #' the data returned by the API. That is, not only the data of your Figma file,
 #' but also, the data from the HTTP request.
@@ -149,7 +149,7 @@ get_figma_file <- function(file_key,
 #' @section Be aware of possible HTTP errors:
 #' To get the data of your Figma file, the functions from \code{figma} package make a HTTP
 #' request to the Figma API. But this request can fail for a number of reasons, and if this
-#' does happen, \code{get_figma_file()} will use \code{report_http_error()} to raise an error
+#' does happen, \code{get_document_info()} will use \code{report_http_error()} to raise an error
 #' and report to the user, what kind of error message the Figma API returned.
 #' See \code{vignette("http-errors")} for more details.
 #'
@@ -228,7 +228,7 @@ get_document_info <- function(file_key, token, .output_format = "list"){
 #' @section Be aware of possible HTTP errors:
 #' To get the data of your Figma file, the functions from \code{figma} package make a HTTP
 #' request to the Figma API. But this request can fail for a number of reasons, and if this
-#' does happen, \code{get_figma_file()} will use \code{report_http_error()} to raise an error
+#' does happen, \code{get_figma_page()} will use \code{report_http_error()} to raise an error
 #' and report to the user, what kind of error message the Figma API returned.
 #' See \code{vignette("http-errors")} for more details.
 #'

@@ -43,7 +43,7 @@ fit the metadata into a \code{tibble::tibble} object.
 
 To get the data of your Figma file, the functions from \code{figma} package make a HTTP
 request to the Figma API. But this request can fail for a number of reasons, and if this
-does happen, \code{get_figma_file()} will use \code{report_http_error()} to raise an error
+does happen, \code{get_document_info()} will use \code{report_http_error()} to raise an error
 and report to the user, what kind of error message the Figma API returned.
 See \code{vignette("http-errors")} for more details.
 }

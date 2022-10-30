@@ -41,7 +41,7 @@ This function uses the \code{/v1/files/} endpoint of Figma API to get all of
 the data of a particular Figma file, and fit it into a R object.
 }
 \details{
-With this function you can bring all of the data of yourFigma file into R.
+With this function you can bring all of the data of your Figma file into R.
 By default, \code{get_figma_file()} returns a `response` object with all of
 the data returned by the API. That is, not only the data of your Figma file,
 but also, the data from the HTTP request.

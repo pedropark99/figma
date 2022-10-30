@@ -4,8 +4,9 @@ Title: R client to the Figma API
 Version: 0.1.0
 Author: Pedro Duarte Faria
 Maintainer: Pedro Duarte Faria <pedropark99@gmail.com>
-Description: An easy-to-use client/wrapper for the Figma API.
-  It allows you to bring all data from a Figma file to your R session. This includes the data of all objects that you have drawn in this file, and their respective canvas/page metadata.
+Description: An easy-to-use client/wrapper for the Figma API. It allows you to bring all
+  data from a Figma file to your R session. This includes the data of all objects
+  that you have drawn in this file, and their respective canvas/page metadata.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
