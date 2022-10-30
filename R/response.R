@@ -1,6 +1,6 @@
 # Parse the response object returned by Figma API
 #
-# The functions present in this file are parser and helpers to parse the raw
+# The functions present in this file are parsers and helpers used to parse the raw
 # `response` object returned by the `httr` HTTP methods (e.g. `httr::GET()`).
 # They generally read the data returned by the API, and try to fit this data
 # into a R object of a specific type.
