@@ -30,6 +30,36 @@ document_attrs <- c(
 )
 
 
+#' Select any of the elements in a object
+#'
+#' Safely select elements of a named object (like a named R list).
+#'
+#' @details
+#' This functions works in a similar way to \code{dplyr::any_of()}. It tries
+#' to select any element of \code{x} that is in the vector given by the user
+#' in the \code{elements} argument.
+#'
+#' In other words, if the user gives the vector \code{c("a", "c", "e")}, \code{select_any_of()}
+#' will search for elements "a", "c" and "e" in the \code{x} object, and will select
+#' any of these elements if it finds them.
+#'
+#' But \code{dplyr::any_of()} is designed to work with columns of a data.frame,
+#' and \code{figma::select_any_of()} is designed to work specially with elements of a
+#' named list (although it can be used to select columns of a data.frames as well).
+#'
+#' @param x A object with \code{names} attribute (usually a named R list);
+#' @param elements A vector of strings with the name of the elements to search for;
+#'
+#' @return A subset of the \code{x} if it finds any of the elements described in the
+#'   \code{element} argument.
+#'
+#' @examples
+#' library(figma)
+#' figma:::select_any_of(
+#'   list(a = 1, b = 2, d = 3, e = 9)
+#'   c("a", "c", "e")
+#' )
+
 select_any_of <- function(x, elements){
   available_elements <- names(x)
   selected_elements <- elements[
@@ -94,8 +124,27 @@ parse_response_object <- function(response, .output_format, ...){
 #' @details
 #' A Figma Document is a just a R list with a more organized structure than the
 #' raw content of the HTTP request in \code{httr::response()}. You can access
-#' each part of this list with \code{`$`} and \code{`[[`} operators. To
-#' understand what is in each element of this list (see Value section).
+#' each part of this list with \code{`$`} and \code{`[[`} operators. See Value section to
+#' understand what is in each element of this list.
+#'
+#' \code{as_figma_document()} will call different parsers depending on what kind
+#' of elements are present in the content of the \code{response} object it receives
+#' as input. These elements define what kind of data is present in the \code{response}
+#' object, and how it is strucutured.
+#'
+#' If this input object have a \code{document} element in the top-level of
+#' the content, is likely that this input object was produced by \code{figma::get_figma_file()}.
+#' In this case, \code{as_figma_document()} will call \code{figma:::parse_figma_file()} to parse
+#' the contents of the HTTP request.
+#'
+#' In the other hand, if this input object have a \code{nodes} element in the top-level of
+#' the content, is likely that this input object was produced by \code{figma::get_figma_page()}.
+#' In this case, \code{as_figma_document()} will call \code{figma:::parse_figma_page()} to parse
+#' the contents of the HTTP request.
+#'
+#' If none of these key elements ("document" or "nodes") are found in the top-level of the
+#' content of the \code{response} object, \code{as_figma_document()} will issue an error
+#' to the user, telling it could not recognize the source of the \code{response} object.
 #'
 #' @param response a `response` object produced by a `httr` HTTP method
 #' (e.g. `httr::GET()`, `httr::POST()`, etc.);
@@ -122,7 +171,7 @@ parse_response_object <- function(response, .output_format, ...){
 #' }
 as_figma_document <- function(response, ...){
   if (!inherits(response, "response")) {
-    stop("Object is not of type `response`!")
+    rlang::abort("Input object is not of type `response`!")
   }
   content <- httr::content(response)
   if ("document" %in% names(content)) {
@@ -133,6 +182,8 @@ as_figma_document <- function(response, ...){
     r <- parse_figma_pages(content)
     return(r)
   }
+
+  report_unrecognized_source(content)
 }
 
 
@@ -200,11 +251,12 @@ as_tibble <- function(x, ...){
   if (inherits(x, "figma_document")) {
     document <- x
   } else {
+    reason <- "Input object type is not supported!"
     msg <- paste0(c(
-      "`as_tibble()` accepts objects of type `response` or `figma_document`. ",
-      "However, a object of type %s was given."
+      "`as_tibble()` receive a input object of types `response` or `figma_document`. ",
+      "However, a object of type '%s' was given."
     ), collapse = "")
-    rlang::abort(sprintf(msg, class(x)))
+    rlang::abort(c(reason, sprintf(msg, class(x))))
   }
 
   dots <- list(...)
@@ -234,7 +286,10 @@ as_tibble <- function(x, ...){
 
 
 
-
+#' Parse the content of a Figma file into a R object
+#'
+#' @details
+#' If \code{as_figma_document()}
 
 parse_figma_file <- function(content){
   document <- select_any_of(content, document_attrs)
@@ -350,19 +405,20 @@ build_objects_tibble <- function(objects){
 }
 
 
-bind_tables <- function(canvas_data, objects_data){
+bind_tables <- function(canvas_data, objects_data, call = rlang::caller_env()){
   n_objects <- nrow(objects_data)
   n_canvas <- nrow(canvas_data)
   if (n_objects == 0) {
     return(tibble::tibble())
   }
   if (n_objects != n_canvas) {
+    reason <- "Objects dataframe and Canvas dataframe have different number of rows!"
     msg <- paste0(c(
-      "Objects dataframe have %d rows. However, Canvas dataframe have %d rows.",
+      "Objects dataframe have %d rows. However, Canvas dataframe have %d rows. ",
       "Because of this inconsistency, we cannot bind these two dataframes together!"
-    ), collapse = "\n")
+    ), collapse = "")
     msg <- sprintf(msg, n_objects, n_canvas)
-    rlang::abort(msg)
+    rlang::abort(c(reason, msg), call = call)
   }
   dplyr::bind_cols(canvas_data, objects_data)
 }
@@ -457,17 +513,14 @@ response_content <- function(response){
 
 
 
-check_output_format <- function(format){
-  formats_allowed <- c('response', 'figma_document', 'tibble')
-  if ( !(format %in% formats_allowed) ) {
-    msg <- sprintf("Output format '%s' not allowed!", format)
-    formats <- sprintf("'%s'", formats_allowed)
+check_output_format <- function(format, call = rlang::caller_env()){
+  allowed_formats <- c('response', 'figma_document', 'tibble')
+  if ( !(format %in% allowed_formats) ) {
+    reason <- sprintf("Output format '%s' not allowed!", format)
+    formats <- sprintf("'%s'", allowed_formats)
     formats <- paste0(formats, collapse = ", ")
-    msg <- paste0(
-      msg, "\n",
-      sprintf("Choose one of the following options: %s", formats)
-    )
-    stop(msg)
+    msg <- paste0(sprintf("Choose one of the following options: %s", formats))
+    rlang::abort(c(reason, msg), call = call)
   }
   return(format)
 }
@@ -492,27 +545,39 @@ check_for_http_errors <- function(response, call = rlang::caller_env()){
 report_http_error <- function(response, call = rlang::caller_env(n = 3)){
 
   content <- response_content(response)
-  header <- "HTTP Error:\n\n"
+  header <- "HTTP Error:\n"
   url <- sprintf(
-    "* URL used in the request: %s\n", response$url
+    "* URL used in the request: %s", response$url
   )
   status <- sprintf(
-    "* Status code returned by the API: %s\n", response$status_code
+    "* Status code returned by the API: %s", response$status_code
   )
   error_message <- sprintf(
-    "* Error message returned by the API: %s\n", content$err
+    "* Error message returned by the API: %s", content$err
   )
   headers <- sprintf(
-    "* Headers returned by the API:\n%s\n",
+    "* Headers returned by the API:\n%s",
     response$all_headers[[1]] |>
       utils::str() |>
       utils::capture.output() |>
       paste0(collapse = "\n")
   )
 
-  rlang::abort(
-    c(header, url, status, error_message, headers) |>
-      paste0(collapse = ""),
-    call = call
+  msg <- c(header, url, status, error_message, headers)
+  rlang::abort(msg, call = call)
+}
+
+
+
+
+report_unrecognized_source <- function(content, call = rlang::caller_env()){
+  reason <- "Unrecognized source of the `response` object!"
+  elements <- paste0(names(content), collapse = ", ")
+  msg <- c(
+    "`as_figma_document()` expected to find a `document` (or `nodes`) element ",
+    "in the most top-level part of the content section of the `response` object. ",
+    "However, the input `response` object have the following elements in its content: %s"
   )
+  msg <- sprintf(paste0(msg, collapse = ""), elements)
+  rlang::abort(c(reason, msg), call = call)
 }
