@@ -175,9 +175,7 @@ vector, or as pure text. To do this conversion, I recommend you to use the `httr
 function. By default, this function converts the raw bytes into a R list.
 
 ```{r}
-list_of_nodes <- figma::untitled_file |>
-  httr::content()
-
+list_of_nodes <- httr::content(figma::untitled_file)
 names(list_of_nodes)
 ```
 

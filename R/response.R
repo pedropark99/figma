@@ -287,7 +287,6 @@ as_tibble <- function(x, ...){
 
 
 
-
 parse_figma_file <- function(content){
   document <- select_any_of(content, document_attrs)
   document <- c(content$document[c("id", "type")], document)
