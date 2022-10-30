@@ -58,7 +58,7 @@ You can find the key (or ID) of your Figma file by looking at the URL in your we
 at the Figma platform. As an example, lets use this Figma file entitled `Untitled` (I will not make a joke on that 
 `r emoji::emoji("sweat_smile")`):
 
-```{r file_example, echo = FALSE, fig.cap = "An example of Figma file"}
+```{r file_example, echo = FALSE, fig.cap = "An example of Figma file", out.width="120%"}
 knitr::include_graphics("example-figma-file.png")
 ```
 
@@ -100,7 +100,7 @@ the image below. This is where you can create all of your personal access tokens
 add a description (or a "alias") to your token, and press Enter. A pop-up should appear
 in your screen with your new token.
 
-```{r, echo = FALSE, fig.cap = "Personal access token section in settings"}
+```{r, echo = FALSE, fig.cap = "Personal access token section in settings", out.width="100%"}
 knitr::include_graphics("create-token.png")
 ```
 
@@ -108,7 +108,7 @@ The Figma API uses this secret token to identify you, to know that is you that i
 for a file, and not someone else. Because of this, is important to keep this token a secret,
 because if someone have it, they can access your Figma files through the API.
 
-A standard way to store these passwords, is to store them in the `.Rprofile` file, but there are
+A standard way to store these passwords, is to store them in the `.Renviron` file, but there are
 many other methods that are good alternatives too. A good place to start is the 
 [vignette from Hadley Wickham](https://cran.r-project.org/web/packages/httr/vignettes/secrets.html).
 

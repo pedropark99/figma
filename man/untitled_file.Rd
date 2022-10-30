@@ -37,6 +37,7 @@ with class \code{response}. The elements of this list and their description are:
 
 All data of the Figma file is stored in the \code{content} element. However, this data is in raw
 format (i.e. in raw bytes). To convert these raw bytes into a useful format like a R list, or a
-string, you should use the \code{httr::content()} function.
+string, you should use the \code{httr::content()} function. See \code{vignette("figma")} for a
+detailed description of the data present in this \code{content} element;
 }
 \keyword{datasets}
