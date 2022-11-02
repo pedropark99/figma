@@ -23,7 +23,7 @@ the resulting query string.
 
 Logical values (TRUE or FALSE) are automatically converted to
 a lower-case version ("true" or "false"), since these versions are
-more tipically used in standard query strings.
+more typically used in standard query strings.
 }
 \examples{
 library(figma)

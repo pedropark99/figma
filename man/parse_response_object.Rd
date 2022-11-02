@@ -10,7 +10,7 @@ parse_response_object(response, .output_format, ...)
 \item{response}{The \code{response} object returned by the \code{httr} HTTP
 methods (e.g. \code{httr::GET()});}
 
-\item{.output_format}{A string with the name of the output format choosen by the user;}
+\item{.output_format}{A string with the name of the output format chosen by the user;}
 
 \item{...}{Further arguments passed by the caller;}
 }
@@ -27,7 +27,7 @@ of it, \code{parse_response_object()} is usually called with
 \code{.output_format = "response"}, which makes the function to just
 return the input as is.
 
-This unprocessed and raw input gives all of the posibble information to
+This unprocessed and raw input gives all of the possible information to
 the user (which is good for debugging). But this information is usually in
 a very messy and not friendly format, which makes harder for data analysis
 and transformation pipelines.

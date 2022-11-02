@@ -39,7 +39,7 @@ be an empty \code{tibble} object.
 
 By default, \code{figma::as_tibble()} does not include any document metadata in
 the resulting tibble object. But you can pass \code{simplified = FALSE} to the
-function to change this behaviour.
+function to change this behavior.
 }
 \examples{
 \dontrun{

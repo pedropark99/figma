@@ -1,9 +1,9 @@
 ---
-title: "Commom HTTP errors in the Figma API"
+title: "Common HTTP errors in the Figma API"
 author: Pedro Duarte Faria
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Commom HTTP errors in the Figma API}
+  %\VignetteIndexEntry{Common HTTP errors in the Figma API}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -45,7 +45,7 @@ library(figma)
 
 ### Wrong node ID in `figma::get_figma_page()` results in status code 400
 
-When you use `figma::get_figma_page()`, and it returns an HTT error with status code 400,
+When you use `figma::get_figma_page()`, and it returns an HTTP error with status code 400,
 is possible that this error was caused by a mistake in the node ID that you provided to
 the function.
 
