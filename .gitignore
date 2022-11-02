@@ -2,7 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-.Rbuildignore
 inst/doc
 /doc/
 /Meta/
+CRAN-SUBMISSION
