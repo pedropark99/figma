@@ -17,7 +17,7 @@ get_document_info(file_key, token, .output_format = "list")
 \value{
 By default, \code{get_document_info()} returns a raw R list with all
 of the document metadata of your Figma file. But you can change this
-behaviour with \code{.output_format = "tibble"}, which gives you
+behavior with \code{.output_format = "tibble"}, which gives you
 a \code{tibble::tibble} object.
 }
 \description{
@@ -34,7 +34,7 @@ it uses, etc.
 That is why \code{get_document_info()} exists. It collects just the
 metadata of your Figma file, and ignores all canvas and objects data.
 
-By default, \code{get_document_info()} fits the metada into a raw R list.
+By default, \code{get_document_info()} fits the metadata into a raw R list.
 But you can change this behaviour with the \code{.output_format} argument.
 With \code{.output_format = "tibble"}, \code{get_document_info()} will
 fit the metadata into a \code{tibble::tibble} object.

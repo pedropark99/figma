@@ -36,7 +36,7 @@ understand what is in each element of this list.
 \code{as_figma_document()} will call different parsers depending on what kind
 of elements are present in the content of the \code{response} object it receives
 as input. These elements define what kind of data is present in the \code{response}
-object, and how it is strucutured.
+object, and how it is structured.
 
 If this input object have a \code{document} element in the top-level of
 the content, is likely that this input object was produced by \code{figma::get_figma_file()}.

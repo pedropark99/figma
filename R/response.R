@@ -78,7 +78,7 @@ select_any_of <- function(x, elements){
 #'
 #' @param response The \code{response} object returned by the \code{httr} HTTP
 #' methods (e.g. \code{httr::GET()});
-#' @param .output_format A string with the name of the output format choosen by the user;
+#' @param .output_format A string with the name of the output format chosen by the user;
 #' @param ... Further arguments passed by the caller;
 #'
 #' @details
@@ -88,7 +88,7 @@ select_any_of <- function(x, elements){
 #' \code{.output_format = "response"}, which makes the function to just
 #' return the input as is.
 #'
-#' This unprocessed and raw input gives all of the posibble information to
+#' This unprocessed and raw input gives all of the possible information to
 #' the user (which is good for debugging). But this information is usually in
 #' a very messy and not friendly format, which makes harder for data analysis
 #' and transformation pipelines.
@@ -130,7 +130,7 @@ parse_response_object <- function(response, .output_format, ...){
 #' \code{as_figma_document()} will call different parsers depending on what kind
 #' of elements are present in the content of the \code{response} object it receives
 #' as input. These elements define what kind of data is present in the \code{response}
-#' object, and how it is strucutured.
+#' object, and how it is structured.
 #'
 #' If this input object have a \code{document} element in the top-level of
 #' the content, is likely that this input object was produced by \code{figma::get_figma_file()}.
@@ -221,7 +221,7 @@ print.figma_document <- function(x, ...){
 #'
 #' By default, \code{figma::as_tibble()} does not include any document metadata in
 #' the resulting tibble object. But you can pass \code{simplified = FALSE} to the
-#' function to change this behaviour.
+#' function to change this behavior.
 #'
 #' @param x A Figma document object (i.e. a \code{figma::figma_document} object),
 #' or, a \code{httr::response} object to parse;
