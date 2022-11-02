@@ -2,3 +2,42 @@ url: https://pedropark99.github.io/figma/
 template:
   bootstrap: 5
 
+reference:
+- title: "Get data of a Figma file"
+  desc: >
+    Functions to get the data of a Figma file, or a specific page,
+    or just the metadata of the file.
+  contents:
+  - get_figma_file
+  - get_figma_page
+  - get_document_info
+- title: "Fit the Figma data into a more flexible and intuitive data structure"
+  desc: >
+    Functions to extract the data of your Figma file from the raw HTTP
+    response object, and fit it into a more flexible and intuitive data structure.
+  contents:
+  - as_tibble
+  - as_figma_document
+- title: "Exported data and global variables"
+  desc: >
+    Global variables used across the package, or, data used in the code examples
+    across vignettes and documentations.
+  contents:
+  - untitled_file
+  - default_attrs
+  - document_attrs
+- title: "URL and endpoint utilities"
+  desc: >
+    These are mainly utilities functions that are used
+    to get (or build) the complete URLs used in the HTTP requests.
+  contents:
+  - build_query_string
+  - build_request_url
+  - get_endpoint_url
+- title: "Other non-exported utility functions"
+  desc: >
+    These are utilities functions that are not exported to the user.
+    But they are documented in the package.
+  contents:
+  - parse_response_object
+  - select_any_of
