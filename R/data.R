@@ -29,6 +29,8 @@
 #' string, you should use the \code{httr::content()} function. See \code{vignette("figma")} for a
 #' detailed description of the data present in this \code{content} element;
 #'
+#' @format An object of class \code{response}, produced by \code{httr} HTTP methods (e.g. \code{httr::GET()});
+#'
 #' @examples
 #' library(figma)
 #' str(untitled_file)

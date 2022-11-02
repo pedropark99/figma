@@ -5,7 +5,7 @@
 \alias{untitled_file}
 \title{An example of a simple Figma file}
 \format{
-An object of class \code{response} of length 10.
+An object of class \code{response}, produced by \code{httr} HTTP methods (e.g. \code{httr::GET()});
 }
 \usage{
 untitled_file
