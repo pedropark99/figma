@@ -18,7 +18,7 @@ A single string with the complete URL.
 }
 \description{
 Add multiple "components" to a base URL, to build
-the complete URL that will be used in the HTTP request.
+the complete URL that will be used in the HTTP request (non-exported function).
 }
 \details{
 This function receives as input, a set of pieces (or components) of
@@ -44,11 +44,4 @@ Third, a query string, which is usually composed by a set of
 key-value pairs. \code{build_request_url()} collects all these
 key-value pairs through the \code{...} argument, and then, combines
 all these pairs together to form a query string.
-}
-\examples{
-library(figma)
-figma:::build_request_url(
-  "http://test.com", path = c("folder", "a-interesting-resource"),
-  skip = 100, page = 2, title = "Document"
-)
 }

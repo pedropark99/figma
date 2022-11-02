@@ -25,7 +25,7 @@ The `figma` package allows you to that. It uses the Figma API to bring all of yo
 It does this, by sending a HTTP request to the Figma API to collect all of your Figma data, and then,
 it parses this data into a R native object, so you can easily use it in your R process.
 
-```{r setup, eval = FALSE}
+```{r setup}
 library(figma)
 ```
 
@@ -151,23 +151,23 @@ which makes analysis and transformation pipelines harder and more complex. That 
 which we will describe later.
 
 To give you an useful example, you can access the exact `response` object shown in the example
-of section 1.4. This `response` object is stored in a object called `untitled_file`,
-that you can access with `figma::untitled_file`. This object `untitled_file` contains all
+of section 1.4. This `response` object is stored in a data object called `untitled_file`,
+that you can access with `data("untitled_file", package = "figma")`. This object `untitled_file` contains all
 of the data from the Figma file shown in section 1.2.
 
 As you can see in the result below, a `response` object is just a simple R list with many
 elements:
 
 ```{r}
-str(figma::untitled_file)
+str(untitled_file)
 ```
 
 All of your Figma file data is in the `content` element, so, you would use the 
-command `figma::untitled_file$content` to access it. But, by default, the Figma API sends
+command `untitled_file$content` to access it. But, by default, the Figma API sends
 the data of your Figma file as raw bytes:
 
 ```{r}
-head(figma::untitled_file$content)
+head(untitled_file$content)
 ```
 
 So you need to convert these bytes in a more useful format like a JSON object, or a character
@@ -175,7 +175,7 @@ vector, or as pure text. To do this conversion, I recommend you to use the `httr
 function. By default, this function converts the raw bytes into a R list.
 
 ```{r}
-list_of_nodes <- httr::content(figma::untitled_file)
+list_of_nodes <- httr::content(untitled_file)
 names(list_of_nodes)
 ```
 
@@ -209,7 +209,7 @@ print(figma_document)
 Or, analogously:
 
 ```{r}
-figma_document <- figma:::as_figma_document(figma::untitled_file)
+figma_document <- figma::as_figma_document(untitled_file)
 figma_document
 ```
 
@@ -264,12 +264,12 @@ print(tibble)
 Or, analogously:
 
 ```{r}
-tibble <- figma::as_tibble(figma::untitled_file)
+tibble <- figma::as_tibble(untitled_file)
 tibble
 ```
 
 Each row in the resulting tibble, is a object present in one of the canvas of your Figma file.
-As an example, the Figma file stored in `figma::untitled_file` have 2 canvas/pages: 3 objects in 
+As an example, the Figma file stored in `untitled_file` have 2 canvas/pages: 3 objects in 
 the first canvas, and 2 objects in the second canvas. So 3 objects + 2 objects = 5 rows in the 
 output tibble.
 

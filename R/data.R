@@ -1,6 +1,6 @@
 #' An example of a simple Figma file
 #'
-#' The \code{figma::untitled_file} object is an example of what kind of object the functions from \code{figma} package
+#' The \code{untitled_file} object is an example of what kind of object the functions from \code{figma} package
 #' tend to return to the user. This object was produced by a call to \code{figma::get_figma_file()}, and contains the
 #' data of a very simple Figma file entitled "Untitled".
 #'
@@ -9,7 +9,7 @@
 #' three objects drawn in Page 1 (a RECTANGLE, a TEXT and a VECTOR object), and, there are two objects
 #' drawn in Page 2 (a RECTANGLE and a TEXT object).
 #'
-#' The \code{figma::untitled_file} object contains the \code{httr::response} object
+#' The \code{untitled_file} object contains the \code{httr::response} object
 #' returned by \code{figma::get_figma_file()}. This \code{httr::response} object is just a simple R list
 #' with class \code{response}. The elements of this list and their description are:
 #'
@@ -28,4 +28,10 @@
 #' format (i.e. in raw bytes). To convert these raw bytes into a useful format like a R list, or a
 #' string, you should use the \code{httr::content()} function. See \code{vignette("figma")} for a
 #' detailed description of the data present in this \code{content} element;
+#'
+#' @format An object of class \code{response}, produced by \code{httr} HTTP methods (e.g. \code{httr::GET()});
+#'
+#' @examples
+#' library(figma)
+#' str(untitled_file)
 "untitled_file"

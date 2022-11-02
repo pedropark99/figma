@@ -114,7 +114,7 @@ in the official repository of the package</a>.</p>
 user mistake in the key variables they provided to the functions of
 package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pedropark99/figma" class="external-link">figma</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pedropark99/figma" class="external-link">figma</a></span><span class="op">)</span></code></pre></div>
 <div class="section level3">
 <h3 id="wrong-node-id-in-figmaget_figma_page-results-in-status-code-400">Wrong node ID in <code>figma::get_figma_page()</code> results in
 status code 400<a class="anchor" aria-label="anchor" href="#wrong-node-id-in-figmaget_figma_page-results-in-status-code-400"></a>
@@ -128,12 +128,12 @@ provided a wrong or invalid node ID to the API. As an example, the code
 below uses a clearly wrong node ID, but a valid personal access token
 and a valid file key.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">node_id</span> <span class="op">&lt;-</span> <span class="st">"wrongID"</span></span>
-<span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span></span>
-<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"My valid personal access token... "</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_figma_page.html">get_figma_page</a></span><span class="op">(</span></span>
-<span>  <span class="va">file_key</span>, <span class="va">token</span>, <span class="va">node_id</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="va">node_id</span> <span class="op">&lt;-</span> <span class="st">"wrongID"</span>
+<span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span>
+<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"My valid personal access token... "</span>
+<span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_figma_page.html">get_figma_page</a></span><span class="op">(</span>
+  <span class="va">file_key</span>, <span class="va">token</span>, <span class="va">node_id</span>
+<span class="op">)</span></code></pre></div>
 <pre><code>Error in `get_figma_page()`:
 ! HTTP Error:
 
@@ -174,12 +174,12 @@ respond to the HTTP request with a HTTP status code equal to 404,
 indicating that they could not find a Figma file identified by the key
 :</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"This key does not exist"</span></span>
-<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"A valid personal token ..."</span></span>
-<span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span></span>
-<span>  <span class="va">file_key</span>, <span class="va">token</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"This key does not exist"</span>
+<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"A valid personal token ..."</span>
+
+<span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span>
+  <span class="va">file_key</span>, <span class="va">token</span>
+<span class="op">)</span></code></pre></div>
 <pre><code>Error in `figma::get_figma_file()`:
 ! HTTP Error:
 
@@ -220,12 +220,12 @@ personal access token. When I deliver these key variables to
 Figma API with this incorrect token, and the Figma servers respond to
 this request with a HTTP error equal to 403.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span></span>
-<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"This is an incorrect token"</span></span>
-<span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span></span>
-<span>  <span class="va">file_key</span>, <span class="va">token</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span>
+<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"This is an incorrect token"</span>
+
+<span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span>
+  <span class="va">file_key</span>, <span class="va">token</span>
+<span class="op">)</span></code></pre></div>
 <pre><code>Error in `figma::get_figma_file()`:
 ! HTTP Error:
 

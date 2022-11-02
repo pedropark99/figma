@@ -84,7 +84,7 @@ check_endpoint <- function(endpoint, call = rlang::caller_env()){
 #' Build the request URL
 #'
 #' Add multiple "components" to a base URL, to build
-#' the complete URL that will be used in the HTTP request.
+#' the complete URL that will be used in the HTTP request (non-exported function).
 #'
 #' @param base_url A single string with the base URL that you want add components to;
 #' @param path A vector of strings (or a single string) with "path" components;
@@ -115,12 +115,6 @@ check_endpoint <- function(endpoint, call = rlang::caller_env()){
 #' key-value pairs through the \code{...} argument, and then, combines
 #' all these pairs together to form a query string.
 #'
-#' @examples
-#' library(figma)
-#' figma:::build_request_url(
-#'   "http://test.com", path = c("folder", "a-interesting-resource"),
-#'   skip = 100, page = 2, title = "Document"
-#' )
 build_request_url <- function(base_url, path = NULL, ...){
   url <- base_url
   if (is_not_null(path) && is.character(path)) {
@@ -200,7 +194,7 @@ check_parameters <- function(parameters, call = rlang::caller_env()){
 
 #' Build a query string from a set of named parameters
 #'
-#' Utility function used to build query strings.
+#' Utility function used to build query strings (non-exported function).
 #'
 #' @param parameters A list with a set of key-value pairs to compose the query string
 #' @returns A single string with the query string produced.
@@ -213,13 +207,6 @@ check_parameters <- function(parameters, call = rlang::caller_env()){
 #' Logical values (TRUE or FALSE) are automatically converted to
 #' a lower-case version ("true" or "false"), since these versions are
 #' more typically used in standard query strings.
-#'
-#' @examples
-#' library(figma)
-#' figma:::build_query_string(list(skip = 100, page = 2, title = "Document"))
-#' # Returns a empty string:
-#' figma:::build_query_string(list())
-#' figma:::build_query_string(list(a = 1, b = 2, c = TRUE))
 #'
 build_query_string <- function(parameters){
   keys <- names(parameters)

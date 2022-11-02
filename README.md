@@ -1,8 +1,12 @@
-# figma
+# figma <img src="man/figures/pkg-logo.png" align="right" style="height:200px" />
+
 
 <!-- badges: start -->
-  [![R-CMD-check](https://github.com/pedropark99/figma/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pedropark99/figma/actions/workflows/R-CMD-check.yaml)
-  <!-- badges: end -->
+[![R-CMD-check](https://github.com/pedropark99/figma/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pedropark99/figma/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+
+## Overview
 
 The aim of `figma` package is to provide an easy-to-use client/wrapper for the [Figma API](https://www.figma.com/developers/api). It allows you to bring all data from a Figma file 
 to your R session. This includes the data of all objects that you have drawn in this file, and their

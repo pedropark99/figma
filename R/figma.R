@@ -232,6 +232,16 @@ get_document_info <- function(file_key, token, .output_format = "list"){
 #' and report to the user, what kind of error message the Figma API returned.
 #' See \code{vignette("http-errors")} for more details.
 #'
+#' @returns By default, \code{get_figma_page()} do not parse the output from
+#' the API, and returns the raw \code{response} object
+#' produced by the \code{httr} HTTP methods (e.g. \code{httr::GET()}).
+#'
+#' But you can change this behavior with \code{.output_format} argument. With
+#' \code{.output_format = "tibble"}, a \code{tibble::tibble()} object
+#' is returned. With \code{.output_format = "figma_document"}, a object of
+#' class \code{figma_document} is returned (See Details
+#' section for more information).
+#'
 #' @examples
 #' \dontrun{
 #' library(figma)
@@ -245,11 +255,11 @@ get_document_info <- function(file_key, token, .output_format = "list"){
 
 
 get_figma_page <- function(file_key,
-                              token,
-                              node_ids,
-                              geometry = FALSE,
-                              .output_format = "response",
-                              ...){
+                           token,
+                           node_ids,
+                           geometry = FALSE,
+                           .output_format = "response",
+                           ...){
   url <- get_endpoint_url(endpoint = "file_nodes")
   node_ids <- paste0(node_ids, collapse = ",")
   url_args <- list(path = c(file_key, "nodes"), ids = node_ids)

@@ -18,7 +18,7 @@ reference:
   contents:
   - as_tibble
   - as_figma_document
-- title: "Exported data and global variables"
+- title: "Example data and global variables"
   desc: >
     Global variables used across the package, or, data used in the code examples
     across vignettes and documentations.
