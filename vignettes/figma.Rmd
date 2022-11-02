@@ -110,7 +110,7 @@ because if someone have it, they can access your Figma files through the API.
 
 A standard way to store these passwords, is to store them in the `.Renviron` file, but there are
 many other methods that are good alternatives too. A good place to start is the 
-[vignette from Hadley Wickham](https://cran.r-project.org/web/packages/httr/vignettes/secrets.html).
+[vignette from Hadley Wickham](https://cran.r-project.org/package=httr/vignettes/secrets.html).
 
 
 ## 1.4 Use `get_figma_file()` to get your Figma file 

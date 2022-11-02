@@ -2,7 +2,8 @@ Package: figma
 Type: Package
 Title: R Client to the Figma API
 Version: 0.1.0
-Author: Pedro Duarte Faria
+Authors@R: person("Pedro", "Faria", role = c("aut", "cre", "cph"), email = "pedropark99@gmail.com")
+Author: Pedro Duarte Faria [aut, cre, cph]
 Maintainer: Pedro Duarte Faria <pedropark99@gmail.com>
 Description: An easy-to-use client/wrapper for the Figma API. It allows you to bring all
   data from a Figma file to your R session. This includes the data of all objects
