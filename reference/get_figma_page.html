@@ -105,6 +105,21 @@ Defaults to FALSE;</p></dd>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>By default, <code>get_figma_page()</code> do not parse the output from
+the API, and returns the raw <code>response</code> object
+produced by the <code>httr</code> HTTP methods (e.g. <code><a href="https://httr.r-lib.org/reference/GET.html" class="external-link">httr::GET()</a></code>).</p>
+
+
+<p>But you can change this behavior with <code>.output_format</code> argument. With
+<code>.output_format = "tibble"</code>, a <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble()</a></code> object
+is returned. With <code>.output_format = "figma_document"</code>, a object of
+class <code>figma_document</code> is returned (See Details
+section for more information).</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>With `get_figma_file()` you get data of all objects in all canvas/pages of your Figma file.
 But with `get_figma_page()` you get data of all objects drawn in a specific set of canvas/pages

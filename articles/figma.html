@@ -227,15 +227,15 @@ through the <code>.output_format</code> argument, which we will describe
 later.</p>
 <p>To give you an useful example, you can access the exact
 <code>response</code> object shown in the example of section 1.4. This
-<code>response</code> object is stored in a object called
+<code>response</code> object is stored in a data object called
 <code>untitled_file</code>, that you can access with
-<code><a href="../reference/untitled_file.html">figma::untitled_file</a></code>. This object
+<code>data("untitled_file", package = "figma")</code>. This object
 <code>untitled_file</code> contains all of the data from the Figma file
 shown in section 1.2.</p>
 <p>As you can see in the result below, a <code>response</code> object is
 just a simple R list with many elements:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">figma</span><span class="fu">::</span><span class="va"><a href="../reference/untitled_file.html">untitled_file</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 10</span></span>
 <span><span class="co">#&gt;  $ url        : chr "https://api.figma.com/v1/files/hch8YlkIrYbU3raDzjPvCz"</span></span>
 <span><span class="co">#&gt;  $ status_code: int 200</span></span>
@@ -296,11 +296,11 @@ just a simple R list with many elements:</p>
 <span><span class="co">#&gt;  $ handle     :Class 'curl_handle' &lt;externalptr&gt; </span></span>
 <span><span class="co">#&gt;  - attr(*, "class")= chr "response"</span></span></code></pre></div>
 <p>All of your Figma file data is in the <code>content</code> element,
-so, you would use the command <code>figma::untitled_file$content</code>
-to access it. But, by default, the Figma API sends the data of your
-Figma file as raw bytes:</p>
+so, you would use the command <code>untitled_file$content</code> to
+access it. But, by default, the Figma API sends the data of your Figma
+file as raw bytes:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">figma</span><span class="fu">::</span><span class="va"><a href="../reference/untitled_file.html">untitled_file</a></span><span class="op">$</span><span class="va">content</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">$</span><span class="va">content</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 7b 22 64 6f 63 75</span></span></code></pre></div>
 <p>So you need to convert these bytes in a more useful format like a
 JSON object, or a character vector, or as pure text. To do this
@@ -308,7 +308,7 @@ conversion, I recommend you to use the <code><a href="https://httr.r-lib.org/ref
 function. By default, this function converts the raw bytes into a R
 list.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">list_of_nodes</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html" class="external-link">content</a></span><span class="op">(</span><span class="fu">figma</span><span class="fu">::</span><span class="va"><a href="../reference/untitled_file.html">untitled_file</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">list_of_nodes</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html" class="external-link">content</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">list_of_nodes</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "document"      "components"    "componentSets" "schemaVersion"</span></span>
 <span><span class="co">#&gt;  [5] "styles"        "name"          "lastModified"  "thumbnailUrl" </span></span>
@@ -341,7 +341,7 @@ instead of a <code>response</code> object.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">figma_document</span><span class="op">)</span></span></code></pre></div>
 <p>Or, analogously:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">figma_document</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">:::</span><span class="fu"><a href="../reference/as_figma_document.html">as_figma_document</a></span><span class="op">(</span><span class="fu">figma</span><span class="fu">::</span><span class="va"><a href="../reference/untitled_file.html">untitled_file</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">figma_document</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/as_figma_document.html">as_figma_document</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span></span>
 <span><span class="va">figma_document</span></span>
 <span><span class="co">#&gt; &lt;Figma Document&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -443,7 +443,7 @@ you can use:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tibble</span><span class="op">)</span></span></code></pre></div>
 <p>Or, analogously:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tibble</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="fu">figma</span><span class="fu">::</span><span class="va"><a href="../reference/untitled_file.html">untitled_file</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">tibble</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span></span>
 <span><span class="va">tibble</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span></span>
 <span><span class="co">#&gt;   canvas_id canvas_name canvas_type object_id object_name   objec…¹ object_att…²</span></span>
@@ -456,9 +456,9 @@ you can use:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable names ¹​object_type, ²​object_attributes</span></span></span></code></pre></div>
 <p>Each row in the resulting tibble, is a object present in one of the
 canvas of your Figma file. As an example, the Figma file stored in
-<code><a href="../reference/untitled_file.html">figma::untitled_file</a></code> have 2 canvas/pages: 3 objects in the
-first canvas, and 2 objects in the second canvas. So 3 objects + 2
-objects = 5 rows in the output tibble.</p>
+<code>untitled_file</code> have 2 canvas/pages: 3 objects in the first
+canvas, and 2 objects in the second canvas. So 3 objects + 2 objects = 5
+rows in the output tibble.</p>
 <p>The columns with <code>canvas_</code> prefix stores the metadata
 about the canvas on which the object of the corresponding row is. And
 the columns with <code>object_</code> prefix stores the data about the
