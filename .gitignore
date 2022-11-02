@@ -1,8 +1,10 @@
 .Rproj.user
+.Rproj.user/
 .Rhistory
 .RData
 .Ruserdata
-.Rbuildignore
 inst/doc
 /doc/
+docs
 /Meta/
+CRAN-SUBMISSION
