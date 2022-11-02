@@ -13,7 +13,7 @@ build_query_string(parameters)
 A single string with the query string produced.
 }
 \description{
-Utility function used to build query strings.
+Utility function used to build query strings (non-exported function).
 }
 \details{
 This function takes a set of key-value pairs (or in other words,
@@ -24,12 +24,4 @@ the resulting query string.
 Logical values (TRUE or FALSE) are automatically converted to
 a lower-case version ("true" or "false"), since these versions are
 more typically used in standard query strings.
-}
-\examples{
-library(figma)
-figma:::build_query_string(list(skip = 100, page = 2, title = "Document"))
-# Returns a empty string:
-figma:::build_query_string(list())
-figma:::build_query_string(list(a = 1, b = 2, c = TRUE))
-
 }

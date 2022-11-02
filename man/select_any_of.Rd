@@ -31,10 +31,3 @@ But \code{dplyr::any_of()} is designed to work with columns of a data.frame,
 and \code{figma::select_any_of()} is designed to work specially with elements of a
 named list (although it can be used to select columns of a data.frames as well).
 }
-\examples{
-library(figma)
-figma:::select_any_of(
-  list(a = 1, b = 2, d = 3, e = 9),
-  c("a", "c", "e")
-)
-}

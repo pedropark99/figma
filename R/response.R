@@ -33,7 +33,6 @@ document_attrs <- c(
 #' Select any of the elements in a object
 #'
 #' Safely select elements of a named object (like a named R list).
-#'
 #' @details
 #' This functions works in a similar way to \code{dplyr::any_of()}. It tries
 #' to select any element of \code{x} that is in the vector given by the user
@@ -52,13 +51,6 @@ document_attrs <- c(
 #'
 #' @return A subset of the \code{x} if it finds any of the elements described in the
 #'   \code{element} argument.
-#'
-#' @examples
-#' library(figma)
-#' figma:::select_any_of(
-#'   list(a = 1, b = 2, d = 3, e = 9),
-#'   c("a", "c", "e")
-#' )
 
 select_any_of <- function(x, elements){
   available_elements <- names(x)
@@ -95,7 +87,7 @@ select_any_of <- function(x, elements){
 #'
 #' The \code{.output_format} argument provide an option for the user to choose
 #' a more friendly format. As an example, with \code{.output_format = "tibble"},
-#' \code{parse_response_object()} will call \code{figma:::as_tibble()} to
+#' \code{parse_response_object()} will call \code{figma::as_tibble()} to
 #' parse the data of the \code{response} object, and fit it into a
 #' \code{tibble::tibble()} object.
 

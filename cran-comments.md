@@ -1,3 +1,24 @@
+## Resubmission
+This is a resubmission. To meet the changes requested by CRAN,
+I made the following adjustments in this version:
+
+* Surround every package name, software name and API name by single quotes in
+  title and description fields of DESCRIPTION;
+
+* Added the URL to Figma's API in the Description field of DESCRIPTION;
+
+* Added the missing 'Value' section in the documentation of `get_figma_page()`;
+
+* Removed all code examples in the documentation of non-exported functions, to avoid
+  the use of `:::` operator;
+  
+Besides these requested changes, I added to DESCRIPTION:
+
+* URLs to the repository and website of the package;
+
+* URL to Bug Report;
+
+
 ## R CMD check results
 
 The package passed on R CMD check with no ERRORs or WARNINGs on all platforms. 

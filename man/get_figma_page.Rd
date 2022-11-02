@@ -28,6 +28,17 @@ Defaults to FALSE;}
 
 \item{...}{Further arguments that are passed to \code{parse_response_object()};}
 }
+\value{
+By default, \code{get_figma_page()} do not parse the output from
+the API, and returns the raw \code{response} object
+produced by the \code{httr} HTTP methods (e.g. \code{httr::GET()}).
+
+But you can change this behavior with \code{.output_format} argument. With
+\code{.output_format = "tibble"}, a \code{tibble::tibble()} object
+is returned. With \code{.output_format = "figma_document"}, a object of
+class \code{figma_document} is returned (See Details
+section for more information).
+}
 \description{
 This function uses the \code{/v1/files/} endpoint of Figma API
 to get the data of an specific canvas/page (or a set of canvas/pages) from a Figma file,

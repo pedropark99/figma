@@ -63,7 +63,7 @@ figma_document object."><!-- mathjax --><script src="https://cdnjs.cloudflare.co
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_figma_document</span><span class="op">(</span><span class="va">response</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">as_figma_document</span><span class="op">(</span><span class="va">response</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -115,13 +115,13 @@ to the user, telling it could not recognize the source of the <code>response</co
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkgaUIZ9raDzjPvCz"</span></span></span>
-<span class="r-in"><span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"my figma token secret ... "</span></span></span>
-<span class="r-in"><span><span class="co"># Returns a `response` object:</span></span></span>
-<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="get_figma_file.html">get_figma_file</a></span><span class="op">(</span><span class="va">file_key</span>, <span class="va">token</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu">as_figma_document</span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkgaUIZ9raDzjPvCz"</span></span>
+<span class="r-in"><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"my figma token secret ... "</span></span>
+<span class="r-in"><span class="co"># Returns a `response` object:</span></span>
+<span class="r-in"><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="get_figma_file.html">get_figma_file</a></span><span class="op">(</span><span class="va">file_key</span>, <span class="va">token</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu">as_figma_document</span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

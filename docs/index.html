@@ -74,10 +74,13 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="figma">figma<a class="anchor" aria-label="anchor" href="#figma"></a>
+<div class="page-header"><h1 id="figma-">figma <img src="reference/figures/pkg-logo.png" align="right" style="height:200px"><a class="anchor" aria-label="anchor" href="#figma-"></a>
 </h1></div>
 <!-- badges: start -->
 
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>The aim of <code>figma</code> package is to provide an easy-to-use client/wrapper for the <a href="https://www.figma.com/developers/api" class="external-link">Figma API</a>. It allows you to bring all data from a Figma file to your R session. This includes the data of all objects that you have drawn in this file, and their respective canvas/page metadata.</p>
 <p>With this kind of data, you can maybe build a custom and automated layout for documents, or create an automated pipeline to build design content for your clients.</p>
 <p>Key features of the package:</p>
@@ -86,12 +89,13 @@
 <li><p>Functions from <code>figma</code> package can output the data into a <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble()</a></code> object;</p></li>
 <li><p>Returns the raw contents of the HTTP response by default, to give more freedom and information to the user;</p></li>
 </ul>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>To get the current development version from github:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pedropark99/figma"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"pedropark99/figma"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
@@ -105,22 +109,22 @@
 <p>The file key is collected through the URL that appears when you access this file in your web browser ( See <code><a href="articles/figma.html">vignette("figma")</a></code> for more details), and you can create a personal access token in the “Settings” section of the Figma platform (See <code><a href="articles/figma.html">vignette("figma")</a></code> for more details).</p>
 <p>After you collected these two variables, you can use <code><a href="reference/get_figma_file.html">figma::get_figma_file()</a></code> to collect all data of your Figma file, like this:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span></span>
-<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"My secret and personal access token ..."</span></span>
-<span></span>
-<span><span class="co"># Returns a `response` object:</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span></span>
-<span>  <span class="va">file_key</span>, <span class="va">token</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span>
+<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"My secret and personal access token ..."</span>
+
+<span class="co"># Returns a `response` object:</span>
+<span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span>
+  <span class="va">file_key</span>, <span class="va">token</span>
+<span class="op">)</span></code></pre></div>
 <p>By default, <code><a href="reference/get_figma_file.html">figma::get_figma_file()</a></code> returns the raw contents of the HTTP response. However, you can ask the function to fit the data of your Figma file in a tibble object, if you prefer. Just pass the <code>.output_format = "tibble"</code> argument to the function, like this:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Returns a `tibble` object:</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span></span>
-<span>  <span class="va">file_key</span>, <span class="va">token</span>,</span>
-<span>  .output_format <span class="op">=</span> <span class="st">"tibble"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="co"># Returns a `tibble` object:</span>
+<span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span>
+  <span class="va">file_key</span>, <span class="va">token</span>,
+  .output_format <span class="op">=</span> <span class="st">"tibble"</span>
+<span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></code></pre></div>
 <pre><code># A tibble: 5 × 7
   canvas_id canvas_name canvas_type object_id object_name       object_type object_attributes
   &lt;chr&gt;     &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;             &lt;chr&gt;       &lt;list&gt;           
@@ -132,14 +136,14 @@
 <p>Instead of getting the data from the entire Figma file, you might need to collect the data from a specific page (or a specific set of pages) of this file. If that’s your case, you can use the <code><a href="reference/get_figma_page.html">figma::get_figma_page()</a></code> function.</p>
 <p>But in order to use the function, you need to collect a third variable, which is the node ID, or, in other words, the ID that identifies the page that you are interested in (See <code>vignette("figma"</code> for more details on how to collect this node ID). After you collected this node ID, you could get this data like this:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">node_id</span> <span class="op">&lt;-</span> <span class="st">"0%3A1"</span></span>
-<span><span class="co"># Returns a `tibble` object:</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="reference/get_figma_page.html">get_figma_page</a></span><span class="op">(</span></span>
-<span>  <span class="va">file_key</span>, <span class="va">token</span>, <span class="va">node_id</span>,</span>
-<span>  .output_format <span class="op">=</span> <span class="st">"tibble"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="va">node_id</span> <span class="op">&lt;-</span> <span class="st">"0%3A1"</span>
+<span class="co"># Returns a `tibble` object:</span>
+<span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="reference/get_figma_page.html">get_figma_page</a></span><span class="op">(</span>
+  <span class="va">file_key</span>, <span class="va">token</span>, <span class="va">node_id</span>,
+  .output_format <span class="op">=</span> <span class="st">"tibble"</span>
+<span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></code></pre></div>
 <pre><code># A tibble: 3 × 7
   canvas_id canvas_name canvas_type object_id object_name object_type object_attributes
   &lt;chr&gt;     &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;       &lt;chr&gt;       &lt;list&gt;           
@@ -148,11 +152,11 @@
 3 0:1       Page 1      CANVAS      5:3       Arrow       VECTOR      &lt;named list [9]&gt; </code></pre>
 <p>On the other hand, for some reason, you might be not interested in the contents of your Figma file, just the metadata of it. For this case, you can use <code><a href="reference/get_document_info.html">figma::get_document_info()</a></code> to get this kind of information, like this:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="reference/get_document_info.html">get_document_info</a></span><span class="op">(</span></span>
-<span>  <span class="va">file_key</span>, <span class="va">token</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="reference/get_document_info.html">get_document_info</a></span><span class="op">(</span>
+  <span class="va">file_key</span>, <span class="va">token</span>
+<span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>List of 13
  $ id           : chr "0:0"
  $ type         : chr "DOCUMENT"

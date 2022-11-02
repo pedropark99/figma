@@ -34,7 +34,7 @@ and transformation pipelines.
 
 The \code{.output_format} argument provide an option for the user to choose
 a more friendly format. As an example, with \code{.output_format = "tibble"},
-\code{parse_response_object()} will call \code{figma:::as_tibble()} to
+\code{parse_response_object()} will call \code{figma::as_tibble()} to
 parse the data of the \code{response} object, and fit it into a
 \code{tibble::tibble()} object.
 }
