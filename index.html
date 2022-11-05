@@ -93,8 +93,11 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>To get the current development version from github:</p>
+<p>To get the current version from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"figma"</span><span class="op">)</span></span></code></pre></div>
+<p>To get the current development version from github:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"pedropark99/figma"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -108,7 +111,7 @@
 </ul>
 <p>The file key is collected through the URL that appears when you access this file in your web browser ( See <code><a href="articles/figma.html">vignette("figma")</a></code> for more details), and you can create a personal access token in the “Settings” section of the Figma platform (See <code><a href="articles/figma.html">vignette("figma")</a></code> for more details).</p>
 <p>After you collected these two variables, you can use <code><a href="reference/get_figma_file.html">figma::get_figma_file()</a></code> to collect all data of your Figma file, like this:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span></span>
 <span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"My secret and personal access token ..."</span></span>
 <span></span>
@@ -117,7 +120,7 @@
 <span>  <span class="va">file_key</span>, <span class="va">token</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>By default, <code><a href="reference/get_figma_file.html">figma::get_figma_file()</a></code> returns the raw contents of the HTTP response. However, you can ask the function to fit the data of your Figma file in a tibble object, if you prefer. Just pass the <code>.output_format = "tibble"</code> argument to the function, like this:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Returns a `tibble` object:</span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span></span>
 <span>  <span class="va">file_key</span>, <span class="va">token</span>,</span>
@@ -135,7 +138,7 @@
 5 5:4       Page 2      CANVAS      5:6       Texto da página 2 TEXT        &lt;named list [16]&gt;</code></pre>
 <p>Instead of getting the data from the entire Figma file, you might need to collect the data from a specific page (or a specific set of pages) of this file. If that’s your case, you can use the <code><a href="reference/get_figma_page.html">figma::get_figma_page()</a></code> function.</p>
 <p>But in order to use the function, you need to collect a third variable, which is the node ID, or, in other words, the ID that identifies the page that you are interested in (See <code>vignette("figma"</code> for more details on how to collect this node ID). After you collected this node ID, you could get this data like this:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">node_id</span> <span class="op">&lt;-</span> <span class="st">"0%3A1"</span></span>
 <span><span class="co"># Returns a `tibble` object:</span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="reference/get_figma_page.html">get_figma_page</a></span><span class="op">(</span></span>
@@ -151,7 +154,7 @@
 2 0:1       Page 1      CANVAS      5:2       Paragraph   TEXT        &lt;named list [16]&gt;
 3 0:1       Page 1      CANVAS      5:3       Arrow       VECTOR      &lt;named list [9]&gt; </code></pre>
 <p>On the other hand, for some reason, you might be not interested in the contents of your Figma file, just the metadata of it. For this case, you can use <code><a href="reference/get_document_info.html">figma::get_document_info()</a></code> to get this kind of information, like this:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="reference/get_document_info.html">get_document_info</a></span><span class="op">(</span></span>
 <span>  <span class="va">file_key</span>, <span class="va">token</span></span>
 <span><span class="op">)</span></span>
@@ -177,6 +180,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=figma" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/pedropark99/figma/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/pedropark99/figma/issues" class="external-link">Report a bug</a></li>
 </ul>
