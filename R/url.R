@@ -114,6 +114,7 @@ check_endpoint <- function(endpoint, call = rlang::caller_env()){
 #' all these pairs together to form a query string.
 #'
 build_request_url <- function(base_url, path = NULL, ...){
+  check_single_string(base_url, argument_name = "base_url")
   url <- base_url
   if (is_not_null(path) && is.character(path)) {
     url <- add_paths_to_url(url, path)
@@ -166,7 +167,7 @@ check_single_string <- function(x,
 
 
 is_single_string <- function(x){
-  is.character(x) && length(x) == 1
+  is.character(x) && length(x) == 1 && !is.na(x)
 }
 
 is_not_null <- function(x){
@@ -185,6 +186,14 @@ check_parameters <- function(parameters, call = rlang::caller_env()){
       "are named arguments."
     )
     rlang::abort(paste0(msg, collapse = ""), call = call)
+  }
+
+  any_null <- any(purrr::map_lgl(
+    parameters, function(x) is.null(x)
+  ))
+  if (any_null) {
+    msg <- "One of the named arguments contains a NULL value!"
+    rlang::abort(msg, call = call)
   }
 }
 
