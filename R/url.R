@@ -47,31 +47,26 @@ implemented_endpoints <- names(api_endpoints)
 #' figma::get_endpoint_url("files")
 #'
 get_endpoint_url <- function(endpoint = NULL){
-  if (is.null(endpoint)) {
-    all_endpoints <- lapply(
-      api_endpoints, function(endpoint){
-        paste0(api_base_url, endpoint, collapse = "")
-      }
-    )
-    return(all_endpoints)
-  }
   check_endpoint(endpoint)
-  endpoint_url <- api_endpoints[[endpoint]]
-  url <- paste0(api_base_url, endpoint_url, collapse = "")
-  return(url)
+  urls <- purrr::map_chr(
+    api_endpoints,
+    function(x) paste0(api_base_url, x, collapse = "")
+  )
+  urls <- if (is.null(endpoint)) urls else urls[[endpoint]]
+  return(urls)
 }
 
 
 check_endpoint <- function(endpoint, call = rlang::caller_env()){
-
   not_a_single_string <- !is_single_string(endpoint)
-  not_implemented <- !endpoint %in% implemented_endpoints
+  if (not_a_single_string) {
+    rlang::abort("The `endpoint` argument should be a single string.", call = call)
+  }
 
-  if (not_implemented || not_a_single_string) {
+  not_implemented <- !endpoint %in% implemented_endpoints
+  if (not_implemented) {
     msg_components <- c(
-      "The given endpoint was '%s'. ",
-      "However, the `endpoint` argument should be a single string ",
-      "with the name of the endpoint you want to use. ",
+      "The given endpoint ('%s') is not available in `figma` package. ",
       "Check `print(figma::implemented_endpoints)` to see the available values ",
       "for `endpoint` argument."
     )
@@ -79,6 +74,9 @@ check_endpoint <- function(endpoint, call = rlang::caller_env()){
     rlang::abort(sprintf(msg_format, endpoint), call = call)
   }
 }
+
+
+
 
 
 #' Build the request URL
