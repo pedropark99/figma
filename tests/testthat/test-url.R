@@ -2,16 +2,21 @@ test_that("`get_endpoint_url()`: Selects just a single Figma endpoint", {
   expect_length(get_endpoint_url("files"), 1L)
 })
 
-
 test_that("`get_endpoint_url()`: Expect an error when selecting a non-available endpoint", {
   expect_error(get_endpoint_url("weird_endpoint"))
 })
-
 
 test_that("`get_endpoint_url()`: Expect an error when using a vector of endpoints", {
   expect_error(get_endpoint_url(c("a", "b", "c")))
 })
 
+test_that("`get_endpoint_url()`: Expect an error when using NA or NULL values", {
+  expect_error(get_endpoint_url(NA_character_))
+})
+
+test_that("`get_endpoint_url()`: Expect an error when using NA or NULL values", {
+  expect_error(get_endpoint_url(NULL))
+})
 
 
 
@@ -67,3 +72,23 @@ test_that("build_request_url(): Should always output a single string value", {
 })
 
 
+test_that("build_request_url(): Expect error when using unnamed arguments in `...`", {
+  expect_error(build_request_url(
+    base_url = "base-url", path = "a-path",
+    # unnamed arguments:
+    NA, 0, NULL, "test"))
+})
+
+test_that("build_request_url(): Expect error when using any argument in `...` with NULL or NA values", {
+  expect_error(build_request_url(
+    base_url = "base-url", path = "a-path", skip = 100,
+    # arguments with NULL or NA
+    na_value = NA))
+})
+
+test_that("build_request_url(): Expect error when using any argument in `...` with NULL or NA values", {
+  expect_error(build_request_url(
+    base_url = "base-url", path = "a-path", skip = 100,
+    # arguments with NULL or NA
+    null_value = NULL))
+})
