@@ -1,3 +1,5 @@
+# Unit tests for `get_endpoint_url()` --------------------------------
+
 test_that("`get_endpoint_url()`: Selects just a single Figma endpoint", {
   expect_length(get_endpoint_url("files"), 1L)
 })
@@ -22,6 +24,7 @@ test_that("`get_endpoint_url()`: Expect an error when using NA or NULL values", 
 
 
 
+# Unit tests for `build_request_url()` -------------------------------
 
 test_that("build_request_url(): Expect a error when using a vector in `base_url` argument", {
   expect_error(build_request_url(c("a", "b", "c")))
@@ -92,3 +95,25 @@ test_that("build_request_url(): Expect error when using any argument in `...` wi
     # arguments with NULL or NA
     null_value = NULL))
 })
+
+
+
+
+
+
+
+
+# Unit tests for `build_query_string()` ---------------------------------
+
+test_that("`build_query_string()`: Expect an error with no inputs", {
+  expect_error(build_query_string())
+})
+
+test_that("`build_query_string()`: Expect error when using unnamed elements in input list", {
+  expect_error(build_query_string(list(1)))
+})
+
+test_that("`build_query_string()`: Always output a single string", {
+  expect_single_string(build_query_string(list(skip = 100, info = FALSE, data = "students")))
+})
+

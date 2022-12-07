@@ -216,6 +216,7 @@ check_parameters <- function(parameters, call = rlang::caller_env()){
 #' more typically used in standard query strings.
 #'
 build_query_string <- function(parameters){
+  check_parameters(parameters)
   keys <- names(parameters)
   key_value_pairs <- vector("character", length(parameters))
   for (i in seq_along(parameters)) {
