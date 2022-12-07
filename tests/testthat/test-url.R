@@ -38,10 +38,13 @@ test_that("build_request_url(): Expect a error when using NULL or NA in `base_ur
   expect_error(build_request_url(NA_character_))
 })
 
-test_that("build_request_url(): Expect a error when using a named argument with NULL", {
-  expect_error(build_request_url("base-url", test = NA, test2 = NULL))
+test_that("build_request_url(): Expect a error when using a named argument with `NULL` or `NA` value", {
+  expect_error(build_request_url("base-url", test_null = NULL))
 })
 
+test_that("build_request_url(): Expect a error when using a named argument with `NULL` or `NA` value", {
+  expect_error(build_request_url("base-url", test_na = NA))
+})
 
 expect_single_string <- function(object){
   act <- quasi_label(rlang::enquo(object), arg = "object")
@@ -116,4 +119,9 @@ test_that("`build_query_string()`: Expect error when using unnamed elements in i
 test_that("`build_query_string()`: Always output a single string", {
   expect_single_string(build_query_string(list(skip = 100, info = FALSE, data = "students")))
 })
+
+test_that("`build_query_string()`: Always output a single string", {
+  expect_single_string(build_query_string(list(skip = 100)))
+})
+
 
