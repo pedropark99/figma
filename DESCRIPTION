@@ -20,7 +20,7 @@ Imports:
     dplyr (>= 1.0.0),
     rlang (>= 1.0.0),
     tibble (>= 3.0.5)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 Suggests:
     knitr,
     rmarkdown,
