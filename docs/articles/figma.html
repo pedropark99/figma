@@ -447,14 +447,14 @@ you can use:</p>
 <code class="sourceCode R"><span><span class="va">tibble</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span></span>
 <span><span class="va">tibble</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span></span>
-<span><span class="co">#&gt;   canvas_id canvas_name canvas_type object_id object_name   objec…¹ object_att…²</span></span>
+<span><span class="co">#&gt;   canvas_id canvas_name canvas_type object_id object_name   objec…¹ object_attrs</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>      </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0:1       Page 1      CANVAS      1:2       Background    RECTAN… &lt;named list&gt;</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 0:1       Page 1      CANVAS      5:2       Paragraph     TEXT    &lt;named list&gt;</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 0:1       Page 1      CANVAS      5:3       Arrow         VECTOR  &lt;named list&gt;</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 5:4       Page 2      CANVAS      5:5       BackgroundPa… RECTAN… &lt;named list&gt;</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 5:4       Page 2      CANVAS      5:6       Texto da pág… TEXT    &lt;named list&gt;</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable names ¹​object_type, ²​object_attributes</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable name ¹​object_type</span></span></span></code></pre></div>
 <p>Each row in the resulting tibble, is a object present in one of the
 canvas of your Figma file. As an example, the Figma file stored in
 <code>untitled_file</code> have 2 canvas/pages: 3 objects in the first
