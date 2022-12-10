@@ -300,20 +300,20 @@ prepare_object <- function(x, call = rlang::caller_env()){
   if (inherits(x, "response")) {
     return(as_figma_document(x))
   } else
-    if (inherits(x, "figma_document")) {
-      return(x)
-    } else {
-      reason <- "Input object type is not supported!"
-      msg <- paste0(c(
-        "`as_tibble()` accepts an object of class `response` or `figma_document`. ",
-        "However, an object of class `%s` was given."
-      ), collapse = "")
-      rlang::abort(c(reason, sprintf(msg, class(x))), call = call)
-    }
+  if (inherits(x, "figma_document")) {
+    return(x)
+  } else {
+    reason <- "Input object type is not supported!"
+    msg <- paste0(c(
+      "`as_tibble()` accepts an object of class `response` or `figma_document`. ",
+      "However, an object of class `%s` was given."
+    ), collapse = "")
+    rlang::abort(c(reason, sprintf(msg, class(x))), call = call)
+  }
 }
 
 unnest_canvas <- function(df, ...){
-  df  <- do.call(
+  df <- do.call(
     tidyr::hoist,
     args = c(
       list(df, "canvas"),
@@ -340,13 +340,13 @@ unnest_objects <- function(df, ...){
       object_attrs = "objects"
     )
 
-  df  <- do.call(
-    tidyr::hoist,
-    args = c(
-      list(df, "object_attrs"),
-      as.list(default_attrs)
-    )
-  ) |>
+  df <- do.call(
+      tidyr::hoist,
+      args = c(
+        list(df, "object_attrs"),
+        as.list(default_attrs)
+      )
+    ) |>
     dplyr::rename(
       object_id = "id",
       object_name = "name",
@@ -361,9 +361,7 @@ unnest_objects <- function(df, ...){
 document_metadata <- function(x, attrs = default_attrs){
   metadata <- x$document
   if (!is.null(attrs)) {
-    metadata <- select_any_of(
-      metadata, attrs
-    )
+    metadata <- select_any_of(metadata, attrs)
   }
   n <- names(metadata)
   names(metadata) <- paste("document", n, sep = "_")
@@ -373,9 +371,9 @@ document_metadata <- function(x, attrs = default_attrs){
 add_document_metadata <- function(df, document){
   dm <- document_metadata(document)
   df <- do.call(
-    dplyr::mutate,
-    args = c(list(df), dm)
-  ) |>
+      dplyr::mutate,
+      args = c(list(df), dm)
+    ) |>
     dplyr::select(
       dplyr::starts_with("document"),
       dplyr::everything()
