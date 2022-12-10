@@ -2,7 +2,6 @@
 title: "Building custom CSS from the Figma API"
 output: rmarkdown::html_vignette
 author: "Pedro Duarte Faria"
-date: "2022-12-08"
 vignette: >
   %\VignetteIndexEntry{Building custom CSS from the Figma API}
   %\VignetteEngine{knitr::rmarkdown}
@@ -117,18 +116,14 @@ Furthermore, the function will receive as second input, a list of CSS attibutes 
 
 ```{r}
 css_statement <- function(selector, attributes) {
-  key_value_pairs <- vector(
-    "character", length = length(attributes)
-  )
-  for (attribute in attributes) {
-    key <- attribute$key
-    value <- attribute$value
-    kv <- sprintf("\t%s: %s;\n", key, value)
-    key_value_pairs <- append(
-      key_value_pairs, kv
-    )
+  key_values <- vector("character", length(attributes))
+  for (i in seq_along(attributes)) {
+    key <- attributes[[i]][["key"]]
+    value <- attributes[[i]][["value"]]
+    kv <- sprintf("\t%s: %s;", key, value)
+    key_values[i] <- kv
   }
-  body <- paste0(key_value_pairs, collapse = "")
+  body <- paste(key_values, collapse = "\n")
   first_line <- sprintf("%s {", selector)
   # Add curly braces
   body <- paste(
@@ -151,7 +146,9 @@ attrs <- list(
 css_statement("body", attrs) |> cat()
 ```
 
+### The CSS code for background color
 
+At last, we can use the `css_bck_color()` function to build the necessary CSS code to specify the background color of the `navbar` HTML element, of our Quarto website. In the example below, I'm exposing the output CSS code directly in the terminal with `cat()`. But, you could use `cat()` to save this CSS code into a file, e.g. `cat(file = "style.css")`.
 
 ```{r}
 css_bck_color <- function(object) {
@@ -169,4 +166,8 @@ nav_bar |>
   cat()
 ```
 
+
+## Conclusion
+
+The data from the Figma API, allows us to build a bridge between visual feedback (i.e. the design) and code output (i.e. the necessary code to build such design). This example might be limited, but can be very useful for analysts that want to make a better connection between their design and developers team, to deliver products faster.
 
