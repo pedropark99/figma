@@ -24,6 +24,7 @@ reference:
     across vignettes and documentations.
   contents:
   - untitled_file
+  - quarto_website
   - default_attrs
   - document_attrs
 - title: "URL and endpoint utilities"

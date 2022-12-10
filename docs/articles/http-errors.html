@@ -8,8 +8,8 @@
 <meta name="description" content="figma">
 <title>Common HTTP errors in the Figma API • figma</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Common HTTP errors in the Figma API">
 <meta property="og:description" content="figma">
@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">figma</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/http-errors.html">Common HTTP errors in the Figma API</a>
+    <a class="dropdown-item" href="../articles/quarto-css.html">Building custom CSS from the Figma API</a>
   </div>
 </li>
 <li class="nav-item">
@@ -114,7 +115,7 @@ in the official repository of the package</a>.</p>
 user mistake in the key variables they provided to the functions of
 package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pedropark99/figma" class="external-link">figma</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pedropark99/figma" class="external-link">figma</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="wrong-node-id-in-figmaget_figma_page-results-in-status-code-400">Wrong node ID in <code>figma::get_figma_page()</code> results in
 status code 400<a class="anchor" aria-label="anchor" href="#wrong-node-id-in-figmaget_figma_page-results-in-status-code-400"></a>
@@ -128,12 +129,12 @@ provided a wrong or invalid node ID to the API. As an example, the code
 below uses a clearly wrong node ID, but a valid personal access token
 and a valid file key.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">node_id</span> <span class="op">&lt;-</span> <span class="st">"wrongID"</span>
-<span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span>
-<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"My valid personal access token... "</span>
-<span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_figma_page.html">get_figma_page</a></span><span class="op">(</span>
-  <span class="va">file_key</span>, <span class="va">token</span>, <span class="va">node_id</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">node_id</span> <span class="op">&lt;-</span> <span class="st">"wrongID"</span></span>
+<span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span></span>
+<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"My valid personal access token... "</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_figma_page.html">get_figma_page</a></span><span class="op">(</span></span>
+<span>  <span class="va">file_key</span>, <span class="va">token</span>, <span class="va">node_id</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>Error in `get_figma_page()`:
 ! HTTP Error:
 
@@ -174,12 +175,12 @@ respond to the HTTP request with a HTTP status code equal to 404,
 indicating that they could not find a Figma file identified by the key
 :</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"This key does not exist"</span>
-<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"A valid personal token ..."</span>
-
-<span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span>
-  <span class="va">file_key</span>, <span class="va">token</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"This key does not exist"</span></span>
+<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"A valid personal token ..."</span></span>
+<span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span></span>
+<span>  <span class="va">file_key</span>, <span class="va">token</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>Error in `figma::get_figma_file()`:
 ! HTTP Error:
 
@@ -220,12 +221,12 @@ personal access token. When I deliver these key variables to
 Figma API with this incorrect token, and the Figma servers respond to
 this request with a HTTP error equal to 403.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span>
-<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"This is an incorrect token"</span>
-
-<span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span>
-  <span class="va">file_key</span>, <span class="va">token</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span></span>
+<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"This is an incorrect token"</span></span>
+<span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span></span>
+<span>  <span class="va">file_key</span>, <span class="va">token</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code>Error in `figma::get_figma_file()`:
 ! HTTP Error:
 

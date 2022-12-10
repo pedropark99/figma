@@ -20,10 +20,25 @@ knitr::opts_chunk$set(
 
 Hello! In this vignette, I will show you a basic example of how you could use the data from the Figma API, to produce custom CSS code, which you could use it in a design product, such as a website. First, lets import the package. After that, the `quarto_website` object will be available for you like this:
 
-```{r setup}
+```{r, include = FALSE}
+library(figma)
+```
+
+
+```{r, eval = FALSE}
 library(figma)
 quarto_website
 ```
+
+```
+Response [https://api.figma.com/v1/files/Y7jJJ5KHcG7hjuZVeRPZWq]
+  Date: 2022-12-08 11:56
+  Status: 200
+  Content-Type: application/json; charset=utf-8
+  Size: 11.5 kB
+{"document":{"id":"0:0","name":"Document","type":"DOCUMENT","scrollBehavior":"SCROLLS"...
+```
+
 
 ## About the `quarto_website` object
 
