@@ -237,19 +237,7 @@ print.figma_document <- function(x, ...){
 #' }
 
 as_tibble <- function(x, ...){
-  if (inherits(x, "response")) {
-    document <- as_figma_document(x)
-  } else
-  if (inherits(x, "figma_document")) {
-    document <- x
-  } else {
-    reason <- "Input object type is not supported!"
-    msg <- paste0(c(
-      "`as_tibble()` receive a input object of types `response` or `figma_document`. ",
-      "However, a object of type '%s' was given."
-    ), collapse = "")
-    rlang::abort(c(reason, sprintf(msg, class(x))))
-  }
+  document <- prepare_object(x)
 
   dots <- list(...)
   simplified <- TRUE
@@ -266,15 +254,29 @@ as_tibble <- function(x, ...){
     list_of_tibbles[[i]] <- data
   }
   df <- dplyr::bind_rows(list_of_tibbles)
-  if (isTRUE(simplified)) {
-    return(df)
-  } else {
+  if (isFALSE(simplified)) {
     df <- add_document_metadata(df, document)
-    return(df)
   }
+  return(df)
 }
 
 
+
+prepare_object <- function(x, call = rlang::caller_env()){
+  if (inherits(x, "response")) {
+    return(as_figma_document(x))
+  } else
+  if (inherits(x, "figma_document")) {
+    return(x)
+  } else {
+    reason <- "Input object type is not supported!"
+    msg <- paste0(c(
+      "`as_tibble()` receive a input object of types `response` or `figma_document`. ",
+      "However, a object of type '%s' was given."
+    ), collapse = "")
+    rlang::abort(c(reason, sprintf(msg, class(x))), call = call)
+  }
+}
 
 
 
