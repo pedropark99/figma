@@ -1,7 +1,7 @@
 Package: figma
 Type: Package
 Title: Web Client/Wrapper to the 'Figma API'
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: person("Pedro", "Faria", role = c("aut", "cre", "cph"), email = "pedropark99@gmail.com")
 Author: Pedro Faria [aut, cre, cph]
 Maintainer: Pedro Faria <pedropark99@gmail.com>
