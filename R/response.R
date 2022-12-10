@@ -407,7 +407,7 @@ check_for_http_errors <- function(response, call = rlang::caller_env()){
 
   if (!inherits(response, "response")) {
     rlang::abort(
-      "Object given to `response` is not of type `response`!",
+      "Object given to `response` is not of class `response`!",
       call = call
     )
   }
@@ -450,7 +450,7 @@ report_unrecognized_source <- function(content, call = rlang::caller_env()){
   msg <- c(
     "`as_figma_document()` expected to find a `document` (or `nodes`) element ",
     "in the most top-level part of the content section of the `response` object. ",
-    "However, the input `response` object have the following elements in its content: %s"
+    "However, the input `response` object have the following elements inside its `content` element: %s"
   )
   msg <- sprintf(paste0(msg, collapse = ""), elements)
   rlang::abort(c(reason, msg), call = call)
