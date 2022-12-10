@@ -193,7 +193,7 @@ get_document_info <- function(file_key, token, .output_format = "list"){
     token,
     .output_format = "figma_document"
   )
-  r <- parse_document_metadata(r, .output_format)
+  r <- document_metadata(r, attrs = NULL)
   return(r)
 }
 

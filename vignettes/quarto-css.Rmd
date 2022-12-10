@@ -1,0 +1,188 @@
+---
+title: "Building custom CSS from the Figma API"
+output: rmarkdown::html_vignette
+author: "Pedro Duarte Faria"
+vignette: >
+  %\VignetteIndexEntry{Building custom CSS from the Figma API}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Introduction
+
+Hello! In this vignette, I will show you a basic example of how you could use the data from the Figma API, to produce custom CSS code, which you could use it in a design product, such as a website. First, lets import the package. After that, the `quarto_website` object will be available for you like this:
+
+```{r, include = FALSE}
+library(figma)
+```
+
+
+```{r, eval = FALSE}
+library(figma)
+quarto_website
+```
+
+```
+Response [https://api.figma.com/v1/files/Y7jJJ5KHcG7hjuZVeRPZWq]
+  Date: 2022-12-08 11:56
+  Status: 200
+  Content-Type: application/json; charset=utf-8
+  Size: 11.5 kB
+{"document":{"id":"0:0","name":"Document","type":"DOCUMENT","scrollBehavior":"SCROLLS"...
+```
+
+
+## About the `quarto_website` object
+
+The `quarto_website` object is a `response` object produced by `figma::get_figma_file()`, so, it contains all data from a Figma file. In this Figma file, I have drawn a homepage for a [Quarto](https://quarto.org) Website. Below we have a screenshot of this Figma file:
+
+```{r, echo = FALSE, fig.cap = 'A screenshot of a Figma file named "Quarto-Website"', out.width="100%"}
+knitr::include_graphics("figma-quarto-website.png")
+```
+
+## Lets reshape the object
+
+For now, this `response` object is in a format which is hard to work with. So lets transform it into a more useful format. First, lets convert it to a `figma_document` object with `figma::as_figma_document()`, to get a better structure of the Figma file. We can see in the result below, that this Figma file have only one canvas/page, with 11 objects drawn in it:
+
+```{r}
+fd <- figma::as_figma_document(quarto_website)
+fd
+```
+
+Because of that, I will separate all objects from this page into a separate object, like this:
+
+```{r}
+objects <- fd$canvas[[1]][["objects"]]
+length(objects)
+```
+
+Now, `objects` stores all the data from these 11 objects drawn in this Figma file. As an example, we can see the name attribute of the first object drawn in the canvas, like this:
+
+```{r}
+objects[[1]][["name"]]
+```
+
+## The `nav-bar` component as an example
+
+All Quarto websites usually have a HTML element named `navbar`, which represents the top navigation bar of your website. This "nav-bar" is the second object drawn in the "Quarto-Website" Figma file. So lets separate this object to take a closer look in it:
+
+```{r}
+nav_bar <- objects[[2]]
+str(nav_bar)
+```
+
+
+### Extracting the CSS selector
+
+As a first effort, we can build the code necessary to transform the name of the Figma object into a CSS selector, like this:
+
+```{r}
+css_selector <- function(object) {
+  name <- object$name
+  prefix <- "."
+  css <- paste0(prefix, name)
+  return(css)
+}
+
+css_selector(nav_bar)
+```
+
+### Getting the background color
+
+Now we have the name of the CSS selector, we can build a "background color" processor, to build the `background-color` CSS attribute. The color of a object is usually in the `fills` element. All colors in Figma are translated into a RGBA (*red-green-blue-alpha*) configuration. 
+
+This means that every "color" element in Figma API's data will always have four other elements inside of it: `r` (for *red*), `g` (for *green*), `b` (for *blue*) and `a` (for *alpha*). Each one of these will store a real number from 0 to 1. You want to convert these four numbers into a hex code that represents this color, and to do that we could use the `rgb()` function.
+
+```{r}
+bck_color <- function(object) {
+  color <- object$fills[[1]][["color"]]
+  as_hex <- rgb(
+    color$r, color$g, color$b, color$a,
+    maxColorValue = 1
+  )
+  return(as_hex)
+}
+
+bck_color(nav_bar)
+```
+
+### Building an attribute processor
+
+Now, we want to build a function to transform a list of CSS attributes (or a list of key-value pairs) into a CSS statement (or a CSS declaration if you prefer). In more details, this function will output CSS code in the following format:
+
+```
+selector {
+  key=value;
+  ...more CSS attibutes
+}
+```
+
+This function will receive a selector as first input. This is the CSS selector to be used in the CSS statement. The function will put this selector at the beginning of the statement, right before the opening curly brace.
+
+Furthermore, the function will receive as second input, a list of CSS attibutes to be added to the body of the CSS statement. Each element of this list, is another list with two elements (`key` and `value`).
+
+```{r}
+css_statement <- function(selector, attributes) {
+  key_values <- vector("character", length(attributes))
+  for (i in seq_along(attributes)) {
+    key <- attributes[[i]][["key"]]
+    value <- attributes[[i]][["value"]]
+    kv <- sprintf("\t%s: %s;", key, value)
+    key_values[i] <- kv
+  }
+  body <- paste(key_values, collapse = "\n")
+  first_line <- sprintf("%s {", selector)
+  # Add curly braces
+  body <- paste(
+    first_line, body, "}", 
+    sep = "\n", collapse = ""
+  )
+  return(body)
+}
+```
+
+With this `css_statement()` function, I can easily build CSS code like this:
+
+```{r}
+attrs <- list(
+  list(key = "text-align", value = "center"),
+  list(key = "color", value = "purple"),
+  list(key = "width", value = "100px")
+)
+
+css_statement("body", attrs) |> cat()
+```
+
+### The CSS code for background color
+
+At last, we can use the `css_bck_color()` function to build the necessary CSS code to specify the background color of the `navbar` HTML element, of our Quarto website. In the example below, I'm exposing the output CSS code directly in the terminal with `cat()`. But, you could use `cat()` to save this CSS code into a file, e.g. `cat(file = "style.css")`.
+
+```{r}
+css_bck_color <- function(object) {
+  selector <- css_selector(object)
+  color <- bck_color(object)
+  color_specs <- list(
+    list(key = "background-color", value = color)
+  )
+  css_statement <- css_statement(selector, color_specs)
+  return(css_statement)
+}
+
+nav_bar |> 
+  css_bck_color() |> 
+  cat()
+```
+
+
+## Conclusion
+
+The data from the Figma API, allows us to build a bridge between visual feedback (i.e. the design) and code output (i.e. the necessary code to build such design). This example might be limited, but can be very useful for analysts that want to make a better connection between their design and developers team, to deliver products faster.
+

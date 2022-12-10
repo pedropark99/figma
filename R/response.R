@@ -107,6 +107,9 @@ parse_response_object <- function(response, .output_format, ...){
 
 
 
+
+
+
 #' Convert a \code{httr} response object to a Figma Document object
 #'
 #' This function receives a \code{httr::response()} object, and outputs a
@@ -189,6 +192,46 @@ print.figma_document <- function(x, ...){
 
 
 
+
+parse_figma_file <- function(content){
+  document <- select_any_of(content, document_attrs)
+  document <- c(content$document[c("id", "type")], document)
+  canvas <- content$document[["children"]]
+  for (i in seq_along(canvas)) {
+    names(canvas[[i]])[names(canvas[[i]]) == "children"] <- "objects"
+  }
+  n_objects <- purrr::map_int(canvas, ~length(.[["objects"]]))
+  names(n_objects) <- paste("Canvas", seq_along(canvas))
+  structure(
+    list(document = document, canvas = canvas,
+         n_canvas = length(canvas), n_objects = n_objects),
+    class = "figma_document"
+  )
+}
+
+
+
+parse_figma_pages <- function(content){
+  document <- select_any_of(content, document_attrs)
+  canvas <- content$nodes
+  canvas <- purrr::map(canvas, ~.[["document"]])
+  for (i in seq_along(canvas)) {
+    names(canvas[[i]])[names(canvas[[i]]) == "children"] <- "objects"
+  }
+  n_objects <- purrr::map_int(canvas, ~length(.[["objects"]]))
+  names(n_objects) <- paste("Canvas", seq_along(canvas))
+  structure(
+    list(document = document, canvas = canvas,
+         n_canvas = length(canvas), n_objects = n_objects),
+    class = "figma_document"
+  )
+}
+
+
+
+
+
+
 #' Convert a \code{httr} response object to a \code{tibble} object
 #'
 #' This function receives a \code{httr::response()} object, and outputs a
@@ -237,267 +280,113 @@ print.figma_document <- function(x, ...){
 #' }
 
 as_tibble <- function(x, ...){
+  document <- prepare_object(x)
+  tibble <- tibble::tibble(
+      canvas = document$canvas
+    ) |>
+    unnest_canvas() |>
+    unnest_objects()
+
+  dots <- list(...)
+  simplified <- dots$simplified
+  if (isFALSE(simplified)) {
+    tibble <- add_document_metadata(tibble, document)
+  }
+
+  return(tibble)
+}
+
+prepare_object <- function(x, call = rlang::caller_env()){
   if (inherits(x, "response")) {
-    document <- as_figma_document(x)
+    return(as_figma_document(x))
   } else
   if (inherits(x, "figma_document")) {
-    document <- x
+    return(x)
   } else {
     reason <- "Input object type is not supported!"
     msg <- paste0(c(
-      "`as_tibble()` receive a input object of types `response` or `figma_document`. ",
-      "However, a object of type '%s' was given."
+      "`as_tibble()` accepts an object of class `response` or `figma_document`. ",
+      "However, an object of class `%s` was given."
     ), collapse = "")
-    rlang::abort(c(reason, sprintf(msg, class(x))))
-  }
-
-  dots <- list(...)
-  simplified <- TRUE
-  if ("simplified" %in% names(dots)) {
-    simplified <- dots$simplified
-  }
-
-  canvas <- document$canvas
-  list_of_tibbles <- vector("list", length = length(canvas))
-  for (i in seq_along(canvas)) {
-    canvas_metadata <- parse_canvas_metadata(canvas[[i]])
-    objects_data <- parse_objects(canvas[[i]])
-    data <- bind_tables(canvas_metadata, objects_data)
-    list_of_tibbles[[i]] <- data
-  }
-  df <- dplyr::bind_rows(list_of_tibbles)
-  if (isTRUE(simplified)) {
-    return(df)
-  } else {
-    df <- add_document_metadata(df, document)
-    return(df)
+    rlang::abort(c(reason, sprintf(msg, class(x))), call = call)
   }
 }
 
-
-
-
-
-
-parse_figma_file <- function(content){
-  document <- select_any_of(content, document_attrs)
-  document <- c(content$document[c("id", "type")], document)
-  canvas <- content$document[["children"]]
-  for (i in seq_along(canvas)) {
-    names(canvas[[i]])[names(canvas[[i]]) == "children"] <- "objects"
-  }
-  n_objects <- purrr::map_int(canvas, ~length(.[["objects"]]))
-  names(n_objects) <- paste("Canvas", seq_along(canvas))
-  structure(
-    list(document = document, canvas = canvas,
-         n_canvas = length(canvas), n_objects = n_objects),
-    class = "figma_document"
+unnest_canvas <- function(df, ...){
+  df <- do.call(
+    tidyr::hoist,
+    args = c(
+      list(df, "canvas"),
+      as.list(c(default_attrs, "objects"))
+    )
   )
-}
 
-
-
-parse_figma_pages <- function(content){
-  document <- select_any_of(content, document_attrs)
-  canvas <- content$nodes
-  canvas <- purrr::map(canvas, ~.[["document"]])
-  for (i in seq_along(canvas)) {
-    names(canvas[[i]])[names(canvas[[i]]) == "children"] <- "objects"
-  }
-  n_objects <- purrr::map_int(canvas, ~length(.[["objects"]]))
-  names(n_objects) <- paste("Canvas", seq_along(canvas))
-  structure(
-    list(document = document, canvas = canvas,
-         n_canvas = length(canvas), n_objects = n_objects),
-    class = "figma_document"
-  )
-}
-
-
-
-
-
-
-
-
-parse_canvas_metadata <- function(canvas){
-  attrs <- canvas[default_attrs]
-  n_objects <- length(canvas$objects)
-  tempcol <- seq_len(n_objects)
-  df <- tibble::tibble(tempcol = tempcol)
-  for (attr in default_attrs) {
-    df[[attr]] <- rep(attrs[[attr]], times = n_objects)
-  }
   df <- df |>
-    dplyr::select(-tempcol) |>
     dplyr::rename(
       canvas_id = "id",
       canvas_name = "name",
       canvas_type = "type"
-    )
+    ) |>
+    dplyr::select(-c("canvas"))
 
   return(df)
 }
 
 
-parse_objects <- function(canvas){
-  objects <- get_canva_objects(canvas)
-  if (length(objects) == 0) {
-    return(tibble::tibble())
-  }
-  build_objects_tibble(objects)
-}
-
-
-parse_document_metadata <- function(figma_document, .output_format){
-  document <- figma_document$document
-  if (.output_format == "tibble") {
-    tempcol <- 1L
-    df <- tibble::tibble(tempcol = tempcol)
-    attrs <- names(document)
-    for (attr in attrs) {
-      value <- document[[attr]]
-      if (is.list(value)) {
-        value <- list(value)
-      }
-      df[[attr]] <- value
-    }
-    df <- df |> dplyr::select(-tempcol)
-    return(df)
-  }
-
-  return(document)
-}
-
-
-
-
-
-
-
-
-
-
-get_canva_objects <- function(canva){
-  canva$objects
-}
-
-build_objects_tibble <- function(objects){
-  table <- get_default_attributes(objects)
-  table <- table |>
-    dplyr::mutate(
-      object_attributes = get_nondefault_attributes(objects)
-    )
-
-  return(table)
-}
-
-
-bind_tables <- function(canvas_data, objects_data, call = rlang::caller_env()){
-  n_objects <- nrow(objects_data)
-  n_canvas <- nrow(canvas_data)
-  if (n_objects == 0) {
-    return(tibble::tibble())
-  }
-  if (n_objects != n_canvas) {
-    reason <- "Objects dataframe and Canvas dataframe have different number of rows!"
-    msg <- paste0(c(
-      "Objects dataframe have %d rows. However, Canvas dataframe have %d rows. ",
-      "Because of this inconsistency, we cannot bind these two dataframes together!"
-    ), collapse = "")
-    msg <- sprintf(msg, n_objects, n_canvas)
-    rlang::abort(c(reason, msg), call = call)
-  }
-  dplyr::bind_cols(canvas_data, objects_data)
-}
-
-
-
-
-
-
-
-
-
-add_document_metadata <- function(df, document){
-  n <- nrow(df)
-  attrs <- names(document$document)
-  for (attr in attrs) {
-    value <- document$document[[attr]]
-    if (is.list(value)) {
-      value <- lapply(seq_len(n), function(x) value)
-    } else {
-      value <- rep(value, times = n)
-    }
-    attr_name <- gsub("([A-Z])", "_\\1", attr, perl = TRUE)
-    attr_name <- paste("document", tolower(attr_name), sep = "_")
-    df[[attr_name]] <- value
-  }
+unnest_objects <- function(df, ...){
   df <- df |>
-    dplyr::select(
-      dplyr::starts_with("document"),
-      dplyr::everything()
+    tidyr::unnest_longer(col = objects) |>
+    dplyr::rename(
+      object_attrs = "objects"
     )
-  return(df)
-}
 
-
-
-
-
-
-
-
-
-
-get_default_attributes <- function(objects){
-  attrs <- purrr::map(objects, ~.[default_attrs])
-  attrs <- purrr::transpose(attrs)
-  attrs <- purrr::map(attrs, unlist) |>
-    tibble::as_tibble() |>
+  df <- do.call(
+      tidyr::hoist,
+      args = c(
+        list(df, "object_attrs"),
+        as.list(default_attrs)
+      )
+    ) |>
     dplyr::rename(
       object_id = "id",
       object_name = "name",
       object_type = "type"
     )
-  return(attrs)
-}
 
-
-get_nondefault_attributes <- function(objects){
-  nondefault_attrs <- purrr::map(
-    objects, find_nondefault_attr
-  )
-  attrs <- purrr::map2(
-    objects, nondefault_attrs,
-    `[`
-  )
-  return(attrs)
-}
-
-
-find_nondefault_attr <- function(node){
-  attr_names <- names(node)
-  non_default_attrs <- attr_names[
-    !(attr_names %in% default_attrs)
-  ]
-  return(non_default_attrs)
+  return(df)
 }
 
 
 
-
-
-
-
-
-
-
-
-
-response_content <- function(response){
-  httr::content(response, encoding = "UTF-8")
+document_metadata <- function(x, attrs = default_attrs){
+  metadata <- x$document
+  if (!is.null(attrs)) {
+    metadata <- select_any_of(metadata, attrs)
+  }
+  n <- names(metadata)
+  names(metadata) <- paste("document", n, sep = "_")
+  return(metadata)
 }
+
+add_document_metadata <- function(df, document){
+  dm <- document_metadata(document)
+  df <- do.call(
+      dplyr::mutate,
+      args = c(list(df), dm)
+    ) |>
+    dplyr::select(
+      dplyr::starts_with("document"),
+      dplyr::everything()
+    )
+
+  return(df)
+}
+
+
+
+
+
+
 
 
 
@@ -518,7 +407,7 @@ check_for_http_errors <- function(response, call = rlang::caller_env()){
 
   if (!inherits(response, "response")) {
     rlang::abort(
-      "Object given to `response` is not of type `response`!",
+      "Object given to `response` is not of class `response`!",
       call = call
     )
   }
@@ -528,11 +417,8 @@ check_for_http_errors <- function(response, call = rlang::caller_env()){
 }
 
 
-
-
 report_http_error <- function(response, call = rlang::caller_env(n = 3)){
-
-  content <- response_content(response)
+  content <- httr::content(response, encoding = "UTF-8")
   header <- "HTTP Error:\n"
   url <- sprintf(
     "* URL used in the request: %s", response$url
@@ -564,7 +450,7 @@ report_unrecognized_source <- function(content, call = rlang::caller_env()){
   msg <- c(
     "`as_figma_document()` expected to find a `document` (or `nodes`) element ",
     "in the most top-level part of the content section of the `response` object. ",
-    "However, the input `response` object have the following elements in its content: %s"
+    "However, the input `response` object have the following elements inside its `content` element: %s"
   )
   msg <- sprintf(paste0(msg, collapse = ""), elements)
   rlang::abort(c(reason, msg), call = call)

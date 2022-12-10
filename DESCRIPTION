@@ -1,7 +1,7 @@
 Package: figma
 Type: Package
 Title: Web Client/Wrapper to the 'Figma API'
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: person("Pedro", "Faria", role = c("aut", "cre", "cph"), email = "pedropark99@gmail.com")
 Author: Pedro Faria [aut, cre, cph]
 Maintainer: Pedro Faria <pedropark99@gmail.com>
@@ -18,9 +18,10 @@ Imports:
     httr (>= 1.4.1),
     purrr (>= 0.3.3),
     dplyr (>= 1.0.0),
+    tidyr (>= 1.0.0),
     rlang (>= 1.0.0),
     tibble (>= 3.0.5)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 Suggests:
     knitr,
     rmarkdown,
