@@ -18,6 +18,7 @@ Imports:
     httr (>= 1.4.1),
     purrr (>= 0.3.3),
     dplyr (>= 1.0.0),
+    tidyr (>= 1.0.0),
     rlang (>= 1.0.0),
     tibble (>= 3.0.5)
 RoxygenNote: 7.2.2

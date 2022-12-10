@@ -238,25 +238,23 @@ print.figma_document <- function(x, ...){
 
 as_tibble <- function(x, ...){
   document <- prepare_object(x)
+  df <- tibble::tibble(canvas = document$canvas)
+  df <- df |>
+    tidyr::unnest_wider(col = canvas) |>
+    dplyr::select("id", "name", "objects") |>
+    dplyr::rename(
+      canvas_id = id,
+      canvas_name = name
+    ) |>
+    tidyr::unnest_longer(col = objects) |>
+    tidyr::hoist(objects, "id", "name", "type") |>
+    dplyr::rename(
+      object_id = id,
+      object_name = name,
+      object_type = type,
+      object_attrs = objects,
+    )
 
-  dots <- list(...)
-  simplified <- TRUE
-  if ("simplified" %in% names(dots)) {
-    simplified <- dots$simplified
-  }
-
-  canvas <- document$canvas
-  list_of_tibbles <- vector("list", length = length(canvas))
-  for (i in seq_along(canvas)) {
-    canvas_metadata <- parse_canvas_metadata(canvas[[i]])
-    objects_data <- parse_objects(canvas[[i]])
-    data <- bind_tables(canvas_metadata, objects_data)
-    list_of_tibbles[[i]] <- data
-  }
-  df <- dplyr::bind_rows(list_of_tibbles)
-  if (isFALSE(simplified)) {
-    df <- add_document_metadata(df, document)
-  }
   return(df)
 }
 
@@ -271,8 +269,8 @@ prepare_object <- function(x, call = rlang::caller_env()){
   } else {
     reason <- "Input object type is not supported!"
     msg <- paste0(c(
-      "`as_tibble()` receive a input object of types `response` or `figma_document`. ",
-      "However, a object of type '%s' was given."
+      "`as_tibble()` accepts an object of class `response` or `figma_document`. ",
+      "However, an object of class `%s` was given."
     ), collapse = "")
     rlang::abort(c(reason, sprintf(msg, class(x))), call = call)
   }
