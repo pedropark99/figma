@@ -8,8 +8,8 @@
 <meta name="description" content="figma">
 <title>Get your Figma file into R • figma</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get your Figma file into R">
 <meta property="og:description" content="figma">
@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">figma</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/http-errors.html">Common HTTP errors in the Figma API</a>
+    <a class="dropdown-item" href="../articles/quarto-css.html">Building custom CSS from the Figma API</a>
   </div>
 </li>
 <li class="nav-item">
@@ -97,7 +98,7 @@ sending a HTTP request to the Figma API to collect all of your Figma
 data, and then, it parses this data into a R native object, so you can
 easily use it in your R process.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pedropark99/figma" class="external-link">figma</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/pedropark99/figma" class="external-link">figma</a></span><span class="op">)</span></span></code></pre></div>
 <p>But in order to use the Figma API, you need to collect two key
 variables about your file and your credentials. They are:</p>
 <ul>
@@ -168,9 +169,7 @@ a personal access token, you can create one in the Figma platform. Just
 log in the platform, and click on the <code>Settings</code> section,
 like in the image below:</p>
 <div class="figure">
-<img src="figma-settings.png" alt="Settings of Figma platform" width="162"><p class="caption">
-Settings of Figma platform
-</p>
+<img src="figma-settings.png" alt=""><p class="caption">Settings of Figma platform</p>
 </div>
 <p>After that, look for the <code>Personal access token</code> section
 of the settings, like in the image below. This is where you can create
@@ -198,15 +197,15 @@ from Hadley Wickham</a>.</p>
 and your personal token that identifies yourself, you can use
 <code><a href="../reference/get_figma_file.html">get_figma_file()</a></code> to get your Figma file:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span>
-<span class="co"># Insert your personal token:</span>
-<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"Your personal token ..."</span>
-
-<span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span>
-  <span class="va">file_key</span>, <span class="va">token</span>
-<span class="op">)</span>
-<span class="co"># A `response` object:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span></span>
+<span><span class="co"># Insert your personal token:</span></span>
+<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"Your personal token ..."</span></span>
+<span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span></span>
+<span>  <span class="va">file_key</span>, <span class="va">token</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># A `response` object:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Response [https://api.figma.com/v1/files/hch8YlkIrYbU3raDzjPvCz]
   Date: 2022-10-29 16:56
   Status: 200
@@ -237,92 +236,92 @@ shown in section 1.2.</p>
 <p>As you can see in the result below, a <code>response</code> object is
 just a simple R list with many elements:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span>
-<span class="co">#&gt; List of 10</span>
-<span class="co">#&gt;  $ url        : chr "https://api.figma.com/v1/files/hch8YlkIrYbU3raDzjPvCz"</span>
-<span class="co">#&gt;  $ status_code: int 200</span>
-<span class="co">#&gt;  $ headers    :List of 12</span>
-<span class="co">#&gt;   ..$ content-type                : chr "application/json; charset=utf-8"</span>
-<span class="co">#&gt;   ..$ date                        : chr "Sat, 29 Oct 2022 16:56:50 GMT"</span>
-<span class="co">#&gt;   ..$ access-control-allow-origin : chr "*"</span>
-<span class="co">#&gt;   ..$ access-control-allow-headers: chr "Content-Type, X-Figma-Token, Authorization"</span>
-<span class="co">#&gt;   ..$ cache-control               : chr "no-cache, no-store"</span>
-<span class="co">#&gt;   ..$ vary                        : chr "X-Figma-Token,Authorization"</span>
-<span class="co">#&gt;   ..$ x-cache                     : chr "Miss from cloudfront"</span>
-<span class="co">#&gt;   ..$ via                         : chr "1.1 88c333921d5c405e037b84bb8c2dc33e.cloudfront.net (CloudFront)"</span>
-<span class="co">#&gt;   ..$ x-amz-cf-pop                : chr "GRU3-P1"</span>
-<span class="co">#&gt;   ..$ alt-svc                     : chr "h3=\":443\"; ma=86400"</span>
-<span class="co">#&gt;   ..$ x-amz-cf-id                 : chr "gjOnBhIpDZxekWpx-zbAwqxsOLunePv8LSTfdf-elMQNLXpyAVSuXw=="</span>
-<span class="co">#&gt;   ..$ strict-transport-security   : chr "max-age=31536000; includeSubDomains; preload"</span>
-<span class="co">#&gt;   ..- attr(*, "class")= chr [1:2] "insensitive" "list"</span>
-<span class="co">#&gt;  $ all_headers:List of 1</span>
-<span class="co">#&gt;   ..$ :List of 3</span>
-<span class="co">#&gt;   .. ..$ status : int 200</span>
-<span class="co">#&gt;   .. ..$ version: chr "HTTP/2"</span>
-<span class="co">#&gt;   .. ..$ headers:List of 12</span>
-<span class="co">#&gt;   .. .. ..$ content-type                : chr "application/json; charset=utf-8"</span>
-<span class="co">#&gt;   .. .. ..$ date                        : chr "Sat, 29 Oct 2022 16:56:50 GMT"</span>
-<span class="co">#&gt;   .. .. ..$ access-control-allow-origin : chr "*"</span>
-<span class="co">#&gt;   .. .. ..$ access-control-allow-headers: chr "Content-Type, X-Figma-Token, Authorization"</span>
-<span class="co">#&gt;   .. .. ..$ cache-control               : chr "no-cache, no-store"</span>
-<span class="co">#&gt;   .. .. ..$ vary                        : chr "X-Figma-Token,Authorization"</span>
-<span class="co">#&gt;   .. .. ..$ x-cache                     : chr "Miss from cloudfront"</span>
-<span class="co">#&gt;   .. .. ..$ via                         : chr "1.1 88c333921d5c405e037b84bb8c2dc33e.cloudfront.net (CloudFront)"</span>
-<span class="co">#&gt;   .. .. ..$ x-amz-cf-pop                : chr "GRU3-P1"</span>
-<span class="co">#&gt;   .. .. ..$ alt-svc                     : chr "h3=\":443\"; ma=86400"</span>
-<span class="co">#&gt;   .. .. ..$ x-amz-cf-id                 : chr "gjOnBhIpDZxekWpx-zbAwqxsOLunePv8LSTfdf-elMQNLXpyAVSuXw=="</span>
-<span class="co">#&gt;   .. .. ..$ strict-transport-security   : chr "max-age=31536000; includeSubDomains; preload"</span>
-<span class="co">#&gt;   .. .. ..- attr(*, "class")= chr [1:2] "insensitive" "list"</span>
-<span class="co">#&gt;  $ cookies    :'data.frame': 0 obs. of  7 variables:</span>
-<span class="co">#&gt;   ..$ domain    : logi(0) </span>
-<span class="co">#&gt;   ..$ flag      : logi(0) </span>
-<span class="co">#&gt;   ..$ path      : logi(0) </span>
-<span class="co">#&gt;   ..$ secure    : logi(0) </span>
-<span class="co">#&gt;   ..$ expiration: 'POSIXct' num(0) </span>
-<span class="co">#&gt;   ..$ name      : logi(0) </span>
-<span class="co">#&gt;   ..$ value     : logi(0) </span>
-<span class="co">#&gt;  $ content    : raw [1:4582] 7b 22 64 6f ...</span>
-<span class="co">#&gt;  $ date       : POSIXct[1:1], format: "2022-10-29 16:56:50"</span>
-<span class="co">#&gt;  $ times      : Named num [1:6] 0 0.173 0.275 0.378 1.606 ...</span>
-<span class="co">#&gt;   ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...</span>
-<span class="co">#&gt;  $ request    :List of 5</span>
-<span class="co">#&gt;   ..$ method : chr "GET"</span>
-<span class="co">#&gt;   ..$ url    : chr "https://api.figma.com/v1/files/hch8YlkIrYbU3raDzjPvCz"</span>
-<span class="co">#&gt;   ..$ fields : NULL</span>
-<span class="co">#&gt;   ..$ options:List of 2</span>
-<span class="co">#&gt;   .. ..$ useragent: chr "libcurl/7.68.0 r-curl/4.3.2 httr/1.4.3"</span>
-<span class="co">#&gt;   .. ..$ httpget  : logi TRUE</span>
-<span class="co">#&gt;   ..$ output : list()</span>
-<span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:2] "write_memory" "write_function"</span>
-<span class="co">#&gt;   ..- attr(*, "class")= chr "request"</span>
-<span class="co">#&gt;  $ handle     :Class 'curl_handle' &lt;externalptr&gt; </span>
-<span class="co">#&gt;  - attr(*, "class")= chr "response"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 10</span></span>
+<span><span class="co">#&gt;  $ url        : chr "https://api.figma.com/v1/files/hch8YlkIrYbU3raDzjPvCz"</span></span>
+<span><span class="co">#&gt;  $ status_code: int 200</span></span>
+<span><span class="co">#&gt;  $ headers    :List of 12</span></span>
+<span><span class="co">#&gt;   ..$ content-type                : chr "application/json; charset=utf-8"</span></span>
+<span><span class="co">#&gt;   ..$ date                        : chr "Sat, 29 Oct 2022 16:56:50 GMT"</span></span>
+<span><span class="co">#&gt;   ..$ access-control-allow-origin : chr "*"</span></span>
+<span><span class="co">#&gt;   ..$ access-control-allow-headers: chr "Content-Type, X-Figma-Token, Authorization"</span></span>
+<span><span class="co">#&gt;   ..$ cache-control               : chr "no-cache, no-store"</span></span>
+<span><span class="co">#&gt;   ..$ vary                        : chr "X-Figma-Token,Authorization"</span></span>
+<span><span class="co">#&gt;   ..$ x-cache                     : chr "Miss from cloudfront"</span></span>
+<span><span class="co">#&gt;   ..$ via                         : chr "1.1 88c333921d5c405e037b84bb8c2dc33e.cloudfront.net (CloudFront)"</span></span>
+<span><span class="co">#&gt;   ..$ x-amz-cf-pop                : chr "GRU3-P1"</span></span>
+<span><span class="co">#&gt;   ..$ alt-svc                     : chr "h3=\":443\"; ma=86400"</span></span>
+<span><span class="co">#&gt;   ..$ x-amz-cf-id                 : chr "gjOnBhIpDZxekWpx-zbAwqxsOLunePv8LSTfdf-elMQNLXpyAVSuXw=="</span></span>
+<span><span class="co">#&gt;   ..$ strict-transport-security   : chr "max-age=31536000; includeSubDomains; preload"</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "class")= chr [1:2] "insensitive" "list"</span></span>
+<span><span class="co">#&gt;  $ all_headers:List of 1</span></span>
+<span><span class="co">#&gt;   ..$ :List of 3</span></span>
+<span><span class="co">#&gt;   .. ..$ status : int 200</span></span>
+<span><span class="co">#&gt;   .. ..$ version: chr "HTTP/2"</span></span>
+<span><span class="co">#&gt;   .. ..$ headers:List of 12</span></span>
+<span><span class="co">#&gt;   .. .. ..$ content-type                : chr "application/json; charset=utf-8"</span></span>
+<span><span class="co">#&gt;   .. .. ..$ date                        : chr "Sat, 29 Oct 2022 16:56:50 GMT"</span></span>
+<span><span class="co">#&gt;   .. .. ..$ access-control-allow-origin : chr "*"</span></span>
+<span><span class="co">#&gt;   .. .. ..$ access-control-allow-headers: chr "Content-Type, X-Figma-Token, Authorization"</span></span>
+<span><span class="co">#&gt;   .. .. ..$ cache-control               : chr "no-cache, no-store"</span></span>
+<span><span class="co">#&gt;   .. .. ..$ vary                        : chr "X-Figma-Token,Authorization"</span></span>
+<span><span class="co">#&gt;   .. .. ..$ x-cache                     : chr "Miss from cloudfront"</span></span>
+<span><span class="co">#&gt;   .. .. ..$ via                         : chr "1.1 88c333921d5c405e037b84bb8c2dc33e.cloudfront.net (CloudFront)"</span></span>
+<span><span class="co">#&gt;   .. .. ..$ x-amz-cf-pop                : chr "GRU3-P1"</span></span>
+<span><span class="co">#&gt;   .. .. ..$ alt-svc                     : chr "h3=\":443\"; ma=86400"</span></span>
+<span><span class="co">#&gt;   .. .. ..$ x-amz-cf-id                 : chr "gjOnBhIpDZxekWpx-zbAwqxsOLunePv8LSTfdf-elMQNLXpyAVSuXw=="</span></span>
+<span><span class="co">#&gt;   .. .. ..$ strict-transport-security   : chr "max-age=31536000; includeSubDomains; preload"</span></span>
+<span><span class="co">#&gt;   .. .. ..- attr(*, "class")= chr [1:2] "insensitive" "list"</span></span>
+<span><span class="co">#&gt;  $ cookies    :'data.frame': 0 obs. of  7 variables:</span></span>
+<span><span class="co">#&gt;   ..$ domain    : logi(0) </span></span>
+<span><span class="co">#&gt;   ..$ flag      : logi(0) </span></span>
+<span><span class="co">#&gt;   ..$ path      : logi(0) </span></span>
+<span><span class="co">#&gt;   ..$ secure    : logi(0) </span></span>
+<span><span class="co">#&gt;   ..$ expiration: 'POSIXct' num(0) </span></span>
+<span><span class="co">#&gt;   ..$ name      : logi(0) </span></span>
+<span><span class="co">#&gt;   ..$ value     : logi(0) </span></span>
+<span><span class="co">#&gt;  $ content    : raw [1:4582] 7b 22 64 6f ...</span></span>
+<span><span class="co">#&gt;  $ date       : POSIXct[1:1], format: "2022-10-29 16:56:50"</span></span>
+<span><span class="co">#&gt;  $ times      : Named num [1:6] 0 0.173 0.275 0.378 1.606 ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...</span></span>
+<span><span class="co">#&gt;  $ request    :List of 5</span></span>
+<span><span class="co">#&gt;   ..$ method : chr "GET"</span></span>
+<span><span class="co">#&gt;   ..$ url    : chr "https://api.figma.com/v1/files/hch8YlkIrYbU3raDzjPvCz"</span></span>
+<span><span class="co">#&gt;   ..$ fields : NULL</span></span>
+<span><span class="co">#&gt;   ..$ options:List of 2</span></span>
+<span><span class="co">#&gt;   .. ..$ useragent: chr "libcurl/7.68.0 r-curl/4.3.2 httr/1.4.3"</span></span>
+<span><span class="co">#&gt;   .. ..$ httpget  : logi TRUE</span></span>
+<span><span class="co">#&gt;   ..$ output : list()</span></span>
+<span><span class="co">#&gt;   .. ..- attr(*, "class")= chr [1:2] "write_memory" "write_function"</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "class")= chr "request"</span></span>
+<span><span class="co">#&gt;  $ handle     :Class 'curl_handle' &lt;externalptr&gt; </span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr "response"</span></span></code></pre></div>
 <p>All of your Figma file data is in the <code>content</code> element,
 so, you would use the command <code>untitled_file$content</code> to
 access it. But, by default, the Figma API sends the data of your Figma
 file as raw bytes:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">$</span><span class="va">content</span><span class="op">)</span>
-<span class="co">#&gt; [1] 7b 22 64 6f 63 75</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">$</span><span class="va">content</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 7b 22 64 6f 63 75</span></span></code></pre></div>
 <p>So you need to convert these bytes in a more useful format like a
 JSON object, or a character vector, or as pure text. To do this
 conversion, I recommend you to use the <code><a href="https://httr.r-lib.org/reference/content.html" class="external-link">httr::content()</a></code>
 function. By default, this function converts the raw bytes into a R
 list.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">list_of_nodes</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html" class="external-link">content</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">list_of_nodes</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "document"      "components"    "componentSets" "schemaVersion"</span>
-<span class="co">#&gt;  [5] "styles"        "name"          "lastModified"  "thumbnailUrl" </span>
-<span class="co">#&gt;  [9] "version"       "role"          "editorType"    "linkAccess"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">list_of_nodes</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html" class="external-link">content</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">list_of_nodes</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "document"      "components"    "componentSets" "schemaVersion"</span></span>
+<span><span class="co">#&gt;  [5] "styles"        "name"          "lastModified"  "thumbnailUrl" </span></span>
+<span><span class="co">#&gt;  [9] "version"       "role"          "editorType"    "linkAccess"</span></span></code></pre></div>
 <p>The canvas/pages nodes are in the
 <code>list_of_nodes$document$children</code> element, and the objects
 nodes are in the <code>children</code> element of each canvas/page node
 (e.g. 
 <code>list_of_nodes$document$children[[1]][["children"]]</code>).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">first_canvas_node</span> <span class="op">&lt;-</span> <span class="va">list_of_nodes</span><span class="op">$</span><span class="va">document</span><span class="op">$</span><span class="va">children</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="va">first_object_node</span> <span class="op">&lt;-</span> <span class="va">first_canvas_node</span><span class="op">[[</span><span class="st">"children"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">first_canvas_node</span> <span class="op">&lt;-</span> <span class="va">list_of_nodes</span><span class="op">$</span><span class="va">document</span><span class="op">$</span><span class="va">children</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">first_object_node</span> <span class="op">&lt;-</span> <span class="va">first_canvas_node</span><span class="op">[[</span><span class="st">"children"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="output-a-figma-document-object">1.6 Output a Figma Document object<a class="anchor" aria-label="anchor" href="#output-a-figma-document-object"></a>
@@ -331,24 +330,24 @@ nodes are in the <code>children</code> element of each canvas/page node
 <code><a href="../reference/get_figma_file.html">get_figma_file()</a></code> will output a Figma Document object,
 instead of a <code>response</code> object.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span>
-<span class="co"># Insert your personal token:</span>
-<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"Your personal token ..."</span>
-
-<span class="va">figma_document</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span>
-  <span class="va">file_key</span>, <span class="va">token</span>,
-  .output_format <span class="op">=</span> <span class="st">"figma_document"</span>
-<span class="op">)</span>
-<span class="co"># A `figma_document` object:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">figma_document</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span></span>
+<span><span class="co"># Insert your personal token:</span></span>
+<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"Your personal token ..."</span></span>
+<span></span>
+<span><span class="va">figma_document</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span></span>
+<span>  <span class="va">file_key</span>, <span class="va">token</span>,</span>
+<span>  .output_format <span class="op">=</span> <span class="st">"figma_document"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># A `figma_document` object:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">figma_document</span><span class="op">)</span></span></code></pre></div>
 <p>Or, analogously:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">figma_document</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/as_figma_document.html">as_figma_document</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span>
-<span class="va">figma_document</span>
-<span class="co">#&gt; &lt;Figma Document&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  * Number of canvas: 2 </span>
-<span class="co">#&gt;  * Number of objects in each canvas: 3 2</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">figma_document</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/as_figma_document.html">as_figma_document</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span></span>
+<span><span class="va">figma_document</span></span>
+<span><span class="co">#&gt; &lt;Figma Document&gt;</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  * Number of canvas: 2 </span></span>
+<span><span class="co">#&gt;  * Number of objects in each canvas: 3 2</span></span></code></pre></div>
 <p>This object is just a R list with class <code>figma_document</code>.
 The main differences between this object and the <code>response</code>
 object are:</p>
@@ -364,65 +363,65 @@ of your Figma file (like the name/title of the file, the last time it
 was modified, its components, etc…) is available in the
 <code>document</code> element:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">figma_document</span><span class="op">$</span><span class="va">document</span><span class="op">)</span>
-<span class="co">#&gt; List of 13</span>
-<span class="co">#&gt;  $ id           : chr "0:0"</span>
-<span class="co">#&gt;  $ type         : chr "DOCUMENT"</span>
-<span class="co">#&gt;  $ name         : chr "Untitled"</span>
-<span class="co">#&gt;  $ components   : Named list()</span>
-<span class="co">#&gt;  $ componentSets: Named list()</span>
-<span class="co">#&gt;  $ styles       : Named list()</span>
-<span class="co">#&gt;  $ schemaVersion: int 0</span>
-<span class="co">#&gt;  $ lastModified : chr "2022-10-25T00:36:59Z"</span>
-<span class="co">#&gt;  $ thumbnailUrl : chr "https://s3-alpha-sig.figma.com/thumbnails/065f8c7c-af9c-4f7f-bb80-e1c9ad6b62b5?Expires=1667779200&amp;Signature=Gz5"| __truncated__</span>
-<span class="co">#&gt;  $ version      : chr "2514657369"</span>
-<span class="co">#&gt;  $ role         : chr "owner"</span>
-<span class="co">#&gt;  $ editorType   : chr "figma"</span>
-<span class="co">#&gt;  $ linkAccess   : chr "view"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">figma_document</span><span class="op">$</span><span class="va">document</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 13</span></span>
+<span><span class="co">#&gt;  $ id           : chr "0:0"</span></span>
+<span><span class="co">#&gt;  $ type         : chr "DOCUMENT"</span></span>
+<span><span class="co">#&gt;  $ name         : chr "Untitled"</span></span>
+<span><span class="co">#&gt;  $ components   : Named list()</span></span>
+<span><span class="co">#&gt;  $ componentSets: Named list()</span></span>
+<span><span class="co">#&gt;  $ styles       : Named list()</span></span>
+<span><span class="co">#&gt;  $ schemaVersion: int 0</span></span>
+<span><span class="co">#&gt;  $ lastModified : chr "2022-10-25T00:36:59Z"</span></span>
+<span><span class="co">#&gt;  $ thumbnailUrl : chr "https://s3-alpha-sig.figma.com/thumbnails/065f8c7c-af9c-4f7f-bb80-e1c9ad6b62b5?Expires=1667779200&amp;Signature=Gz5"| __truncated__</span></span>
+<span><span class="co">#&gt;  $ version      : chr "2514657369"</span></span>
+<span><span class="co">#&gt;  $ role         : chr "owner"</span></span>
+<span><span class="co">#&gt;  $ editorType   : chr "figma"</span></span>
+<span><span class="co">#&gt;  $ linkAccess   : chr "view"</span></span></code></pre></div>
 <p>Furthermore, you can get the data of each canvas/page (and their
 respective objects) in the <code>canvas</code> element:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">figma_document</span><span class="op">$</span><span class="va">canvas</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; [1] "id"                   "name"                 "type"                </span>
-<span class="co">#&gt; [4] "objects"              "backgroundColor"      "prototypeStartNodeID"</span>
-<span class="co">#&gt; [7] "flowStartingPoints"   "prototypeDevice"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">figma_document</span><span class="op">$</span><span class="va">canvas</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "id"                   "name"                 "type"                </span></span>
+<span><span class="co">#&gt; [4] "objects"              "backgroundColor"      "prototypeStartNodeID"</span></span>
+<span><span class="co">#&gt; [7] "flowStartingPoints"   "prototypeDevice"</span></span></code></pre></div>
 <p>And the data of all the objects present in each canvas is found in
 the <code>objects</code> element:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">first_canvas_node</span> <span class="op">&lt;-</span> <span class="va">figma_document</span><span class="op">$</span><span class="va">canvas</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="va">first_object_node</span> <span class="op">&lt;-</span> <span class="va">first_canvas_node</span><span class="op">$</span><span class="va">objects</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">first_object_node</span><span class="op">)</span>
-<span class="co">#&gt; List of 12</span>
-<span class="co">#&gt;  $ id                  : chr "1:2"</span>
-<span class="co">#&gt;  $ name                : chr "Background"</span>
-<span class="co">#&gt;  $ type                : chr "RECTANGLE"</span>
-<span class="co">#&gt;  $ blendMode           : chr "PASS_THROUGH"</span>
-<span class="co">#&gt;  $ absoluteBoundingBox :List of 4</span>
-<span class="co">#&gt;   ..$ x     : num -379</span>
-<span class="co">#&gt;   ..$ y     : num -277</span>
-<span class="co">#&gt;   ..$ width : num 793</span>
-<span class="co">#&gt;   ..$ height: num 549</span>
-<span class="co">#&gt;  $ absoluteRenderBounds:List of 4</span>
-<span class="co">#&gt;   ..$ x     : num -379</span>
-<span class="co">#&gt;   ..$ y     : num -277</span>
-<span class="co">#&gt;   ..$ width : num 793</span>
-<span class="co">#&gt;   ..$ height: num 549</span>
-<span class="co">#&gt;  $ constraints         :List of 2</span>
-<span class="co">#&gt;   ..$ vertical  : chr "TOP"</span>
-<span class="co">#&gt;   ..$ horizontal: chr "LEFT"</span>
-<span class="co">#&gt;  $ fills               :List of 1</span>
-<span class="co">#&gt;   ..$ :List of 3</span>
-<span class="co">#&gt;   .. ..$ blendMode: chr "NORMAL"</span>
-<span class="co">#&gt;   .. ..$ type     : chr "SOLID"</span>
-<span class="co">#&gt;   .. ..$ color    :List of 4</span>
-<span class="co">#&gt;   .. .. ..$ r: num 0.851</span>
-<span class="co">#&gt;   .. .. ..$ g: num 0.851</span>
-<span class="co">#&gt;   .. .. ..$ b: num 0.851</span>
-<span class="co">#&gt;   .. .. ..$ a: num 1</span>
-<span class="co">#&gt;  $ strokes             : list()</span>
-<span class="co">#&gt;  $ strokeWeight        : num 1</span>
-<span class="co">#&gt;  $ strokeAlign         : chr "INSIDE"</span>
-<span class="co">#&gt;  $ effects             : list()</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">first_canvas_node</span> <span class="op">&lt;-</span> <span class="va">figma_document</span><span class="op">$</span><span class="va">canvas</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">first_object_node</span> <span class="op">&lt;-</span> <span class="va">first_canvas_node</span><span class="op">$</span><span class="va">objects</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">first_object_node</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 12</span></span>
+<span><span class="co">#&gt;  $ id                  : chr "1:2"</span></span>
+<span><span class="co">#&gt;  $ name                : chr "Background"</span></span>
+<span><span class="co">#&gt;  $ type                : chr "RECTANGLE"</span></span>
+<span><span class="co">#&gt;  $ blendMode           : chr "PASS_THROUGH"</span></span>
+<span><span class="co">#&gt;  $ absoluteBoundingBox :List of 4</span></span>
+<span><span class="co">#&gt;   ..$ x     : num -379</span></span>
+<span><span class="co">#&gt;   ..$ y     : num -277</span></span>
+<span><span class="co">#&gt;   ..$ width : num 793</span></span>
+<span><span class="co">#&gt;   ..$ height: num 549</span></span>
+<span><span class="co">#&gt;  $ absoluteRenderBounds:List of 4</span></span>
+<span><span class="co">#&gt;   ..$ x     : num -379</span></span>
+<span><span class="co">#&gt;   ..$ y     : num -277</span></span>
+<span><span class="co">#&gt;   ..$ width : num 793</span></span>
+<span><span class="co">#&gt;   ..$ height: num 549</span></span>
+<span><span class="co">#&gt;  $ constraints         :List of 2</span></span>
+<span><span class="co">#&gt;   ..$ vertical  : chr "TOP"</span></span>
+<span><span class="co">#&gt;   ..$ horizontal: chr "LEFT"</span></span>
+<span><span class="co">#&gt;  $ fills               :List of 1</span></span>
+<span><span class="co">#&gt;   ..$ :List of 3</span></span>
+<span><span class="co">#&gt;   .. ..$ blendMode: chr "NORMAL"</span></span>
+<span><span class="co">#&gt;   .. ..$ type     : chr "SOLID"</span></span>
+<span><span class="co">#&gt;   .. ..$ color    :List of 4</span></span>
+<span><span class="co">#&gt;   .. .. ..$ r: num 0.851</span></span>
+<span><span class="co">#&gt;   .. .. ..$ g: num 0.851</span></span>
+<span><span class="co">#&gt;   .. .. ..$ b: num 0.851</span></span>
+<span><span class="co">#&gt;   .. .. ..$ a: num 1</span></span>
+<span><span class="co">#&gt;  $ strokes             : list()</span></span>
+<span><span class="co">#&gt;  $ strokeWeight        : num 1</span></span>
+<span><span class="co">#&gt;  $ strokeAlign         : chr "INSIDE"</span></span>
+<span><span class="co">#&gt;  $ effects             : list()</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="output-a-tibbletibble-object">1.7 Output a <code>tibble::tibble()</code> object<a class="anchor" aria-label="anchor" href="#output-a-tibbletibble-object"></a>
@@ -433,29 +432,29 @@ the <code>objects</code> element:</p>
 object. This is probably the most useful and friendly output format that
 you can use:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span>
-<span class="co"># Insert your personal token:</span>
-<span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"Your personal token ..."</span>
-
-<span class="va">tibble</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span>
-  <span class="va">file_key</span>, <span class="va">token</span>,
-  .output_format <span class="op">=</span> <span class="st">"tibble"</span>
-<span class="op">)</span>
-<span class="co"># A `tibble` object:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tibble</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">file_key</span> <span class="op">&lt;-</span> <span class="st">"hch8YlkIrYbU3raDzjPvCz"</span></span>
+<span><span class="co"># Insert your personal token:</span></span>
+<span><span class="va">token</span> <span class="op">&lt;-</span> <span class="st">"Your personal token ..."</span></span>
+<span></span>
+<span><span class="va">tibble</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/get_figma_file.html">get_figma_file</a></span><span class="op">(</span></span>
+<span>  <span class="va">file_key</span>, <span class="va">token</span>,</span>
+<span>  .output_format <span class="op">=</span> <span class="st">"tibble"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># A `tibble` object:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tibble</span><span class="op">)</span></span></code></pre></div>
 <p>Or, analogously:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tibble</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span>
-<span class="va">tibble</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span>
-<span class="co">#&gt;   canvas_id canvas_name canvas_type object_id object_name   objec…¹ object_att…²</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>      </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0:1       Page 1      CANVAS      1:2       Background    RECTAN… &lt;named list&gt;</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 0:1       Page 1      CANVAS      5:2       Paragraph     TEXT    &lt;named list&gt;</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 0:1       Page 1      CANVAS      5:3       Arrow         VECTOR  &lt;named list&gt;</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 5:4       Page 2      CANVAS      5:5       BackgroundPa… RECTAN… &lt;named list&gt;</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 5:4       Page 2      CANVAS      5:6       Texto da pág… TEXT    &lt;named list&gt;</span>
-<span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable names ¹​object_type, ²​object_attributes</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tibble</span> <span class="op">&lt;-</span> <span class="fu">figma</span><span class="fu">::</span><span class="fu"><a href="../reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">untitled_file</span><span class="op">)</span></span>
+<span><span class="va">tibble</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 7</span></span></span>
+<span><span class="co">#&gt;   canvas_id canvas_name canvas_type object_id object_name   objec…¹ object_att…²</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0:1       Page 1      CANVAS      1:2       Background    RECTAN… &lt;named list&gt;</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 0:1       Page 1      CANVAS      5:2       Paragraph     TEXT    &lt;named list&gt;</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 0:1       Page 1      CANVAS      5:3       Arrow         VECTOR  &lt;named list&gt;</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 5:4       Page 2      CANVAS      5:5       BackgroundPa… RECTAN… &lt;named list&gt;</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 5:4       Page 2      CANVAS      5:6       Texto da pág… TEXT    &lt;named list&gt;</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable names ¹​object_type, ²​object_attributes</span></span></span></code></pre></div>
 <p>Each row in the resulting tibble, is a object present in one of the
 canvas of your Figma file. As an example, the Figma file stored in
 <code>untitled_file</code> have 2 canvas/pages: 3 objects in the first

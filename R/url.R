@@ -188,11 +188,11 @@ check_parameters <- function(parameters, call = rlang::caller_env()){
     rlang::abort(paste0(msg, collapse = ""), call = call)
   }
 
-  any_null <- any(purrr::map_lgl(
-    parameters, function(x) is.null(x)
+  any_null_na <- any(purrr::map_lgl(
+    parameters, function(x) is.null(x) | any(is.na(x))
   ))
-  if (any_null) {
-    msg <- "One of the named arguments contains a NULL value!"
+  if (any_null_na) {
+    msg <- "One of the named arguments contains a `NULL` or `NA` value!"
     rlang::abort(msg, call = call)
   }
 }
