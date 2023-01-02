@@ -121,7 +121,7 @@ Now, we want to build a function to transform a list of CSS attributes (or a lis
 ```
 selector {
   key=value;
-  ...more CSS attibutes
+  ...more CSS attributes
 }
 ```
 

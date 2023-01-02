@@ -35,7 +35,7 @@ That is why \code{get_document_info()} exists. It collects just the
 metadata of your Figma file, and ignores all canvas and objects data.
 
 By default, \code{get_document_info()} fits the metadata into a raw R list.
-But you can change this behaviour with the \code{.output_format} argument.
+But you can change this behavior with the \code{.output_format} argument.
 With \code{.output_format = "tibble"}, \code{get_document_info()} will
 fit the metadata into a \code{tibble::tibble} object.
 }
